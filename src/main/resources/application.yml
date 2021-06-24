@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@192.168.20.19:1521:xe
+    username: gotcha
+    password: oracle
+    
+mybatis:
+  type-aliases-package: com.example.test.vo
+  config-location: classpath:config/mybatis-config.xml
+  mapper-locations: classpath:mappers/**/*.xml
