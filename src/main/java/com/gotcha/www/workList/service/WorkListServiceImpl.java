@@ -18,15 +18,15 @@ public class WorkListServiceImpl implements WorkListService {
 	WorkListDAO workListDAO;
 
 	@Override
-	public List<ListVO> selectList(String wsId) {
+	public List<ListVO> selectList(String listWsid) {
 		
-		return workListDAO.selectList(wsId);
+		return workListDAO.selectList(listWsid);
 	}
 
 	@Override
-	public List<Map<String, CardVO>> selectCard(CardVO cvo) {
+	public List<CardVO> selectCard(String cardWsid) {
 		
-		return workListDAO.selectCard(cvo);
+		return workListDAO.selectCard(cardWsid);
 	}
 
 	@Override
