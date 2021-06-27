@@ -1,4 +1,4 @@
-package com.gotcha.www.user.vo;
+package com.gotcha.www.home.vo;
 
 import java.sql.Date;
 

@@ -3,33 +3,6 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.gotcha.www.user.dao.UserDAO">
-
-	<select id="selectWorkspace" parameterType="String" resultType="HashMap">
-		SELECT UR.IS_FAV, W.WS_ID, W.WS_NAME, UR.USER_ID, U.USER_NAME, R.ROLE_ID, R.ROLE_TYPE
-		from GC_USER_ROLE UR
-		INNER JOIN GC_USER U
-		ON (U.user_id = UR.user_id)
-		INNER JOIN GC_ROLE R 
-		ON (R.role_id = UR.role_id) 
-		INNER JOIN GC_WS W 
-		ON(W.WS_ID = UR.WS_ID)
-		WHERE UR.USER_ID=#{user_id}
-	</select>
-
-	<resultMap id="NotiList" type="HashMap">
-		<result property="ws_id" column="ws_id" />
-		<result property="user_id" column="user_id" /> 
-		<result property="ws_name" column="ws_name" />
-		<result property="noti_type" column="noti_/type" />
-		<result property="noti_desc" column="noti_desc" jdbcType="CLOB" javaType="java.lang.String"/>
-	</resultMap>
-	<select id="selectNoti" parameterType="String" resultMap="NotiList">
-		SELECT w.ws_id, w.ws_name, n.noti_type, n.noti_desc, n.noti_time
-		FROM gc_noti n
-		JOIN gc_ws w ON w.ws_id = n.ws_id
-		JOIN gc_noti_user nu ON nu.noti_id = n.noti_id
-		WHERE nu.user_id= #{user_id}
-	</select>
 	
 	<select id="checkId" parameterType="String" resultType="int">
 		SELECT count(user_id) 
