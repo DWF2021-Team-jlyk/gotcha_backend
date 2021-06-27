@@ -3,7 +3,20 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.gotcha.www.user.dao.UserDAO">
-
+	
+	<select id="findByUsername" parameterType="String" resultType="userDto">
+		<!-- SELECT user_id, user_pwd, user_enabled
+		FROM gc_user
+		WHERE user_id = #{user_id} -->
+		SELECT ur.ws_id, u.user_id, u.user_pwd, u.user_enabled, r.role_type 
+		FROM gc_user_role ur
+		JOIN gc_user u
+		ON ur.user_id = u.user_id
+		JOIN gc_role r
+		ON ur.role_id = r.role_id
+		WHERE ur.user_id = #{user_id} and ur.ws_id = 2 
+	</select>
+	
 	<select id="selectWorkspace" parameterType="String" resultType="HashMap">
 		SELECT UR.IS_FAV, W.WS_ID, W.WS_NAME, UR.USER_ID, U.USER_NAME, R.ROLE_ID, R.ROLE_TYPE
 		from GC_USER_ROLE UR
