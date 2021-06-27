@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class CardTodoDTO {
-    int todo_id;
-    String todo_name;
-    int card_id;
-    String todo_start_date;
-    String todo_end_date;
-    int todo_isdone;
+    private int todo_id;
+    private String todo_name;
+    private int card_id;
+    private String todo_start_date;
+    private String todo_end_date;
+    private int todo_isdone;
 }

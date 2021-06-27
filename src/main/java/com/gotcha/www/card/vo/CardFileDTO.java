@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CardFileDTO {
-    int card_id;
-    String file_id;
-    String file_name;
+    private int card_id;
+    private String file_id;
+    private String file_name;
 }

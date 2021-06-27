@@ -15,14 +15,14 @@ import java.util.Objects;
 @NoArgsConstructor
 @Builder
 public class CardDTO {
-    int card_id;
-    String card_name;
-    String card_desc;
-    String card_end_date;
-    String card_start_date;
-    int list_id;
-    int ws_id;
-    int card_isdone;
+    private int card_id;
+    private String card_name;
+    private String card_desc;
+    private String card_end_date;
+    private String card_start_date;
+    private int list_id;
+    private int ws_id;
+    private int card_isdone;
 
     @Override
     public boolean equals(Object o) {

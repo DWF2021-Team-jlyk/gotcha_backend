@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class CardMemberDTO {
-    int card_id;
-    String user_id;
+    private int card_id;
+    private String user_id;
 }
