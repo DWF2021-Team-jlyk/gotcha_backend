@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 
 @Service
+@Transactional
 public class CardDetailServiceImpl implements CardDetailService{
 
     private final Log log = LogFactory.getLog(this.getClass());
@@ -22,10 +24,8 @@ public class CardDetailServiceImpl implements CardDetailService{
     private final CardDAO cardDAO;
     private final CardDetailDAO cardDetailDAO;
 
-    public CardDetailServiceImpl(
-            @Autowired CardDAO cardDAO,
-            @Autowired CardDetailDAO cardDetailDAO
-    ) {
+    @Autowired
+    public CardDetailServiceImpl(CardDAO cardDAO, CardDetailDAO cardDetailDAO) {
         this.cardDAO = cardDAO;
         this.cardDetailDAO = cardDetailDAO;
     }
@@ -41,5 +41,7 @@ public class CardDetailServiceImpl implements CardDetailService{
 
         return cardDetailVO;
     }
+
+
 
 }

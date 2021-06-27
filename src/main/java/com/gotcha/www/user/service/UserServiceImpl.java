@@ -1,6 +1,5 @@
 package com.gotcha.www.user.service;
 
-import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
@@ -18,9 +17,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.gotcha.www.user.dao.UserDAO;
-import com.gotcha.www.user.vo.NotiJoinVO;
 import com.gotcha.www.user.vo.UserVO;
-import com.gotcha.www.user.vo.WorkspaceDto;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,20 +26,6 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserDAO mainDAO;
-
-	// select workspace list
-	@Override
-	public List<WorkspaceDto> selectWorkspace(String user_id) {
-		List<WorkspaceDto> adminList = mainDAO.selectWorkspace(user_id); 
-		return adminList;
-	}
-
-	// select notice list
-	@Override
-	public List<NotiJoinVO> selectNotice(String user_id) {
-		List<NotiJoinVO> notiList = mainDAO.selectNoti(user_id);
-		return notiList;
-	}
 	
 	// id 중복 검사
 	@Override

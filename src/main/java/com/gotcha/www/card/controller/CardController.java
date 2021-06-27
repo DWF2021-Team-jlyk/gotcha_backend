@@ -8,7 +8,8 @@ public class CardController {
 
     private final CardService cardService;
 
-    public CardController(@Autowired CardService cardService) {
+    @Autowired
+    public CardController(CardService cardService) {
         this.cardService = cardService;
     }
 
