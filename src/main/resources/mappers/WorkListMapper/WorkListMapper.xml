@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gotcha.www.workList.dao.WorkListDAO">
+
+	<resultMap id="Listlist" type="map">
+		<result property="ws_id" column="ws_id" />
+		<result property="user_id" column="user_id" />
+		<result property="list_name" column="list_name" />
+		<result property="is_fav" column="is_fav" />
+	</resultMap>
+	<select id="selectList" parameterType="String"
+		resultType="com.gotcha.www.workList.vo.ListVO">
+		select * from gc_list
+		where
+		ws_id = #{ws_id}
+	</select>
+
+
+	<resultMap type="map" id="CardList">
+
+		<result property="card_desc" column="card_desc" jdbcType="CLOB"
+			javaType="java.lang.String" />
+
+	</resultMap>
+
+	<select id="selectCard" parameterType="String"
+		resultType="com.gotcha.www.workList.vo.CardVO" resultMap="CardList">
+
+		select * from gc_card
+		where
+		ws_id = #{ws_id}
+
+	</select>
+
+	<select id="selectCardList" parameterType="Integer"
+		resultType="com.gotcha.www.workList.vo.CardVO">
+		select * from gc_card where list_id = #{list_id}
+	</select>
+
+</mapper>
