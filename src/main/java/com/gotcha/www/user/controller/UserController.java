@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,7 @@ import com.gotcha.www.user.service.UserService;
 import com.gotcha.www.user.vo.UserDto;
 import com.gotcha.www.user.vo.UserVO;
 
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -72,7 +74,16 @@ public class UserController {
 //		log.info("login post mapping");
 //		log.info("userVO : "+userDto.toString());
 //	}
-
+	
+//	@PostMapping("/loginPage")
+//	public String user(HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException {
+//		ObjectMapper om = new ObjectMapper();
+//		UserDto userDto = om.readValue(request.getInputStream(), UserDto.class);
+//		log.info("login post mapping");
+//		log.info("userVO : "+userDto);
+//		return "loginPage";
+//	}
+//	
 	// 회원가입
 	@PostMapping("/joinCheck")
 	public boolean join(@RequestBody UserVO userVO, HttpServletRequest request) {

@@ -64,6 +64,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			
 			// authentication 객체가 session 영역에 저장됨. => 로그인이 되었다는 뜻.
 			PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+			
 			// 값이 나온다는 것은 로그인이 정상적으로 되었다는 뜻.
 			System.out.println("로그인 완료됨: "+principalDetails.getUserDto().getUser_id());
 			//System.out.println(request.getInputStream().toString());
@@ -93,7 +94,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			Authentication authResult) throws IOException, ServletException {
 		System.out.println("successfulAuthentication 실행됨: 인증이 완료되었다는 뜻임");
 		PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-		
+		System.out.println("princi id :"+principalDetails.getUserDto().getUser_id());
 		// RSA방식이 아닌 Hash 암호방식
 		String jwtToken = JWT.create()
 				.withSubject("cos토큰")
