@@ -18,6 +18,6 @@ public class NotiJoinVO {
 	private String noti_type;
 	private String noti_desc;
 	private Date noti_time;
-	private
+	private char noti_checked;
 	
 }

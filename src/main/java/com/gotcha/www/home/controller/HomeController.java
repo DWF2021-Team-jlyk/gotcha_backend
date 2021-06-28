@@ -23,8 +23,7 @@ public class HomeController {
 	
 	
 	@PostMapping("/wsList")
-	public @ResponseBody List<WorkspaceDto> selectWorkspace(@RequestBody UserVO userVO)
-			throws Exception {
+	public @ResponseBody List<WorkspaceDto> selectWorkspace(@RequestBody UserVO userVO) {
 		System.out.println(userVO.toString());
 		List<WorkspaceDto> mainList = homeService.selectWorkspace(userVO.getUser_id());
 		System.out.println(mainList);
@@ -32,17 +31,14 @@ public class HomeController {
 	}
 	
 	@PostMapping("/notiList")
-	public @ResponseBody List<NotiJoinVO> selectNotice(@RequestBody UserVO userVO)
-			throws Exception {
+	public @ResponseBody List<NotiJoinVO> selectNotice(@RequestBody UserVO userVO) {
 		List<NotiJoinVO> mainList = homeService.selectNotice(userVO.getUser_id());
 		System.out.println(mainList);
 		return mainList;
 	}
 	
 	@PostMapping("/favUpdate")
-	public @ResponseBody void UpdateFav(@RequestBody WorkspaceDto workspaceDto)
-			throws Exception {
+	public @ResponseBody void UpdateFav(@RequestBody WorkspaceDto workspaceDto) {
 		homeService.updateFav(workspaceDto);
-	
 	}
 }
