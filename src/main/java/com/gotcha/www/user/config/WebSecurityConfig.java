@@ -36,7 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-            .antMatchers("/resources/**");
+            .antMatchers("/resources/**")
+            .antMatchers("/user/**");
     }
 
 	@Override
@@ -48,18 +49,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.addFilter(corsFilter) // @CrossOrigin(인증 X), 시큐리티 필터에 등록 인증(O)
 			.formLogin().disable()
-//			.formLogin().loginPage("/login").and()
+//			.formLogin().loginPage("/loginPage").and()
 			.httpBasic().disable() //
-			.addFilter(new JwtAuthenticationFilter(authenticationManager()))
-			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO))
 			.authorizeRequests()
-//			.antMatchers("/user/**").permitAll()
-//			.antMatchers("/home/**").permitAll()
 			.antMatchers("/workList/admin").access("hasRole('ROLE_ADMIN')")
-			.antMatchers("/workList/member").access("hasRole('ROLE_MEMBER')")
-//			.antMatchers("")
-//			.access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER')")
-			.anyRequest().permitAll();
+			.antMatchers("/workList/member").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER')")
+			.anyRequest().permitAll()
+			.and()
+			.addFilter(new JwtAuthenticationFilter(authenticationManager()))
+			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
 	}	
 	
 }

@@ -5,16 +5,19 @@
 <mapper namespace="com.gotcha.www.user.dao.UserDAO">
 	
 	<select id="findByUsername" parameterType="String" resultType="userDto">
-		<!-- SELECT user_id, user_pwd, user_enabled
+		SELECT user_id, user_pwd, user_enabled
 		FROM gc_user
-		WHERE user_id = #{user_id} -->
+		WHERE user_id = #{user_id}
+	</select>
+	
+	<select id="findByWsUsername" parameterType="String" resultType="userDto">
 		SELECT ur.ws_id, u.user_id, u.user_pwd, u.user_enabled, r.role_type 
 		FROM gc_user_role ur
 		JOIN gc_user u
 		ON ur.user_id = u.user_id
 		JOIN gc_role r
 		ON ur.role_id = r.role_id
-		WHERE ur.user_id = #{user_id} and ur.ws_id = 2 
+		WHERE ur.user_id = #{user_id} and ur.ws_id = #{ws_id}
 	</select>
 	
 	<select id="selectWorkspace" parameterType="String" resultType="HashMap">
@@ -58,6 +61,12 @@
 	<update id="updateEnabled" parameterType="String">
 		UPDATE gc_user 
 		SET user_enabled = 1 
+		WHERE user_id = #{user_id}
+	</update>
+	
+	<update id="updateLastLogin" parameterType="String">
+		UPDATE gc_user
+		SET user_last_login = to_char(SYSDATE,'YYYY-MM-DD HH24:MI:SS')
 		WHERE user_id = #{user_id}
 	</update>
 </mapper>

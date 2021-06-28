@@ -28,7 +28,7 @@ public class PrincipalDetails implements UserDetails{
 		authorities.add(new SimpleGrantedAuthority(userDto.getRole_type()));
 		return authorities;
 	}
-
+	
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub

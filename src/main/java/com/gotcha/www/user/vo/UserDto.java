@@ -13,6 +13,7 @@ public class UserDto {
 	private String ws_id;
 	private String user_id;
 	private String user_pwd;
+	private String user_name;
 	private String user_enabled;
 	private String role_type;
 }
