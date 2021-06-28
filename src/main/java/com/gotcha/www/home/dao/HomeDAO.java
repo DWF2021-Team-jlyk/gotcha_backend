@@ -15,5 +15,7 @@ public interface HomeDAO {
 	List<NotiJoinVO> selectNoti(String user_id);
 	
 	void updateFav(WorkspaceDto workspaceDto);
+	
+	List<String> selecWsUserList(int ws_id);
 
 }

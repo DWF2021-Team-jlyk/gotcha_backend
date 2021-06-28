@@ -12,4 +12,8 @@ public interface HomeService {
 	
 	//fav 바꾸기
 	void updateFav(WorkspaceDto workspaceDto);
+	
+	//workspace setting userlist받아오기
+	List<String> selecWsUserList(int ws_id);
+	
 }
