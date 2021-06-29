@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gotcha.www.card.dao.CardDetailDAO">
+    <select
+            id="selectTodoList"
+            parameterType="int"
+            resultType="com.gotcha.www.card.vo.CardTodoDTO"
+    >
+        select *
+        from GC_CARD_TODO
+        where card_id = #{card_id}
+    </select>
+
+    <select id="selectMember"
+            parameterType="int"
+            resultType="com.gotcha.www.card.vo.CardMemberDTO"
+    >
+        select *
+        from GC_CARD_MEM
+        where card_id = #{card_id}
+    </select>
+
+    <select id="selectFile"
+            parameterType="int"
+            resultType="com.gotcha.www.card.vo.CardFileDTO"
+    >
+        select *
+        from GC_CARD_FILE
+        where card_id = #{card_id}
+    </select>
+
+    <select id="selectCardAct"
+            parameterType="int"
+            resultType="com.gotcha.www.card.vo.CardActDTO"
+    >
+        select *
+        from GC_CARD_ACT
+        where card_id = #{card_id}
+    </select>
+
+</mapper>

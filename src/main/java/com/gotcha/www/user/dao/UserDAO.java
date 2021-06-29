@@ -1,14 +1,14 @@
 package com.gotcha.www.user.dao;
 
-import java.util.List;
-
+import com.gotcha.www.home.vo.WorkspaceDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.gotcha.www.user.vo.NotiJoinVO;
+import com.gotcha.www.home.vo.NotiJoinVO;
 import com.gotcha.www.user.vo.UserDto;
 import com.gotcha.www.user.vo.UserVO;
-import com.gotcha.www.user.vo.WorkspaceDto;
+
+import java.util.List;
 
 @Mapper
 public interface UserDAO {

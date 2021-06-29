@@ -1,6 +1,4 @@
-package com.gotcha.www.user.vo;
-
-import java.sql.Date;
+package com.gotcha.www.home.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,12 +9,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class NotiJoinVO {
+public class WorkspaceDto {
+	private char is_fav; 
 	private int ws_id;
-	private String user_id;
 	private String ws_name;
-	private String noti_type;
-	private String noti_desc;
-	private Date noti_time;
-	
+	private String user_id;
+	private String user_name;
+	private int role_id;
+	private String role_type;
 }

@@ -15,8 +15,9 @@ public class CardVO {
 	private int card_id;
 	private String card_name;
 	private String card_desc;
-	private Date card_start_date;
-	private Date card_end_date;
+	private String card_start_date;
+	private String card_end_date;
+	private char card_isdone;
 	private int list_id;
 	private int ws_id;
 }	
