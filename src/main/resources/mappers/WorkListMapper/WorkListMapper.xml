@@ -34,7 +34,7 @@
 	</update>
 
 	<!-- delete List (list_id 받아옴) -->
-	<delete id="deleteList">
+	<delete id="deleteList" parameterType="Integer">
 		delete from gc_list
 		where list_id = #{list_id}
 	</delete>
@@ -82,12 +82,12 @@
 	</update>
 
 	<!-- delete Card -->
-	<delete id="deleteCard">
+	<delete id="deleteCard" parameterType="int">
 		delete from gc_card
 		where card_id = #{card_id}
 	</delete>
 
 	<select id="selectCardList" parameterType="Integer" resultType="com.gotcha.www.workList.vo.CardVO"> 
-		select * from gc_card where list_id = #{list_id} </select>
+		select * from gc_card where list_id = #{card_id} </select>
 
 </mapper>

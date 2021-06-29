@@ -30,7 +30,7 @@ public class WorkListController {
 
 	private Log log = LogFactory.getLog(this.getClass());
 
-	// 워크리스트에 리스트 뿌려줌
+	// List CRUD
 	@RequestMapping("")
 	public @ResponseBody List<ListVO> selectList(@RequestBody HashMap<String, String> map) throws Exception {
 		String listWsid = map.get("ws_id");
@@ -67,7 +67,7 @@ public class WorkListController {
 		workListService.deleteList(listVO.getList_id());
 	}
 
-	// 워크리스트의 리스트에 카드 뿌려줌
+	// Card CRUD
 	@RequestMapping("/card")
 	public @ResponseBody List<CardVO> selectCard(@RequestBody HashMap<String, String> map) throws Exception {
 		String cardWsid = map.get("ws_id");
@@ -94,7 +94,7 @@ public class WorkListController {
 	}
 	
 	@RequestMapping("card/delete")
-	public void deleteCard(@RequestBody int card_id) {
-		workListService.deleteCard(card_id);
+	public void deleteCard(@RequestBody CardVO cardVO) {
+		workListService.deleteCard(cardVO.getCard_id());
 	}
 }
