@@ -23,7 +23,12 @@ public class WorkListServiceImpl implements WorkListService {
 		return workListDAO.selectList(listWsid);
 	}
 
-
+	@Override
+	public int selectListId() {
+		return workListDAO.selectListId();
+	}
+	
+	
 	@Override
 	public void insertList(ListVO listVO) {
 		workListDAO.insertList(listVO);
@@ -65,6 +70,11 @@ public class WorkListServiceImpl implements WorkListService {
 		workListDAO.deleteCard(card_id);
 		
 	}
+
+
+
+
+
 
 //	@Override
 //	public List<CardVO> selectCartList(int list_id) {
