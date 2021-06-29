@@ -23,6 +23,7 @@
 		<result property="ws_name" column="ws_name" />
 		<result property="noti_type" column="noti_type" />
 		<result property="noti_desc" column="noti_desc" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="noti_checked" column="noti_checked" />
 	</resultMap>
 
 	<select id="selectNoti" parameterType="String" resultMap="NotiList">
@@ -38,6 +39,10 @@
 			set is_fav = #{is_fav}
 			where ws_id = #{ws_id} and user_id = #{user_id}
 	</update>
+	
+	<select id="selecWsUserList" parameterType="int" resultType="String">
+		select user_id from gc_user_role where ws_id = #{ws_id}
+	</select>
 </mapper>
 
 

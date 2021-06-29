@@ -41,4 +41,13 @@ public class HomeController {
 	public @ResponseBody void UpdateFav(@RequestBody WorkspaceDto workspaceDto) {
 		homeService.updateFav(workspaceDto);
 	}
+	
+	@PostMapping("/wsUserList")
+	public @ResponseBody List<String> selecWsUserList(@RequestBody int ws_id)
+			throws Exception {
+		List<String> wsUserList = homeService.selecWsUserList(ws_id);
+		System.out.println(wsUserList);
+		return wsUserList;
+		
+	}
 }
