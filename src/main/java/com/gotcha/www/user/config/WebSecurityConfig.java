@@ -48,8 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session을 사용하지 않겠다.
 			.and()
 			.addFilter(corsFilter) // @CrossOrigin(인증 X), 시큐리티 필터에 등록 인증(O)
-			.formLogin().disable()
-//			.formLogin().loginPage("/loginPage").and()
+//			.formLogin().disable()
+			.formLogin().loginPage("/login").and()
 			.httpBasic().disable() //
 			.authorizeRequests()
 			.antMatchers("/workList/admin").access("hasRole('ROLE_ADMIN')")
