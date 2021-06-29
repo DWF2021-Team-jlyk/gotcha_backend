@@ -56,8 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/workList/member").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER')")
 			.anyRequest().permitAll()
 			.and()
-			.addFilter(new JwtAuthenticationFilter(authenticationManager()))
-			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
+			.addFilter(new JwtAuthenticationFilter(authenticationManager()));
+//			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
 	}	
 	
 }
