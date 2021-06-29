@@ -6,11 +6,25 @@ import java.util.Map;
 import com.gotcha.www.workList.vo.CardVO;
 import com.gotcha.www.workList.vo.ListVO;
 
-
-
 public interface WorkListService {
+	// List Service
+
 	List<ListVO> selectList(String listWsid);
-	//List<Map<String, CardVO>> selectCard(CardVO cvo);
+
+	void insertList(ListVO listVO);
+
+	void updateList(ListVO listVO);
+
+	void deleteList(int list_id);
+
+	// List<Map<String, CardVO>> selectCard(CardVO cvo);
 	List<CardVO> selectCard(String cardWsid);
-	List<CardVO> selectCartList(int list_id);
+
+	void insertCard(CardVO cardVO);
+
+	void updateCard(CardVO cardVO);
+
+	void deleteCard(int card_id);
+
+	//List<CardVO> selectCartList(int list_id);
 }
