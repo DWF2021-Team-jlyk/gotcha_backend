@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,7 +20,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gotcha.www.user.config.auth.PrincipalDetails;
+import com.gotcha.www.user.vo.PrincipalDetails;
 import com.gotcha.www.user.dao.UserDAO;
 import com.gotcha.www.user.vo.UserDto;
 import com.gotcha.www.workList.vo.WorkListVO;
@@ -28,12 +31,12 @@ import com.gotcha.www.workList.vo.WorkListVO;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 
 	private final UserDAO userDAO;
-	
+
 	public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserDAO userDAO) {
 		super(authenticationManager);
 		this.userDAO = userDAO;
 	}
-	
+
 	// 인증이나 권한이 필요한 주소 요청이 있을 때 해당 필터를 타게 됨.
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -42,7 +45,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 		System.out.println("path:"+request.getPathInfo() + ", " + request.getServletPath());
 		System.out.println("request.getInputStream() : " + request.getInputStream());
 
-		// get workspace id 
+		// get workspace id
 		ObjectMapper om = new ObjectMapper();
 		WorkListVO workListVO = om.readValue(request.getInputStream(), WorkListVO.class);
 		String ws_id = Integer.toString(workListVO.getWs_id());
@@ -50,10 +53,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 		System.out.println("ws_id: " + workListVO.getWs_id());
 		System.out.println("token: " + token);
 		System.out.println("인증이나 권한이 필요한 주소 요청이 됨.");
-	
+
 		String jwtHeader = request.getHeader("Authorization");
 		System.out.println("jwtHeader : "+jwtHeader);
-		
+
 		// header가 있는지 확인
 //		if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
 //			chain.doFilter(request, response);
@@ -63,7 +66,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 			chain.doFilter(request, response);
 			return;
 		}
-		
+
 		// JWT 토큰을 검증을 해서 정상적인 사용자인지 확인
 		//String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
 		String jwtToken = token.replace("Bearer ", "");
@@ -79,16 +82,17 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 			System.out.println("userEntity: " + userEntity.getRole_type());
 			PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
 			System.out.println("principalDetails : " + principalDetails.getUsername()+".....");
-			
+
 			// Jwt 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어준다.
-			Authentication authentication = 
+			Authentication authentication =
 					new UsernamePasswordAuthenticationToken(principalDetails,null,principalDetails.getAuthorities());
-			
+
 			// session 공간
 			// 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-		
+
 		}
 		chain.doFilter(request, response);
 	}
+
 }

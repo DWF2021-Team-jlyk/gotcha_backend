@@ -2,9 +2,11 @@ package com.gotcha.www.home.controller;
 
 import java.util.List;
 
+import com.gotcha.www.user.vo.PrincipalDetails;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,7 @@ public class HomeController {
         log.info("\nselectWorkspace\n userVo : " + userVO.toString());
         List<WorkspaceDto> mainList = homeService.selectWorkspace(userVO.getUser_id());
         log.debug("\nselectWorkspace\n mainList : " + mainList);
+//        log.info("\ngetUsername : "+principalDetails.getUsername());
         return mainList;
     }
 
