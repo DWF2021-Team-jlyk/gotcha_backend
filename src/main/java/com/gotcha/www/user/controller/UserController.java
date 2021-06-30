@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,16 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gotcha.www.user.service.UserService;
 import com.gotcha.www.user.vo.UserVO;
 
-@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
 	UserService userService;
-	
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	HttpSession session;
 	
@@ -41,7 +36,7 @@ public class UserController {
 //		log.info("userVO : "+userDto);
 //		return "loginPage";
 //	}
-//	
+	
 	// 회원가입
 	@PostMapping("/joinCheck")
 	public boolean join(@RequestBody UserVO userVO, HttpServletRequest request) {
@@ -51,13 +46,10 @@ public class UserController {
 		
 		if(status == true) {
 			log.info("joinCheck true");
-			String toMail = userVO.getUser_id();
-			String rawPassword = userVO.getUser_pwd();
-			String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-			userVO.setUser_pwd(encPassword);
-			System.out.println("pwd : " + userVO.getUser_pwd());
+			String toMailId = userVO.getUser_id();
+			
 			userService.insertUser(userVO);
-			String code = userService.sendToEmail(toMail);
+			String code = userService.sendToEmail("join",toMailId);
 			session = request.getSession();
 			session.setAttribute("joinCode", code);
 			return true;
@@ -77,16 +69,31 @@ public class UserController {
 		 
 		 String joinCode = (String) session.getAttribute("joinCode");
 		 
-		 log.info("getCode: "+session.getAttribute("joinCode"));
+		 log.info("getCode: " + session.getAttribute("joinCode"));
 		 
 		 boolean checkCode = userService.checkCode(inputCode, joinCode);
 		 
 		 if(checkCode == true) {
-			 System.out.println("Session:"+session.getAttribute("joinCode"));
+			 System.out.println("Session:" + session.getAttribute("joinCode"));
 			 userService.updateEnabled(user_id);
 			 session.removeAttribute("joinCode");
 		 }
 		 
 		 return checkCode;
+	}
+	
+	@PostMapping("/pwdFind")
+	public boolean pwdFind(@RequestBody HashMap<String,String> map) {
+		String user_id = map.get("user_id");
+		log.info("user_id : "+user_id);
+		
+		boolean checkCode = userService.checkId(user_id);
+		
+		if(checkCode == false) {
+			userService.sendToEmail("find",user_id);
+			return true;
+		}
+		
+		return false;
 	}
 }

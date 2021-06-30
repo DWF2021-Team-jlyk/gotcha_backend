@@ -69,4 +69,10 @@
 		SET user_last_login = to_char(SYSDATE,'YYYY-MM-DD HH24:MI:SS')
 		WHERE user_id = #{user_id}
 	</update>
+	
+	<update id="updatePwd" parameterType="String">
+		UPDATE gc_user
+		SET user_pwd = #{user_pwd}
+		WHERE user_id = #{user_id}
+	</update>
 </mapper>

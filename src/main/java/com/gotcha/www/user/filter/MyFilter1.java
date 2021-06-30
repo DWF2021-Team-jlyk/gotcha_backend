@@ -19,7 +19,7 @@ public class MyFilter1 implements Filter{
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		
-		System.out.println("필터1");
+		//System.out.println("필터1");
 		chain.doFilter(request, response);
 	}
 

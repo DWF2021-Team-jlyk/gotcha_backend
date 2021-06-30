@@ -1,12 +1,16 @@
 package com.gotcha.www.home.controller;
 
+import java.security.Principal;
 import java.util.List;
 
+import com.gotcha.www.user.service.PrincipalDetailsService;
 import com.gotcha.www.user.vo.PrincipalDetails;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +34,16 @@ public class HomeController {
     @PostMapping("/wsList")
     public @ResponseBody
     List<WorkspaceDto> selectWorkspace(@RequestBody UserVO userVO) {
+//    	Authentication loggedInUser = (Authentication) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+//    	PrincipalDetails userDetails = (PrincipalDetails)principal;
+//    	String name = loggedInUser.getName();
+//    	String username = principal.getUsername(); 
+//    	String password = principal.getPassword();
+//    	String username = ((PrincipalDetails) principal).getUsername();
+//    	PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+//
+//		log.info("username : " + name);
+    	
         log.info("\nselectWorkspace\n userVo : " + userVO.toString());
         List<WorkspaceDto> mainList = homeService.selectWorkspace(userVO.getUser_id());
         log.debug("\nselectWorkspace\n mainList : " + mainList);
