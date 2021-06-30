@@ -1,10 +1,12 @@
 package com.gotcha.www.workList.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gotcha.www.workList.dao.WorkListDAO;
 import com.gotcha.www.workList.vo.CardVO;
@@ -30,9 +32,12 @@ public class WorkListServiceImpl implements WorkListService {
 	
 	
 	@Override
+	@Transactional(rollbackFor = SQLException.class)
 	public void insertList(ListVO listVO) {
+		int nextIndex = workListDAO.selectListId();
+		String id = Integer.toString(nextIndex);
+		listVO.setList_id(id);
 		workListDAO.insertList(listVO);
-		
 	}
 
 	@Override

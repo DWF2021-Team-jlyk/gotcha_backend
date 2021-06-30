@@ -51,8 +51,13 @@ public class WorkListController {
 
 	@RequestMapping("/insert")
 	public @ResponseBody ListVO insertList(@RequestBody ListVO listVO) {
-		listVO.setList_id(workListService.selectListId());
+		log.debug("listVO debug before"+listVO);
+//		int lastIndex = workListService.selectListId();
+//		String id = Integer.toString(lastIndex);
+//		listVO.setList_id(id);
+		System.out.println("ddddd");
 		workListService.insertList(listVO);
+		log.debug("listVO debug after"+listVO);
 		return listVO;
 	}
 
@@ -66,7 +71,9 @@ public class WorkListController {
 
 	@RequestMapping("/delete")
 	public void deleteList(@RequestBody ListVO listVO) {
-		workListService.deleteList(listVO.getList_id());
+		String currentIndex = listVO.getList_id();
+		int deleteId = Integer.parseInt(currentIndex);
+		workListService.deleteList(deleteId);
 	}
 
 	// Card CRUD
