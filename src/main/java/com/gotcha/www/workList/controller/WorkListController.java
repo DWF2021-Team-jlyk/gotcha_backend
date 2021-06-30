@@ -2,17 +2,19 @@ package com.gotcha.www.workList.controller;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gotcha.www.user.vo.PrincipalDetails;
 import com.gotcha.www.workList.dao.WorkListDAO;
 import com.gotcha.www.workList.service.WorkListService;
 import com.gotcha.www.workList.vo.CardVO;
@@ -90,6 +92,27 @@ public class WorkListController {
 		System.out.println(cardVO);
 	}
 	
+<<<<<<< HEAD
+//	//워크리스트의 리스트에 카드 뿌려줌
+//	@RequestMapping("/main/wsList/list/card")
+//	public @ResponseBody List<Map<String, CardVO>> selectList(@RequestBody CardVO cardVO)throws Exception{
+//		System.out.println("list_id: "+cardVO.getList_id());
+//		List<Map<String, CardVO>> cardList = wokrListService.selectCard(cardVO);
+//		System.out.println("cardList: "+cardList);
+//		return cardList;
+//	}
+	
+	//워크리스트의 리스트에 카드 뿌려줌
+	@RequestMapping("/main/wsList/list/card")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
+//	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
+	public @ResponseBody List<CardVO> selectCard(@RequestBody HashMap<String,String> map)throws Exception{
+		String cardWsid = map.get("ws_id");
+		System.out.println("cardWsid: "+cardWsid);
+		List<CardVO> cardList = wokrListService.selectCard(cardWsid);
+		System.out.println("cardList: "+cardList);
+		return cardList;
+=======
 	@RequestMapping("card/update")
 	public void updateCard(@RequestBody CardVO cardVO) {
 		workListService.updateCard(cardVO);
@@ -98,5 +121,6 @@ public class WorkListController {
 	@RequestMapping("card/delete")
 	public void deleteCard(@RequestBody CardVO cardVO) {
 		workListService.deleteCard(cardVO.getCard_id());
+>>>>>>> origin/taeheon
 	}
 }

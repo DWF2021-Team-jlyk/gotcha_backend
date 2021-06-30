@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.filter.CorsFilter;
 
 import com.gotcha.www.user.dao.UserDAO;
+import com.gotcha.www.user.filter.JwtAuthenticationFilter;
+import com.gotcha.www.user.filter.JwtAuthorizationFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,12 +54,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.formLogin().loginPage("/login").and()
 			.httpBasic().disable() //
 			.authorizeRequests()
-			.antMatchers("/workList/admin").access("hasRole('ROLE_ADMIN')")
-			.antMatchers("/workList/member").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER')")
+//			.antMatchers("admin").hasRole("ADMIN")
+//			.antMatchers("member").hasAnyRole("ADMIN, MEMBER")
 			.anyRequest().permitAll()
 			.and()
-			.addFilter(new JwtAuthenticationFilter(authenticationManager()));
-//			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
+
+			.addFilter(new JwtAuthenticationFilter(authenticationManager()))
+			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
+//			.exceptionHandling()
+//			.authenticationEntryPoint(authenticationEntryPoint) // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
+//			.accessDeniedHandler(accessDeniedHandler) // 권한에서 예외가 발생;
+
 	}	
 	
 }
