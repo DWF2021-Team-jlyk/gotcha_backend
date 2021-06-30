@@ -7,8 +7,10 @@ import java.util.List;
 
 @Mapper
 public interface CardTodoDAO {
+    int selectTodoId();
+    int todoCount(int card_id);
     List<CardTodoDTO> selectCardTodo(int card_id);
-    void deleteCardTodo(int card_id, int todo_id);
+    void deleteCardTodo(int todo_id);
     void updateCardTodo(CardTodoDTO cardTodo);
     void insertCardTodo(CardTodoDTO cardTodo);
 }

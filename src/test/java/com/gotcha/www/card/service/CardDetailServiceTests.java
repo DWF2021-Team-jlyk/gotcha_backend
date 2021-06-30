@@ -21,7 +21,7 @@ public class CardDetailServiceTests {
     @Test
     public void getCardInfoTest(){
         CardDetailVO cardDetail = service.getCardInfo(1);
-        log.info("\n"+cardDetail.getCardDTO());
+//        log.info("\n"+cardDetail.getCardDTO());
         log.info("\n"+cardDetail.getCardActs());
         log.info("\n"+cardDetail.getCardFiles());
         log.info("\n"+cardDetail.getCardTodos());

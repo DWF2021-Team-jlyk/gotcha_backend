@@ -15,6 +15,12 @@ public class HomeServiceTests {
     private HomeService service;
 
     @Test
+    public void selectWorkspaceTest() {
+        service.selectWorkspace("user01@naver.com")
+                .forEach(log::info);
+    }
+
+    @Test
     public void selectNoticeTest(){
         service.selectNotice("user01@naver.com")
                 .forEach(log::info);
