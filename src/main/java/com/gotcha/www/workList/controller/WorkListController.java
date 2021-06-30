@@ -50,8 +50,10 @@ public class WorkListController {
 	}
 
 	@RequestMapping("/insert")
-	public void insertList(@RequestBody ListVO listVO) {
+	public @ResponseBody ListVO insertList(@RequestBody ListVO listVO) {
+		listVO.setList_id(workListService.selectListId());
 		workListService.insertList(listVO);
+		return listVO;
 	}
 
 	@RequestMapping("/update")
@@ -72,7 +74,7 @@ public class WorkListController {
 	public @ResponseBody List<CardVO> selectCard(@RequestBody HashMap<String, String> map) throws Exception {
 		String cardWsid = map.get("ws_id");
 
-		log.info("cardWsid: " + cardWsid);
+		log.info("\ncardWsid: " + cardWsid);
 
 		List<CardVO> cardList = workListService.selectCard(cardWsid);
 

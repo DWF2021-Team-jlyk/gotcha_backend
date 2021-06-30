@@ -5,7 +5,9 @@
 <mapper namespace="com.gotcha.www.workList.dao.WorkListDAO">
 
 	<!-- Control Lists -->
-
+	<select id="selectListId" resultType="Integer">
+		select list_seq.nextval from dual
+	</select>
 	<!-- select List -->
 	<select id="selectList" parameterType="String"
 		resultType="com.gotcha.www.workList.vo.ListVO">
@@ -20,7 +22,7 @@
 		keyProperty="list_id" keyColumn="list_id">
 		insert into gc_list
 		values
-		(list_seq.nextval,#{list_name},#{ws_id})
+		(#{list_id},#{list_name},#{ws_id})
 	</insert>
 
 	<!-- update List (list_id는 받아옴) -->
