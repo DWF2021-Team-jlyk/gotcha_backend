@@ -11,10 +11,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.filter.CorsFilter;
 
 import com.gotcha.www.user.dao.UserDAO;
+import com.gotcha.www.user.exception.CustomAuthenticationEntryPoint;
 import com.gotcha.www.user.filter.JwtAuthenticationFilter;
 import com.gotcha.www.user.filter.JwtAuthorizationFilter;
 
 import lombok.RequiredArgsConstructor;
+
+/**
+ * 작성일 : 2021-06-21
+ * 작성자 : 장승업
+ * 시큐리티 설정
+ */
 
 @Configuration
 @EnableWebSecurity
@@ -50,19 +57,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session을 사용하지 않겠다.
 			.and()
 			.addFilter(corsFilter) // @CrossOrigin(인증 X), 시큐리티 필터에 등록 인증(O)
-//			.formLogin().disable()
-			.formLogin().loginPage("/login").and()
-			.httpBasic().disable() //
+			.formLogin().disable()
+			.anonymous().disable()
+//			.formLogin().loginPage("/login").and()
+			.httpBasic().disable() //			
 			.authorizeRequests()
-//			.antMatchers("admin").hasRole("ADMIN")
+			.antMatchers("/main/wsList/list/info").access("hasRole('ROLE_ADMIN')")
 //			.antMatchers("member").hasAnyRole("ADMIN, MEMBER")
 			.anyRequest().permitAll()
 			.and()
-
 			.addFilter(new JwtAuthenticationFilter(authenticationManager()))
-			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
-//			.exceptionHandling()
-//			.authenticationEntryPoint(authenticationEntryPoint) // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
+//			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO))
+			.exceptionHandling()
+			.authenticationEntryPoint(new CustomAuthenticationEntryPoint()); // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
 //			.accessDeniedHandler(accessDeniedHandler) // 권한에서 예외가 발생;
 
 	}	

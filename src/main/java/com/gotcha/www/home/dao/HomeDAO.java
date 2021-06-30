@@ -9,7 +9,7 @@ import com.gotcha.www.home.vo.NotiJoinVO;
 import com.gotcha.www.home.vo.WorkspaceDto;
 
 @Mapper
-public interface HomeDAO <T>{
+public interface HomeDAO{
 
 	List<WorkspaceDto> selectWorkspace(String user_id);
 

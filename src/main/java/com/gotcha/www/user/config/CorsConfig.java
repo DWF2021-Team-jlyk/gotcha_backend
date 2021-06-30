@@ -6,6 +6,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+/*
+ * 작성일 : 2021-06-21
+ * 작성자 : 장승업
+ * cors 설정 filter
+ */
 @Configuration
 public class CorsConfig {
 	

@@ -14,9 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gotcha.www.user.dao.UserDAO;
+import com.gotcha.www.user.vo.PrincipalDetails;
+import com.gotcha.www.user.vo.UserDto;
 import com.gotcha.www.user.vo.UserVO;
 
 @Service
@@ -25,12 +30,12 @@ public class UserServiceImpl implements UserService {
 	private Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 	
 	@Autowired
-	UserDAO mainDAO;
+	UserDAO userDAO;
 	
 	// id 중복 검사
 	@Override
 	public boolean checkId(String user_id) {
-		int countId = mainDAO.checkId(user_id);
+		int countId = userDAO.checkId(user_id);
 		if(countId > 0) {
 			return false;
 		}else {
@@ -40,7 +45,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public void insertUser(UserVO userVO) {
-		mainDAO.insertUser(userVO);
+		userDAO.insertUser(userVO);
 	}
 	
 	@Override
@@ -105,7 +110,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void updateEnabled(String user_id) {
-		mainDAO.updateEnabled(user_id);
+		userDAO.updateEnabled(user_id);
 	}
 
 }
