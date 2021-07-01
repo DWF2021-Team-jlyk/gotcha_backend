@@ -11,4 +11,5 @@ public interface CardTodoDAO {
     void deleteCardTodo(int card_id, int todo_id);
     void updateCardTodo(CardTodoDTO cardTodo);
     void insertCardTodo(CardTodoDTO cardTodo);
+    void changeTodoIsDone(CardTodoDTO cardTodoDTO);
 }

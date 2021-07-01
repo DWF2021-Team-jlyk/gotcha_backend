@@ -16,4 +16,5 @@ public interface CardDetailDAO {
     List<CardFileDTO> selectFile(int card_id);
     List<CardActDTO> selectCardAct(int card_id);
 
+    
 }

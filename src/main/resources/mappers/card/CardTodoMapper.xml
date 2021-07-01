@@ -25,4 +25,10 @@
                 #{todo_end_date},
                 #{todo_isdone})
     </insert>
+    
+    <update id="updateTodoIsDone" parameterType="com.gotcha.www.card.vo.CardTodoDTO">
+			UPDATE gc_card_todo
+			set todo_isdone = #{todo_isdone}
+			where todo_id = #{todo_id}
+	</update>
 </mapper>

@@ -33,7 +33,7 @@ public class HomeController {
 	@PostMapping("/notiList")
 	public @ResponseBody List<NotiJoinVO> selectNotice(@RequestBody UserVO userVO) {
 		List<NotiJoinVO> mainList = homeService.selectNotice(userVO.getUser_id());
-		System.out.println(mainList);
+		System.out.println("노티" + mainList);
 		return mainList;
 	}
 	
@@ -45,8 +45,8 @@ public class HomeController {
 	@PostMapping("/wsUserList")
 	public @ResponseBody List<String> selecWsUserList(@RequestBody int ws_id)
 			throws Exception {
+		
 		List<String> wsUserList = homeService.selecWsUserList(ws_id);
-		System.out.println(wsUserList);
 		return wsUserList;
 		
 	}
