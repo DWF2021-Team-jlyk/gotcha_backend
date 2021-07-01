@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class ListVO {
 	private int ws_id;
-	private String list_id;
+	private int list_id;
 	private String list_name;
 	
 	

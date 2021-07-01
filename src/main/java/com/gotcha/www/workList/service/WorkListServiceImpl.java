@@ -32,11 +32,9 @@ public class WorkListServiceImpl implements WorkListService {
 	
 	
 	@Override
-	@Transactional(rollbackFor = SQLException.class)
+	@Transactional
 	public void insertList(ListVO listVO) {
-		int nextIndex = workListDAO.selectListId();
-		String id = Integer.toString(nextIndex);
-		listVO.setList_id(id);
+		listVO.setList_id(workListDAO.selectListId());
 		workListDAO.insertList(listVO);
 	}
 

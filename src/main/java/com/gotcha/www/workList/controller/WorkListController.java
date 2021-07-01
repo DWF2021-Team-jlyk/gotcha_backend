@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,13 +52,13 @@ public class WorkListController {
 
 	@RequestMapping("/insert")
 	public @ResponseBody ListVO insertList(@RequestBody ListVO listVO) {
-		log.debug("listVO debug before"+listVO);
+		//log.debug("listVO debug before"+listVO);
 //		int lastIndex = workListService.selectListId();
 //		String id = Integer.toString(lastIndex);
-//		listVO.setList_id(id);
-		System.out.println("ddddd");
+		listVO.setList_id(workListService.selectListId());
+		//System.out.println("ddddd:"+listVO);
 		workListService.insertList(listVO);
-		log.debug("listVO debug after"+listVO);
+		log.info("listVO insert info after:"+listVO);
 		return listVO;
 	}
 
@@ -71,9 +72,8 @@ public class WorkListController {
 
 	@RequestMapping("/delete")
 	public void deleteList(@RequestBody ListVO listVO) {
-		String currentIndex = listVO.getList_id();
-		int deleteId = Integer.parseInt(currentIndex);
-		workListService.deleteList(deleteId);
+		log.info("listVO delete info before"+listVO);
+		workListService.deleteList(listVO.getList_id());
 	}
 
 	// Card CRUD
