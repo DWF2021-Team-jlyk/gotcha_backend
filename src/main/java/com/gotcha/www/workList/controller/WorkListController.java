@@ -20,8 +20,8 @@ import com.gotcha.www.workList.service.WorkListService;
 import com.gotcha.www.workList.vo.CardVO;
 import com.gotcha.www.workList.vo.ListVO;
 
-@RestController
 @RequestMapping("/main/wsList/list")
+@RestController
 public class WorkListController {
 
     @Autowired

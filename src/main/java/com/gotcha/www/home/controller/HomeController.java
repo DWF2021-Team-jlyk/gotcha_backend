@@ -23,8 +23,8 @@ import com.gotcha.www.home.vo.WorkspaceDto;
 import com.gotcha.www.home.vo.UserVO;
 
 
-@RestController
 @RequestMapping("/home")
+@RestController
 public class HomeController {
     @Autowired
     HomeService homeService;
