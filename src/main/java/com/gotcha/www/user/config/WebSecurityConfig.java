@@ -47,6 +47,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
             .antMatchers("/resources/**")
             .antMatchers("/user/**");
+//            .antMatchers("/home/wsList")
+//            .antMatchers("/home/notiList")
+//            .antMatchers("/home/favUpdate")
+//            .antMatchers("/home/wsUserList");
     }
 
 	@Override
@@ -66,10 +70,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //			.antMatchers("member").hasAnyRole("ADMIN, MEMBER")
 			.anyRequest().permitAll()
 			.and()
-			.addFilter(new JwtAuthenticationFilter(authenticationManager()))
-//			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO))
-			.exceptionHandling()
-			.authenticationEntryPoint(new CustomAuthenticationEntryPoint()); // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
+			.addFilter(new JwtAuthenticationFilter(authenticationManager(), userDAO))
+			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
+//			.exceptionHandling()
+//			.authenticationEntryPoint(authenticationEntryPoint) // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
 //			.accessDeniedHandler(accessDeniedHandler) // 권한에서 예외가 발생;
 
 	}	

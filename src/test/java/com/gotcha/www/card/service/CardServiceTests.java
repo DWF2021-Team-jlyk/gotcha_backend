@@ -11,16 +11,16 @@ public class CardServiceTests {
 
     private Log log = LogFactory.getLog(this.getClass());
 
-    @Autowired
-    private CardService cardService;
-
-    @Test
-    public void getCardsTest(){
-        cardService.getCards(1).forEach(log::info);
-    }
-
-    @Test
-    public void getCardTest(){
-        log.info(cardService.getCard(1));
-    }
+//    @Autowired
+//    private CardService cardService;
+//
+//    @Test
+//    public void getCardsTest(){
+//        cardService.getCards(1).forEach(log::info);
+//    }
+//
+//    @Test
+//    public void getCardTest(){
+//        log.info(cardService.getCard(1));
+//    }
 }

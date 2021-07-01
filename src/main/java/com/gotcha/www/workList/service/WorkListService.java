@@ -10,6 +10,8 @@ public interface WorkListService {
 	// List Service
 
 	List<ListVO> selectList(String listWsid);
+	
+	int selectListId();
 
 	void insertList(ListVO listVO);
 

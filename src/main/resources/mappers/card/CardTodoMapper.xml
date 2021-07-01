@@ -3,14 +3,27 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gotcha.www.card.dao.CardTodoDAO">
     <select
+            id="selectTodoId"
+            resultType="int"
+    >
+        select TODO_SEQ.nextval from dual
+    </select>
+    <select
             id="selectCardTodo"
             parameterType="int"
             resultType="com.gotcha.www.card.vo.CardTodoDTO"
     >
         select *
         from GC_CARD_TODO
-        where CARD_ID=#{card_id}
+        where CARD_ID = #{card_id}
     </select>
+
+    <select id="todoCount" parameterType="int" resultType="int">
+        select count(*)
+        from GC_CARD_TODO
+        where CARD_ID = #{card_id}
+    </select>
+
     <insert id="insertCardTodo" parameterType="com.gotcha.www.card.vo.CardTodoDTO">
         insert into GC_CARD_TODO(todo_id,
                                  todo_name,
@@ -25,4 +38,20 @@
                 #{todo_end_date},
                 #{todo_isdone})
     </insert>
+
+    <delete id="deleteCardTodo" parameterType="int">
+        delete
+        from GC_CARD_TODO
+        where TODO_ID = #{todo_id}
+    </delete>
+
+    <update id="updateCardTodo" parameterType="com.gotcha.www.card.vo.CardTodoDTO">
+        update GC_CARD_TODO
+        set CARD_ID         = #{card_id},
+            TODO_NAME       = #{todo_name},
+            TODO_START_DATE = #{todo_start_date},
+            TODO_END_DATE   = #{todo_end_date},
+            TODO_ISDONE     = #{todo_isdone}
+        where TODO_ID = #{todo_id}
+    </update>
 </mapper>

@@ -24,12 +24,10 @@ public class PrincipalDetailsService implements UserDetailsService{
 	private final UserDAO userDAO;
 
 	@Override
-	@Transactional(rollbackFor=UsernameNotFoundException.class)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		log.info("PrincipalDetailsService의 loadUserByUsername()");
 		log.info("username: " + username);
 		UserDto userDto = userDAO.findByUsername(username);
-		userDAO.updateLastLogin(username);
 		
 		if(userDto.getRole_type() == null || userDto.getRole_type().equals("")) {
 			userDto.setRole_type("ROLE_USER");

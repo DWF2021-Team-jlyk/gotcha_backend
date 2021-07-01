@@ -16,6 +16,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +29,10 @@ import com.gotcha.www.user.vo.UserVO;
 public class UserServiceImpl implements UserService {
 	
 	private Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
-	
+
 	@Autowired
 	UserDAO userDAO;
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	// id 중복 검사
 	@Override
@@ -45,21 +47,23 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public void insertUser(UserVO userVO) {
+		String rawPassword = userVO.getUser_pwd();
+		// 비밀번호 암호화
+		String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+		userVO.setUser_pwd(encPassword);
+		log.info("[JOIN ENCODE PASSWORD] " + userVO.getUser_pwd());
 		userDAO.insertUser(userVO);
 	}
 	
 	@Override
-	public String sendToEmail(String toMail) {
+	public String sendToEmail(String division,String toMail) {
 		Random random=new Random();  //난수 생성을 위한 랜덤 클래스
 		String code="";  //인증번호 
+		String chars = "abcdefghijklmnopqrstuvwxyz";
+		String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String NUMS = "1234567890";
+		String SPEC = "!@#$%&";
 		
-		// code 생성
-		for(int i =0; i<6;i++) {
-			int index = random.nextInt(9)+1; // 1 ~ 9 code 생성
-			code += index;
-		}
-		
-		log.info("code : " + code);
 		log.info("mail : " + toMail);
 		
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -81,10 +85,32 @@ public class UserServiceImpl implements UserService {
 			MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMsg, true, "UTF-8");
 
 			//messageHelper.setFrom(new InternetAddress("jsu917@gmail.com"));
+			
 			messageHelper.setTo(new InternetAddress(toMail));//수취인
-			messageHelper.setSubject("안녕하세요. [GotCha] 인증 코드입니다.");//메일 title
-			messageHelper.setText("인증코드 : " + code, true);
+			
+			if(division.equals("join")) {
+				// code 생성
+				for(int i =0; i<6;i++) {
+					int index = random.nextInt(9)+1; // 1 ~ 9 code 생성
+					code += index;
+				}
+				log.info("[code] " + code);
+				messageHelper.setSubject("안녕하세요. [GotCha] 인증 코드입니다.");//메일 title
+				messageHelper.setText("인증코드 : " + code, true);
+			} else if(division.equals("find")) {
+				
+				code = createRandomPassword(SPEC) + createRandomPassword(CHARS) + createRandomPassword(chars) + createRandomPassword(NUMS);
+				log.info("[createPassword] " + code);
+				
+				messageHelper.setSubject("안녕하세요. [GotCha] 임시 비밀번호 입니다.");//메일 title
+				messageHelper.setText("임시 비밀번호 : " + code, true);
+				
+				// 비밀번호 암호화
+				String encPassword = bCryptPasswordEncoder.encode(code);
+				userDAO.updatePwd(toMail, encPassword);
+			}
 			mailSender.send(mimeMsg);
+			
 		} catch (AddressException e) {
 			e.printStackTrace();
 			System.out.println("AddressException : " + e.getMessage());
@@ -95,10 +121,19 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 			System.out.println("MessagingException : " + e.getMessage());
 		}
-		return code;
 		
+		return code;
 	}
 
+	// 비밀번호 찾기(비밀번호 생성)
+	private String createRandomPassword(String src) {
+		Random rnd = new Random();
+	    int index1 = (int) (rnd.nextFloat() * src.length())
+	    		, index2 = (int) (rnd.nextFloat() * src.length());
+	    		
+	    return "" + src.charAt(index1) + src.charAt(index2);
+	}
+	
 	@Override
 	public boolean checkCode(String inputCode, String joinCode) {
 		if(joinCode.equals(inputCode)) {
@@ -113,4 +148,6 @@ public class UserServiceImpl implements UserService {
 		userDAO.updateEnabled(user_id);
 	}
 
+	
+	
 }

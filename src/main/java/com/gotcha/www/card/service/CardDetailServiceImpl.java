@@ -1,18 +1,13 @@
 package com.gotcha.www.card.service;
 
-import com.gotcha.www.card.dao.CardDAO;
 import com.gotcha.www.card.dao.CardDetailDAO;
-import com.gotcha.www.card.vo.CardDTO;
 import com.gotcha.www.card.vo.CardDetailVO;
+import com.gotcha.www.workList.dao.WorkListDAO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 
 @Service
@@ -21,18 +16,18 @@ public class CardDetailServiceImpl implements CardDetailService{
 
     private final Log log = LogFactory.getLog(this.getClass());
 
-    private final CardDAO cardDAO;
+    private final WorkListDAO workListDAO;
     private final CardDetailDAO cardDetailDAO;
 
     @Autowired
-    public CardDetailServiceImpl(CardDAO cardDAO, CardDetailDAO cardDetailDAO) {
-        this.cardDAO = cardDAO;
+    public CardDetailServiceImpl(WorkListDAO workListDAO, CardDetailDAO cardDetailDAO) {
+        this.workListDAO = workListDAO;
         this.cardDetailDAO = cardDetailDAO;
     }
 
     public CardDetailVO getCardInfo(int card_id){
         CardDetailVO cardDetailVO = CardDetailVO.builder()
-                .cardDTO(cardDAO.selectCard(card_id))
+                .cardVO(workListDAO.selectOneCard(card_id))
                 .cardMembers(cardDetailDAO.selectMember(card_id))
                 .cardTodos(cardDetailDAO.selectTodoList(card_id))
                 .cardFiles(cardDetailDAO.selectFile(card_id))

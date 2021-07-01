@@ -19,16 +19,12 @@ import com.gotcha.www.user.filter.JwtAuthenticationFilter;
 import com.gotcha.www.user.service.UserService;
 import com.gotcha.www.user.vo.UserVO;
 
-//@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
 	UserService userService;
-	
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	HttpSession session;
 	
@@ -55,7 +51,7 @@ public class UserController {
 			userVO.setUser_pwd(encPassword);
 			log.info("pwd : " + userVO.getUser_pwd());
 			userService.insertUser(userVO);
-			String code = userService.sendToEmail(toMail);
+			String code = userService.sendToEmail("join",toMailId);
 			session = request.getSession();
 			session.setAttribute("joinCode", code);
 			return true;
@@ -75,7 +71,7 @@ public class UserController {
 		 
 		 String joinCode = (String) session.getAttribute("joinCode");
 		 
-		 log.info("getCode: "+session.getAttribute("joinCode"));
+		 log.info("getCode: " + session.getAttribute("joinCode"));
 		 
 		 boolean checkCode = userService.checkCode(inputCode, joinCode);
 		 
@@ -86,5 +82,20 @@ public class UserController {
 		 }
 		 
 		 return checkCode;
+	}
+	
+	@PostMapping("/pwdFind")
+	public boolean pwdFind(@RequestBody HashMap<String,String> map) {
+		String user_id = map.get("user_id");
+		log.info("user_id : "+user_id);
+		
+		boolean checkCode = userService.checkId(user_id);
+		
+		if(checkCode == false) {
+			userService.sendToEmail("find",user_id);
+			return true;
+		}
+		
+		return false;
 	}
 }

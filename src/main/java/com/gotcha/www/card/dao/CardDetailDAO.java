@@ -10,10 +10,8 @@ import java.util.List;
 
 @Mapper
 public interface CardDetailDAO {
-
     List<CardTodoDTO> selectTodoList(int card_id);
     List<CardMemberDTO> selectMember(int card_id);
     List<CardFileDTO> selectFile(int card_id);
     List<CardActDTO> selectCardAct(int card_id);
-
 }

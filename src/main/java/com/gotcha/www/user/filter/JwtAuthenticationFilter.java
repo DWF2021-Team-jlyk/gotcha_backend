@@ -20,7 +20,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gotcha.www.user.config.JwtProperties;
+import com.gotcha.www.user.dao.UserDAO;
 import com.gotcha.www.user.vo.PrincipalDetails;
+//import com.gotcha.www.user.filter.AuthException;
+//import com.gotcha.www.user.filter.JwtException;
+//import com.gotcha.www.user.filter.User;
 import com.gotcha.www.user.vo.UserDto;
 
 import io.jsonwebtoken.Claims;
@@ -46,6 +50,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	
 	private final AuthenticationManager authenticationManager;
+	private final UserDAO userDAO;
 	
 	// /login 요청을 하면 로그인 시도를 위해서 실행되는 함수
 	@Override
@@ -120,6 +125,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.withClaim("id",principalDetails.getUserDto().getUser_id())
 				.sign(Algorithm.HMAC512(JwtProperties.SECRET));
 		
+		// user_last_login update 
+		userDAO.updateLastLogin(principalDetails.getUserDto().getUser_id());
 		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
 	}
 

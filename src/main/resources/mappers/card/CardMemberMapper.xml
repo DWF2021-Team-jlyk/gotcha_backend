@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gotcha.www.card.vo.CardMemberDTO">
+    <select id="MemberCount" parameterType="int" resultType="int">
+        select count(*)
+        from GC_CARD_MEM
+        where CARD_ID = #{card_id}
+    </select>
+    <delete id="deleteCardMember" parameterType="String">
+        delete
+        from GC_CARD_MEM
+        where USER_ID = #{user_id} and CARD_ID = #{card_id}
+    </delete>
+</mapper>
