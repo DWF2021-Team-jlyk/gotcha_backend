@@ -29,7 +29,6 @@ public class HomeServiceImpl implements HomeService{
 	@Override
 	public List<NotiJoinVO> selectNotice(String user_id) {
 		List<NotiJoinVO> notiList = homeDAO.selectNoti(user_id);
-		System.out.println(notiList);
 		log.info(notiList);
 //		log.info(notiList.getClass());
 //		log.info(notiList.get(0).getClass());
@@ -43,7 +42,7 @@ public class HomeServiceImpl implements HomeService{
 	}
 
 	@Override
-	public List<String> selecWsUserList(int ws_id) {
+	public List<String> selectWsUserList(int ws_id) {
 		List<String> wsUserList = homeDAO.selecWsUserList(ws_id);
 		return wsUserList;
 	}

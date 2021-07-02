@@ -36,5 +36,10 @@ public interface UserDAO {
 
 	// last login time update
 	public void updateLastLogin(String username);
+
+	// update Password
+	public void updatePwd(String code);
+
+	public void updatePwd(@Param("user_id")String toMail,@Param("user_pwd") String code);
 	
 }

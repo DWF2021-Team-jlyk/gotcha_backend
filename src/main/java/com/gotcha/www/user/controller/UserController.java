@@ -1,6 +1,5 @@
 package com.gotcha.www.user.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,22 +8,15 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gotcha.www.user.service.UserService;
-import com.gotcha.www.user.vo.UserDto;
 import com.gotcha.www.user.vo.UserVO;
 
-@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -32,48 +24,9 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
 	HttpSession session;
 	
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
-
-	@GetMapping("home")
-	public String home() {
-		return "<h1>home</h1>";
-	}
-	
-	@PostMapping("token")
-	public String token() {
-		return "<h1>token</h1>";
-	}
-	
-	// select workspace List
-//	@PostMapping("/wsList")
-//	public @ResponseBody List<WorkspaceDto> selectWorkspace(@RequestBody UserVO userVO)
-//			throws Exception {
-//		List<WorkspaceDto> mainList = userService.selectWorkspace(userVO.getUser_id());
-//		System.out.println(mainList);
-//		return mainList;
-//	}
-	
-	// select notice List
-//	@PostMapping("/notiList")
-//	public @ResponseBody List<NotiJoinVO> selectNotice(@RequestBody UserVO userVO)
-//			throws Exception {
-//		List<NotiJoinVO> mainList = userService.selectNotice(userVO.getUser_id());
-//		System.out.println(mainList);
-//		return mainList;
-//	}
-
-//	@GetMapping("/user")
-//	public void user(HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException {
-//		ObjectMapper om = new ObjectMapper();
-//		UserDto userDto = om.readValue(request.getInputStream(), UserDto.class);
-//		log.info("login post mapping");
-//		log.info("userVO : "+userDto.toString());
-//	}
 	
 //	@PostMapping("/loginPage")
 //	public String user(HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException {
@@ -83,7 +36,7 @@ public class UserController {
 //		log.info("userVO : "+userDto);
 //		return "loginPage";
 //	}
-//	
+	
 	// 회원가입
 	@PostMapping("/joinCheck")
 	public boolean join(@RequestBody UserVO userVO, HttpServletRequest request) {
@@ -93,13 +46,10 @@ public class UserController {
 		
 		if(status == true) {
 			log.info("joinCheck true");
-			String toMail = userVO.getUser_id();
-			String rawPassword = userVO.getUser_pwd();
-			String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-			userVO.setUser_pwd(encPassword);
-			System.out.println("pwd : " + userVO.getUser_pwd());
+			String toMailId = userVO.getUser_id();
+			
 			userService.insertUser(userVO);
-			String code = userService.sendToEmail(toMail);
+			String code = userService.sendToEmail("join",toMailId);
 			session = request.getSession();
 			session.setAttribute("joinCode", code);
 			return true;
@@ -119,16 +69,31 @@ public class UserController {
 		 
 		 String joinCode = (String) session.getAttribute("joinCode");
 		 
-		 log.info("getCode: "+session.getAttribute("joinCode"));
+		 log.info("getCode: " + session.getAttribute("joinCode"));
 		 
 		 boolean checkCode = userService.checkCode(inputCode, joinCode);
 		 
 		 if(checkCode == true) {
-			 System.out.println("Session:"+session.getAttribute("joinCode"));
+			 System.out.println("Session:" + session.getAttribute("joinCode"));
 			 userService.updateEnabled(user_id);
 			 session.removeAttribute("joinCode");
 		 }
 		 
 		 return checkCode;
+	}
+	
+	@PostMapping("/pwdFind")
+	public boolean pwdFind(@RequestBody HashMap<String,String> map) {
+		String user_id = map.get("user_id");
+		log.info("user_id : "+user_id);
+		
+		boolean checkCode = userService.checkId(user_id);
+		
+		if(checkCode == false) {
+			userService.sendToEmail("find",user_id);
+			return true;
+		}
+		
+		return false;
 	}
 }

@@ -13,6 +13,8 @@ public interface WorkListDAO {
 	// List Mapper
 	public List<ListVO> selectList(String listWsid);
 	
+	public int selectListId();
+	
 	void insertList(ListVO listVO);
 	
 	void updateList(ListVO listVO);
@@ -25,12 +27,15 @@ public interface WorkListDAO {
 	
 	public List<CardVO> selectCard(String cardWsid);
 	
+	public int selectCardId();
+	
 	void insertCard(CardVO cardVO);
 	
 	void updateCard(CardVO cardVO);
 	
 	void deleteCard(int card_id);
 
+	CardVO selectOneCard(int card_id);
 	//public List<CardVO> selectCardList(int list_id);
 	
 	

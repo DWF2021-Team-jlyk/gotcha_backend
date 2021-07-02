@@ -1,4 +1,4 @@
-package com.gotcha.www.user.config.auth;
+package com.gotcha.www.user.vo;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,8 +7,6 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.gotcha.www.user.vo.UserDto;
 
 import lombok.Data;
 

@@ -10,6 +10,8 @@ public interface WorkListService {
 	// List Service
 
 	List<ListVO> selectList(String listWsid);
+	
+	int selectListId();
 
 	void insertList(ListVO listVO);
 
@@ -19,6 +21,8 @@ public interface WorkListService {
 
 	// List<Map<String, CardVO>> selectCard(CardVO cvo);
 	List<CardVO> selectCard(String cardWsid);
+	
+	int selectCardId();
 
 	void insertCard(CardVO cardVO);
 

@@ -10,7 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class WorkspaceDto {
-	private char is_fav; 
+	private int is_fav;
 	private int ws_id;
 	private String ws_name;
 	private String user_id;

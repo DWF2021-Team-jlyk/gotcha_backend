@@ -6,7 +6,7 @@ import com.gotcha.www.user.vo.UserVO;
 public interface UserService {
 
 	// 이메일 보내기
-	String sendToEmail(String toMail);
+	String sendToEmail(String division, String user_id);
 
 	// 생성 코드 입력 코드 비교
 	boolean checkCode(String inputCode, String joinCode);

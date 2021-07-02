@@ -1,4 +1,4 @@
-package com.gotcha.www.user.config;
+package com.gotcha.www.user.filter;
 
 import java.io.IOException;
 import java.util.Date;
@@ -8,6 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,11 +19,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gotcha.www.user.config.auth.PrincipalDetails;
+import com.gotcha.www.user.config.JwtProperties;
+import com.gotcha.www.user.dao.UserDAO;
+import com.gotcha.www.user.vo.PrincipalDetails;
+//import com.gotcha.www.user.filter.AuthException;
+//import com.gotcha.www.user.filter.JwtException;
+//import com.gotcha.www.user.filter.User;
 import com.gotcha.www.user.vo.UserDto;
 
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+
+/* 
+ * 작성일 : 2021-06-21
+ * 작성자 : 장승업
+ * login 요청 시 username, password의 정보를 토대로 
+ * DB에 있는지 검색 후 있으면 token 생성 filter
+*/
 
 // 스프링 시큐리티에서 UsernamePasswordAuthenticationFilter 가 있음
 // /login 요청해서 username,password 전송하면(post)
@@ -29,26 +42,33 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
+	
+	
+	private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+	
 	private final AuthenticationManager authenticationManager;
+	private final UserDAO userDAO;
 	
 	// /login 요청을 하면 로그인 시도를 위해서 실행되는 함수
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
-		System.out.println("JwtAuthenticationFilter: 로그인 시도 중...");
+		log.info("JwtAuthenticationFilter: 로그인 시도 중...");
 		
 		// 1. username, password 받아서
 		// request.getInputStream() byte안에 username과 password가 담겨있다.
 		try {
+			// 일반적으로 받는 방법
 //			BufferedReader br = request.getReader();
 //			String input = null;
 //			while((input=br.readLine())!=null) {
 //				System.out.println(input);
 //			}
+			
 			// json 객체를 parsing 해준다
 			ObjectMapper om = new ObjectMapper();
 			UserDto userDto = om.readValue(request.getInputStream(), UserDto.class);
-			System.out.println("userDto: " + userDto);
+			log.info("userDto: " + userDto);
 			
 			// 토큰 생성
 			UsernamePasswordAuthenticationToken authenticationToken = 
@@ -66,11 +86,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 			
 			// 값이 나온다는 것은 로그인이 정상적으로 되었다는 뜻.
-			System.out.println("로그인 완료됨: "+principalDetails.getUserDto().getUser_id());
-			//System.out.println(request.getInputStream().toString());
+			log.info("로그인 완료됨: "+principalDetails.getUserDto().getUser_id());
+			
 			// authentication 객체가 session영역에 저장을 해야하고 그 방법이 return 해주면 됨.
-			// 리턴의 이유는 권한 관리를 security가 대신 해주기 때문에 편하려고 하는거임.
-			// 굳이 JWT 토큰을 사용하면서 세션을 만들 이유가 없음  근데 단지 권한 처리때문에 session 넣어준다.
+			// 리턴의 이유는 권한 관리를 security가 대신 해주기 때문에 편하려고 하는 것이다.
+			// 굳이 JWT 토큰을 사용하면서 세션을 만들 이유가 없다 하지만 단지 권한 처리때문에 session 넣어준다.
 			
 			return authentication;
 		} catch (IOException e) {
@@ -92,16 +112,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
-		System.out.println("successfulAuthentication 실행됨: 인증이 완료되었다는 뜻임");
+		log.info("successfulAuthentication 실행됨: 인증이 완료되었다는 뜻임");
 		PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-		System.out.println("princi id :"+principalDetails.getUserDto().getUser_id());
+		log.info("success login id :"+principalDetails.getUserDto().getUser_id());
 		// RSA방식이 아닌 Hash 암호방식
 		String jwtToken = JWT.create()
-				.withSubject("cos토큰")
-				.withExpiresAt(new Date(System.currentTimeMillis()+(60000*10))) // => (10분) 만료 시간 (1000 = 1초)
+				.withSubject("gotcha토큰")
+				.withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPRIATION_TIME)) // => (10분) 만료 시간 (1000 = 1초)
 				.withClaim("id",principalDetails.getUserDto().getUser_id())
-				.sign(Algorithm.HMAC512("cos"));
+				.sign(Algorithm.HMAC512(JwtProperties.SECRET));
 		
-		response.addHeader("Authorization", "Bearer " + jwtToken);
+		// user_last_login update 
+		userDAO.updateLastLogin(principalDetails.getUserDto().getUser_id());
+		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
 	}
+
 }
