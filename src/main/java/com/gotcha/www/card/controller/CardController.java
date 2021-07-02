@@ -40,7 +40,7 @@ public class CardController {
 	
 	@PostMapping("/todoIsDoneChange")
     public @ResponseBody void changeTodoIsDone(@RequestBody CardTodoDTO cardTodoDTO) {
-		cardDetailService.changeTodoIsDone(cardTodoDTO);
+		cardDetailService.updateTodoIsDone(cardTodoDTO);
 	
     }
 

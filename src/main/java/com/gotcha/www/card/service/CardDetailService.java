@@ -6,5 +6,5 @@ import com.gotcha.www.card.vo.CardTodoDTO;
 
 public interface CardDetailService {
     CardDetailVO getCardInfo(int card_id);
-    void changeTodoIsDone(CardTodoDTO cardTodoDTO);
+    void updateTodoIsDone(CardTodoDTO cardTodoDTO);
 }

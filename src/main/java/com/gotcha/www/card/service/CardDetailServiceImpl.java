@@ -49,9 +49,9 @@ public class CardDetailServiceImpl implements CardDetailService{
     }
 
 	@Override
-	public void changeTodoIsDone(CardTodoDTO cardTodoDTO) {
+	public void updateTodoIsDone(CardTodoDTO cardTodoDTO) {
 		// TODO Auto-generated method stub
-		cardTodoDAO.changeTodoIsDone(cardTodoDTO);
+		cardTodoDAO.updateTodoIsDone(cardTodoDTO);
 	}
 
 
