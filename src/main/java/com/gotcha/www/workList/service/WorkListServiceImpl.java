@@ -55,9 +55,16 @@ public class WorkListServiceImpl implements WorkListService {
 		
 		return workListDAO.selectCard(cardWsid);
 	}
+	
+	@Override
+	public int selectCardId() {
+		return workListDAO.selectCardId();
+	}
 
 	@Override
+	@Transactional
 	public void insertCard(CardVO cardVO) {
+		cardVO.setCard_id(workListDAO.selectCardId());
 		workListDAO.insertCard(cardVO);
 		
 	}
@@ -74,6 +81,7 @@ public class WorkListServiceImpl implements WorkListService {
 		
 	}
 
+	
 
 
 

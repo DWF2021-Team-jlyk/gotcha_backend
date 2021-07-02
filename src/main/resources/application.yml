@@ -4,6 +4,8 @@ spring:
     url: jdbc:oracle:thin:@192.168.20.19:1521:xe
     username: gotcha
     password: oracle
+  jackson:
+    property-naming-strategy: LOWER_CASE
     
 mybatis:
   type-aliases-package: com.example.test.vo

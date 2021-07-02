@@ -52,11 +52,7 @@ public class WorkListController {
 
 	@RequestMapping("/insert")
 	public @ResponseBody ListVO insertList(@RequestBody ListVO listVO) {
-		//log.debug("listVO debug before"+listVO);
-//		int lastIndex = workListService.selectListId();
-//		String id = Integer.toString(lastIndex);
 		listVO.setList_id(workListService.selectListId());
-		//System.out.println("ddddd:"+listVO);
 		workListService.insertList(listVO);
 		log.info("listVO insert info after:"+listVO);
 		return listVO;
@@ -91,10 +87,11 @@ public class WorkListController {
 	}
 
 	@RequestMapping("/card/insert")
-	public void insertCard(@RequestBody CardVO cardVO) {
-		System.out.println(cardVO);
+	public @ResponseBody CardVO insertCard(@RequestBody CardVO cardVO) {
+		cardVO.setCard_id(workListService.selectCardId());
 		workListService.insertCard(cardVO);
-		System.out.println(cardVO);
+		log.info("cardVO insert info after:"+cardVO);
+		return cardVO;
 	}
 	
 	@RequestMapping("card/update")

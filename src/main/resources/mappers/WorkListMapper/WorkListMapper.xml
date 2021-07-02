@@ -5,8 +5,10 @@
 <mapper namespace="com.gotcha.www.workList.dao.WorkListDAO">
 
 	<!-- Control Lists -->
+	<!-- select ListId -->
 	<select id="selectListId" resultType="Integer">
-		select list_seq.nextval from dual
+		select list_seq.nextval
+		from dual
 	</select>
 	<!-- select List -->
 	<select id="selectList" parameterType="String"
@@ -38,11 +40,17 @@
 	<!-- delete List (list_id 받아옴) -->
 	<delete id="deleteList" parameterType="Integer">
 		delete from gc_list
-		where list_id = #{list_id}
+		where
+		list_id = #{list_id}
 	</delete>
 
 
 	<!-- Control Cards -->
+	<!-- select CardId -->
+	<select id="selectCardId" resultType="Integer">
+		select card_seq.nextval
+		from dual
+	</select>
 	<!-- select Card -->
 	<resultMap type="map" id="CardList">
 
@@ -63,33 +71,39 @@
 
 	<!-- insert Card (list_id, ws_id, card_start_date, card_end_date 받아옴) -->
 	<insert id="insertCard"
-		parameterType="com.gotcha.www.workList.vo.CardVO" 
+		parameterType="com.gotcha.www.workList.vo.CardVO"
 		keyProperty="card_id" keyColumn="card_id">
 		insert into gc_card
 		values
-		(card_seq.nextval,#{card_name},#{card_desc,jdbcType=CLOB},#{list_id},#{ws_id},0,#{card_start_date,jdbcType=VARCHAR},#{card_end_date,jdbcType=VARCHAR})
-	</insert> 
-	
+		(#{card_id},#{card_name},#{card_desc,jdbcType=CLOB},#{list_id},#{ws_id},0,#{card_start_date,jdbcType=VARCHAR},#{card_end_date,jdbcType=VARCHAR})
+	</insert>
+
 	<!-- update Card (list_id, ws_id, card_start_date, card_end_date 받아옴) -->
 	<update id="updateCard">
 		update gc_card
 		set card_name = #{card_name},
-		card_desc = #{card_desc,jdbcType=CLOB},
+		card_desc
+		= #{card_desc,jdbcType=CLOB},
 		list_id = #{list_id},
 		ws_id = #{ws_id},
 		card_isdone = #{card_isdone},
-		card_start_date = #{card_start_date,jdbcType=VARCHAR},
-		card_end_date = #{card_end_date,jdbcType=VARCHAR}
+		card_start_date =
+		#{card_start_date,jdbcType=VARCHAR},
+		card_end_date =
+		#{card_end_date,jdbcType=VARCHAR}
 		where card_id = #{card_id}
 	</update>
 
 	<!-- delete Card -->
-	<delete id="deleteCard" parameterType="int">
+	<delete id="deleteCard" parameterType="Integer">
 		delete from gc_card
-		where card_id = #{card_id}
+		where
+		card_id = #{card_id}
 	</delete>
 
-	<select id="selectCardList" parameterType="Integer" resultType="com.gotcha.www.workList.vo.CardVO"> 
-		select * from gc_card where list_id = #{card_id} </select>
+	<select id="selectCardList" parameterType="Integer"
+		resultType="com.gotcha.www.workList.vo.CardVO">
+		select * from gc_card where list_id = #{card_id}
+	</select>
 
 </mapper>
