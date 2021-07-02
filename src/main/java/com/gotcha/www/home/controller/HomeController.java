@@ -1,5 +1,6 @@
 package com.gotcha.www.home.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gotcha.www.home.service.HomeService;
 import com.gotcha.www.home.vo.NotiJoinVO;
-import com.gotcha.www.home.vo.WorkspaceDto;
 import com.gotcha.www.home.vo.UserVO;
+import com.gotcha.www.home.vo.WorkspaceDto;
 
 
 @RestController
@@ -32,9 +33,9 @@ public class HomeController {
 	
 	@PostMapping("/notiList")
 	public @ResponseBody List<NotiJoinVO> selectNotice(@RequestBody UserVO userVO) {
-		List<NotiJoinVO> mainList = homeService.selectNotice(userVO.getUser_id());
-		System.out.println("노티" + mainList);
-		return mainList;
+//		List<NotiJoinVO> mainList = homeService.selectNotice(userVO.getUser_id());
+//		System.out.println("노티" + mainList);
+		return homeService.selectNotice(userVO.getUser_id());
 	}
 	
 	@PostMapping("/favUpdate")

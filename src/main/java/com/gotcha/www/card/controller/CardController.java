@@ -16,6 +16,7 @@ import com.gotcha.www.card.service.CardDetailService;
 import com.gotcha.www.card.service.CardService;
 import com.gotcha.www.card.vo.CardDTO;
 import com.gotcha.www.card.vo.CardDetailVO;
+import com.gotcha.www.card.vo.CardMemberDTO;
 import com.gotcha.www.card.vo.CardTodoDTO;
 
 @RestController
@@ -31,7 +32,7 @@ public class CardController {
 
 	@PostMapping("/cardDetail")
     public @ResponseBody CardDetailVO getCardDetail(@RequestBody CardDTO card) {
-		
+		System.out.println(card);
 		CardDetailVO cardDetail =  cardDetailService.getCardInfo(card.getCard_id());
 		logger.info(cardDetail.toString());
 
@@ -44,5 +45,9 @@ public class CardController {
 	
     }
 
+	@PostMapping("/cardMemberInsert")
+	public @ResponseBody void insertCardMember(@RequestBody CardMemberDTO cardMemberDTO) {
+		cardDetailService.insertCardMember(cardMemberDTO);
+	}
 
 }

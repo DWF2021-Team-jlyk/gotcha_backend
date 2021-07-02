@@ -5,6 +5,7 @@ import com.gotcha.www.card.dao.CardDetailDAO;
 import com.gotcha.www.card.dao.CardTodoDAO;
 import com.gotcha.www.card.vo.CardDTO;
 import com.gotcha.www.card.vo.CardDetailVO;
+import com.gotcha.www.card.vo.CardMemberDTO;
 import com.gotcha.www.card.vo.CardTodoDTO;
 
 import org.apache.commons.logging.Log;
@@ -50,8 +51,13 @@ public class CardDetailServiceImpl implements CardDetailService{
 
 	@Override
 	public void updateTodoIsDone(CardTodoDTO cardTodoDTO) {
-		// TODO Auto-generated method stub
 		cardTodoDAO.updateTodoIsDone(cardTodoDTO);
+	}
+
+	@Override
+	public void insertCardMember(CardMemberDTO cardMemberDTO) {
+		cardDetailDAO.insertCardMember(cardMemberDTO);
+		
 	}
 
 
