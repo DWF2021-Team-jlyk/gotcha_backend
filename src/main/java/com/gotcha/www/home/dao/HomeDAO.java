@@ -1,6 +1,5 @@
 package com.gotcha.www.home.dao;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -17,6 +16,6 @@ public interface HomeDAO{
 	
 	void updateFav(WorkspaceDto workspaceDto);
 	
-	List<String> selecWsUserList(int ws_id);
+	List<String> selectWsUserList(int ws_id);
 
 }

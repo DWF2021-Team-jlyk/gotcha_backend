@@ -14,16 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gotcha.www.home.vo.UserVO;
 import com.gotcha.www.user.dao.UserDAO;
-import com.gotcha.www.user.vo.PrincipalDetails;
-import com.gotcha.www.user.vo.UserDto;
-import com.gotcha.www.user.vo.UserVO;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -32,7 +28,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserDAO userDAO;
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	// id 중복 검사
 	@Override
@@ -148,6 +146,58 @@ public class UserServiceImpl implements UserService {
 		userDAO.updateEnabled(user_id);
 	}
 
-	
+	@Override
+	public UserVO getUserInfo(String userId) {
+		UserVO userVO = userDAO.getUserInfo(userId);
+		log.info("[SERVICE UserVO] " + userVO.toString());
+		return userVO;
+	}
+
+	@Override
+	public void updateUserName(String user_id, String user_name) {
+		System.out.println("serviceImpl userName update");
+		userDAO.updateUserName(user_id ,user_name);
+	}
+
+	@Override
+	public boolean checkPwd(String user_id, String user_pwd) {
+		log.info(user_pwd);		
+		UserVO userVO = userDAO.getUserPwd(user_id);
+		log.info("[CURRENTPWD] "+userVO.getUser_pwd());
+		
+//		boolean status = bCryptPasswordEncoder.matches(user_pwd, userVO.getUser_pwd()) ? true : false; 
+		
+		return bCryptPasswordEncoder.matches(user_pwd, userVO.getUser_pwd());
+	}
+
+	@Override
+	public void changePwd(String user_id, String user_pwd) {
+		String encPassword = bCryptPasswordEncoder.encode(user_pwd);
+		UserVO userVO = new UserVO();
+		userVO.setUser_pwd(encPassword);
+		userDAO.updatePwd(user_id, userVO.getUser_pwd());
+	}
+
+	@Override
+	@Transactional
+	public boolean withdrawal(String userId) {
+//		boolean checkStatus;
+		// 각  workspace 마다 member가 몇 명인지 체크 후 0명이면 user_role 및 workspace 삭제(수정 해야함)
+//		int checkMember = userDAO.checkWorkspaceMember();
+//		if(checkMember > 0) {
+//			return false;
+//		}
+		int checkAdmin = userDAO.checkWorkspaceAdmin(userId);
+		if(checkAdmin > 0) {
+			return false;
+		}else {
+			userDAO.deleteCardReply(userId);
+			userDAO.deleteCardMember(userId);
+			userDAO.deleteNotiUser(userId);
+			userDAO.deleteUserRole(userId);
+			userDAO.deleteUser(userId);
+			return true;
+		}
+	}
 	
 }

@@ -43,7 +43,7 @@ public class HomeServiceImpl implements HomeService{
 
 	@Override
 	public List<String> selectWsUserList(int ws_id) {
-		List<String> wsUserList = homeDAO.selecWsUserList(ws_id);
+		List<String> wsUserList = homeDAO.selectWsUserList(ws_id);
 		return wsUserList;
 	}
 

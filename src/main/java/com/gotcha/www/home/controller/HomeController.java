@@ -1,14 +1,11 @@
 package com.gotcha.www.home.controller;
 
-import java.security.Principal;
 import java.util.List;
 
-import com.gotcha.www.user.service.PrincipalDetailsService;
-import com.gotcha.www.user.vo.PrincipalDetails;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +18,8 @@ import com.gotcha.www.home.service.HomeService;
 import com.gotcha.www.home.vo.NotiJoinVO;
 import com.gotcha.www.home.vo.UserVO;
 import com.gotcha.www.home.vo.WorkspaceDto;
-import com.gotcha.www.user.vo.UserDto;
+import com.gotcha.www.user.service.UserService;
+import com.gotcha.www.user.vo.PrincipalDetails;
 
 
 @RestController
@@ -30,48 +28,91 @@ public class HomeController {
     @Autowired
     HomeService homeService;
 
+    @Autowired
+    UserService userService;
+    
     private Log log = LogFactory.getLog(this.getClass());
-
+    private static String userId;
+    
     @PostMapping("/wsList")
-    public @ResponseBody
-    List<WorkspaceDto> selectWorkspace(@RequestBody UserVO userVO, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+	public @ResponseBody List<WorkspaceDto> selectWorkspace(@RequestBody UserVO userVO
+			, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+		userId = getLoginUser(principalDetails);
+		List<WorkspaceDto> mainList = homeService.selectWorkspace(userId);
+		log.info("[/wsList RESULT] " + mainList);
+		return mainList;
+	}
+	
+	@PostMapping("/notiList")
+	public @ResponseBody List<NotiJoinVO> selectNotice(@RequestBody UserVO userVO
+			, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+		userId = getLoginUser(principalDetails);
+		List<NotiJoinVO> mainList = homeService.selectNotice(userId);
+		log.info("노티" + mainList);
+		return mainList;
+	}
+	
+	@PostMapping("/favUpdate")
+	public @ResponseBody void UpdateFav(@RequestBody WorkspaceDto workspaceDto
+			, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+		userId = getLoginUser(principalDetails);
+		workspaceDto.setUser_id(userId);
+		homeService.updateFav(workspaceDto);
+	}
+	
+	@PostMapping("/wsUserList")
+	public @ResponseBody List<String> selecWsUserList(@RequestBody int ws_id)
+			throws Exception {
+		List<String> wsUserList = homeService.selectWsUserList(ws_id);
+		return wsUserList;
+		
+	}
     
-    	String userId = getLoginUser(principalDetails);
-
-		log.info("userId : " + userId);
-
-        log.info("\nselectWorkspace\n userVo : " + userVO.toString());
-        List<WorkspaceDto> mainList = homeService.selectWorkspace(userVO.getUser_id());
-        log.debug("\nselectWorkspace\n mainList : " + mainList);
-//        log.info("\ngetUsername : "+principalDetails.getUsername());
-        return mainList;
-    }
-
-    @PostMapping("/notiList")
-    public @ResponseBody
-    List<NotiJoinVO> selectNotice(@RequestBody UserVO userVO) {
-//        List<NotiJoinVO> mainList = homeService.selectNotice(userVO.getUser_id());
-//        log.info(mainList);
-        return null;
-    }
-
-    @PostMapping("/favUpdate")
-    public @ResponseBody
-    void UpdateFav(@RequestBody WorkspaceDto workspaceDto) {
-        homeService.updateFav(workspaceDto);
-    }
-
-    @PostMapping("/wsUserList")
-    public @ResponseBody
-    List<String> selectWsUserList(@RequestBody int ws_id)
-            throws Exception {
-        List<String> wsUserList = homeService.selectWsUserList(ws_id);
-        log.info(wsUserList);
-        return wsUserList;
+    @PostMapping("/myPage")
+	public UserVO myPage(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+		userId = getLoginUser(principalDetails);
+		UserVO userVO = userService.getUserInfo(userId);
+		log.info("[Request myPage UserVO] " + userVO.toString());
+		return userVO;
+	}
+    
+    @PostMapping("/updateUserName")
+    public void updateUserName(@RequestBody UserVO userVO,
+    		@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    	log.info("updateUserName");
+    	log.info("user_name"+ userVO.getUser_name());
+    	userId = getLoginUser(principalDetails);
+    	log.info("[login id] " + userId);
+    	userService.updateUserName(userId, userVO.getUser_name());
     }
     
+    @PostMapping("/checkCurrentPwd")
+    public boolean checkCurrentPwd(@RequestBody UserVO userVO,
+    		@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    	log.info("[checkCurrentPwd Request] " + userVO.getUser_pwd());
+    	userId = getLoginUser(principalDetails);
+    	boolean checkPwd = userService.checkPwd(userId, userVO.getUser_pwd());
+    	log.info("[CURRENT PASSWORD RESULT] "+checkPwd);
+    	return checkPwd;
+    }
+    
+    @PostMapping("/changePwd")
+    public void changePwd(@RequestBody UserVO userVO,
+    		@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    	userId = getLoginUser(principalDetails);
+    	log.info("[changPwd userVO]" + userVO);
+    	userService.changePwd(userId, userVO.getUser_pwd());
+    }
+    
+    @PostMapping("/withdrawal")
+    public boolean withdrawal(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    	userId = getLoginUser(principalDetails);
+    	boolean status = userService.withdrawal(userId);
+    	return status;
+    }
+    
+    // get login id
     public String getLoginUser(PrincipalDetails principalDetails) {
-    	String userId="";
     	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
 		if (principal instanceof PrincipalDetails) {
 			userId = ((PrincipalDetails) principal).getUsername();

@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class WorkListVO {
 	private String user_id;
+	private String user_name;
+	private String user_pwd;
 	private int ws_id;
 	private int list_id;
 	private int card_id;

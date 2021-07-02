@@ -15,5 +15,4 @@ public interface HomeService {
 	
 	//workspace setting userlist받아오기
 	List<String> selectWsUserList(int ws_id);
-	
 }

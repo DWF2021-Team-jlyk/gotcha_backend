@@ -9,9 +9,7 @@ package com.gotcha.www.user.filter;
 */
 
 import java.io.IOException;
-import java.util.Date;
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.Calendar;
 
 import javax.servlet.FilterChain;
@@ -25,27 +23,22 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gotcha.www.user.config.JwtProperties;
 import com.gotcha.www.user.config.RequestBodyWrapper;
 import com.gotcha.www.user.dao.UserDAO;
+import com.gotcha.www.user.exception.CustomAccessDeniedHandler;
 import com.gotcha.www.user.vo.PrincipalDetails;
 //import com.gotcha.www.user.filter.AuthException;
 //import com.gotcha.www.user.filter.JwtException;
 //import com.gotcha.www.user.filter.User;
 import com.gotcha.www.user.vo.UserDto;
 import com.gotcha.www.workList.vo.WorkListVO;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
 
 // 시큐리티가 filter가지고 있는데 그 필터중에 BasicAuthenticationFilter라는 것이 있다.
 // 권한이나 인증이 필요한 특정 주소를 요청했을 때 위 필터를 무조건 타게 되어있음.
@@ -66,7 +59,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 //		super.doFilterInternal(request, response, chain);
-		System.out.println("path: " + request.getServletPath());
+		log.info("[REQUEST PATH] " + request.getServletPath());
 		//System.out.println("request.getInputStream() : " + request.getInputStream());
 
 		// get workspace id
@@ -77,15 +70,24 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 		log.info("[requestWrapper] " + requestWrapper.getUserPrincipal());
 		
 		ObjectMapper om = new ObjectMapper();
-		WorkListVO workListVO = om.readValue(request.getInputStream(), WorkListVO.class);
-		log.info("toString : " + workListVO.toString());
+		WorkListVO workListVO = om.readValue(requestWrapper.getInputStream(), WorkListVO.class);
+		log.info("[WorkListVO INFO] " + workListVO.toString());
 		String ws_id = Integer.toString(workListVO.getWs_id());
 		String token = workListVO.getAccessToken();
-		log.info("ws_id: " + workListVO.getWs_id());
-		log.info("token: " + token);
-		log.info("인증이나 권한이 필요한 주소 요청이 됨.");
+		log.info("[WorkListVO WS_ID] " + workListVO.getWs_id());
+		log.info("[WorkListVO ACCESSTOKEN] " + token);
+		log.info("[JwtAuthorize] 인증이나 권한이 필요한 주소 요청이 됨.");
+		
+		if(token == null || !token.startsWith("Bearer")) {
+			log.info("[TOKEN IS NULL]");
+			AccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
+			accessDeniedHandler.handle(request, response, null);
+			chain.doFilter(requestWrapper, response);
+			return;
+		}
+		
 		if(ws_id.equals(null) || ws_id.equals("")) {
-			log.info("ws_id not value");
+			log.info("[WS_ID NOT GET VALUE]...");
 		}
 //		String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
 //		log.info("jwtHeader : "+jwtHeader);
@@ -100,45 +102,41 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 //			return;
 //		}
 		
-		if(token == null || !token.startsWith("Bearer")) {
-			chain.doFilter(request, response);
-			return;
-		}
-		
 		// JWT 토큰을 검증을 해서 정상적인 사용자인지 확인
 		//String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
 		String jwtToken = token.replace("Bearer ", "");
+		// 토큰 만료시간 체크
 		if(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET))
 		.build().verify(jwtToken).getExpiresAt().before(Calendar.getInstance().getTime())) {
-			chain.doFilter(request, response);
-			throw new RuntimeException("Exired token~!");
+			chain.doFilter(requestWrapper, response);
+			throw new RuntimeException("[Exired token~!]");
 		}else {
 			String userId = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET))
 					.build().verify(jwtToken)
 					.getClaim("id").asString();
-			System.out.println("userId : " + userId);
+			log.info("[TOKEN LOGIN ID] " + userId);
 			// 서명이 정상적으로 됨
 			if(userId != null) {
 				log.info("username 정상");
 				UserDto userEntity = new UserDto();
 				// select workspace 
 				if(!ws_id.equals("0")) {
-					log.info("select workspace");
+					log.info("[SELECT WORKSPACE]");
 					userEntity = userDAO.findByWsUsername(userId,ws_id);
 				}else if(ws_id.equals("0")){
-					log.info("not select workspace");
+					log.info("[NOT SELECT WORKSPACE]");
 					// not select workspace
 					userEntity = userDAO.findByUsername(userId);
-					log.info("[userEntity] "+userEntity);
+					log.info("[USERENTITY] "+userEntity);
 					if(userEntity.getRole_type() == null || userEntity.getRole_type().equals("")) {
-						log.info("NULL ROLETYPE");
+						log.info("[NULL ROLETYPE]");
 						userEntity.setRole_type("ROLE_USER");					
 					}
 				}
-				log.info("userEntity: " + userEntity.getUser_id());
-				log.info("userEntity: " + userEntity.getRole_type());
+				log.info("[USERENTITY GET ID] " + userEntity.getUser_id());
+				log.info("[USERENTITY ROLE_TYPE] " + userEntity.getRole_type());
 				PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
-				log.info("principalDetails : " + principalDetails.getUsername()+".....");
+				log.info("[PRINCIPALDETAILS GET ID] " + principalDetails.getUsername()+".....");
 
 				// Jwt 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어준다.
 				Authentication authentication =
@@ -150,7 +148,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 				chain.doFilter(requestWrapper, response);
 			}
 		}
-		chain.doFilter(requestWrapper, response);
+//		chain.doFilter(requestWrapper, response);
 	}	
 
 //	private Authentication getAuthentication(HttpServletRequest request) {

@@ -8,10 +8,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.filter.CorsFilter;
 
 import com.gotcha.www.user.dao.UserDAO;
-import com.gotcha.www.user.exception.CustomAuthenticationEntryPoint;
+import com.gotcha.www.user.exception.CustomAccessDeniedHandler;
 import com.gotcha.www.user.filter.JwtAuthenticationFilter;
 import com.gotcha.www.user.filter.JwtAuthorizationFilter;
 
@@ -42,6 +43,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 //    }
 	
+	@Bean
+	public AccessDeniedHandler accessDeniedHandler(){
+	    return new CustomAccessDeniedHandler();
+	}
+	
 	@Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
@@ -62,19 +68,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.addFilter(corsFilter) // @CrossOrigin(인증 X), 시큐리티 필터에 등록 인증(O)
 			.formLogin().disable()
-			.anonymous().disable()
+//			.anonymous().disable()
 //			.formLogin().loginPage("/login").and()
 			.httpBasic().disable() //			
 			.authorizeRequests()
-			.antMatchers("/main/wsList/list/info").access("hasRole('ROLE_ADMIN')")
+			.antMatchers("/home/*").access("hasRole('ROLE_USER')")
+			.antMatchers("/main/wsList/list/**").access("hasAnyRole('ROLE_ADMIN') or hasAnyRole('ROLE_MEMBER')")
 //			.antMatchers("member").hasAnyRole("ADMIN, MEMBER")
+//			.antMatchers("/user/*").permitAll()
 			.anyRequest().permitAll()
 			.and()
 			.addFilter(new JwtAuthenticationFilter(authenticationManager(), userDAO))
-			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
-//			.exceptionHandling()
+			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO))
+			.exceptionHandling()
 //			.authenticationEntryPoint(authenticationEntryPoint) // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
-//			.accessDeniedHandler(accessDeniedHandler) // 권한에서 예외가 발생;
+			.accessDeniedHandler(new CustomAccessDeniedHandler()); // 권한에서 예외가 발생;
+//			.accessDeniedPage("/user/accessDenied");
 
 	}	
 	
