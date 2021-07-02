@@ -12,6 +12,7 @@ import com.gotcha.www.workList.vo.ListVO;
 public interface WorkListDAO {
 	// List Mapper
 	public List<ListVO> selectList(String listWsid);
+	
 	public int selectListId();
 	
 	void insertList(ListVO listVO);
@@ -25,6 +26,8 @@ public interface WorkListDAO {
 	//public List<Map<String, CardVO>> selectCard(CardVO cvo);
 	
 	public List<CardVO> selectCard(String cardWsid);
+	
+	public int selectCardId();
 	
 	void insertCard(CardVO cardVO);
 	

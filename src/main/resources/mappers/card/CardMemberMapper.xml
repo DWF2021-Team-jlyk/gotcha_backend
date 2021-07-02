@@ -7,6 +7,11 @@
         from GC_CARD_MEM
         where CARD_ID = #{card_id}
     </select>
+    <select id="selectCardMember" parameterType="int" resultType="com.gotcha.www.card.vo.CardMemberDTO">
+        select *
+        from GC_CARD_MEM
+        where CARD_ID = #{card_id}
+    </select>
     <delete id="deleteCardMember" parameterType="String">
         delete
         from GC_CARD_MEM

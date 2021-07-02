@@ -49,80 +49,61 @@ public class WorkListController {
 //		list.setCard(cardList);
 //		}
 
-        return listList;
-    }
+		return listList;
+	}
 
-    @RequestMapping("/insert")
-    public @ResponseBody
-    ListVO insertList(@RequestBody ListVO listVO) {
-        listVO.setList_id(workListService.selectListId());
-        workListService.insertList(listVO);
-        return listVO;
-    }
+	@RequestMapping("/insert")
+	public @ResponseBody ListVO insertList(@RequestBody ListVO listVO) {
+		listVO.setList_id(workListService.selectListId());
+		workListService.insertList(listVO);
+		log.info("listVO insert info after:"+listVO);
+		return listVO;
+	}
 
-    @RequestMapping("/update")
-    public void updateList(@RequestBody ListVO listVO) {
-        // System.out.println("here1");
-        System.out.println(listVO);
-        workListService.updateList(listVO);
-        // System.out.println("here");
-    }
+	@RequestMapping("/update")
+	public void updateList(@RequestBody ListVO listVO) {
+		// System.out.println("here1");
+		System.out.println(listVO);
+		workListService.updateList(listVO);
+		// System.out.println("here");
+	}
 
-    @RequestMapping("/delete")
-    public void deleteList(@RequestBody ListVO listVO) {
-        workListService.deleteList(listVO.getList_id());
-    }
+	@RequestMapping("/delete")
+	public void deleteList(@RequestBody ListVO listVO) {
+		log.info("listVO delete info before"+listVO);
+		workListService.deleteList(listVO.getList_id());
+	}
 
-    // Card CRUD
-    @RequestMapping("/card")
-    public @ResponseBody
-    List<CardVO> selectCard(@RequestBody HashMap<String, String> map) throws Exception {
-        String cardWsid = map.get("ws_id");
+	// Card CRUD
+	@RequestMapping("/card")
+	public @ResponseBody List<CardVO> selectCard(@RequestBody HashMap<String, String> map) throws Exception {
+		String cardWsid = map.get("ws_id");
 
-        log.info("\ncardWsid: " + cardWsid);
+		log.info("\ncardWsid: " + cardWsid);
 
-        List<CardVO> cardList = workListService.selectCard(cardWsid);
+		List<CardVO> cardList = workListService.selectCard(cardWsid);
 
-        log.info("cards: " + cardList);
+		log.info("cards: " + cardList);
 
-        return cardList;
-    }
+		return cardList;
+	}
 
-    @RequestMapping("/card/insert")
-    public void insertCard(@RequestBody CardVO cardVO) {
-        System.out.println(cardVO);
-        workListService.insertCard(cardVO);
-        System.out.println(cardVO);
-    }
-
-//	//워크리스트의 리스트에 카드 뿌려줌
-//	@RequestMapping("/main/wsList/list/card")
-//	public @ResponseBody List<Map<String, CardVO>> selectList(@RequestBody CardVO cardVO)throws Exception{
-//		System.out.println("list_id: "+cardVO.getList_id());
-//		List<Map<String, CardVO>> cardList = wokrListService.selectCard(cardVO);
-//		System.out.println("cardList: "+cardList);
-//		return cardList;
-//	}
-
-//	//워크리스트의 리스트에 카드 뿌려줌
-//	@RequestMapping("/main/wsList/list/card")
-//	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
-////	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
-//	public @ResponseBody List<CardVO> selectCard(@RequestBody HashMap<String,String> map)throws Exception{
-//		String cardWsid = map.get("ws_id");
-//		System.out.println("cardWsid: "+cardWsid);
-//		List<CardVO> cardList = wokrListService.selectCard(cardWsid);
-//		System.out.println("cardList: "+cardList);
-//		return cardList;
-//
-//	@RequestMapping("card/update")
-//	public void updateCard(@RequestBody CardVO cardVO) {
-//		workListService.updateCard(cardVO);
-//	}
-//
-//	@RequestMapping("card/delete")
-//	public void deleteCard(@RequestBody CardVO cardVO) {
-//		workListService.deleteCard(cardVO.getCard_id());
-//>>>>>>> origin/taeheon
+	@RequestMapping("/card/insert")
+	public @ResponseBody CardVO insertCard(@RequestBody CardVO cardVO) {
+		cardVO.setCard_id(workListService.selectCardId());
+		workListService.insertCard(cardVO);
+		log.info("cardVO insert info after:"+cardVO);
+		return cardVO;
+	}
+	
+	@RequestMapping("card/update")
+	public void updateCard(@RequestBody CardVO cardVO) {
+		workListService.updateCard(cardVO);
+	}
+	
+	@RequestMapping("card/delete")
+	public void deleteCard(@RequestBody CardVO cardVO) {
+		workListService.deleteCard(cardVO.getCard_id());
+	}
 }
 
