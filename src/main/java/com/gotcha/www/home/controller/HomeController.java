@@ -71,7 +71,7 @@ public class HomeController {
     
     public String getLoginUser(PrincipalDetails principalDetails) {
     	String userId="";
-    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (principal instanceof PrincipalDetails) {
 			userId = ((PrincipalDetails) principal).getUsername();
 		} else {
