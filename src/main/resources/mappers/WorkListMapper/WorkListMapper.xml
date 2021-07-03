@@ -52,15 +52,15 @@
 		from dual
 	</select>
 	<!-- select Card -->
-	<resultMap type="map" id="CardList">
+	<!-- <resultMap type="map" id="CardList">
 
 		<result property="card_desc" column="card_desc" jdbcType="CLOB"
 			javaType="java.lang.String" />
 
-	</resultMap>
+	</resultMap> -->
 
 	<select id="selectCard" parameterType="String"
-		resultType="com.gotcha.www.workList.vo.CardVO" resultMap="CardList">
+		resultType="com.gotcha.www.workList.vo.CardVO">
 
 		select * from
 		gc_card
