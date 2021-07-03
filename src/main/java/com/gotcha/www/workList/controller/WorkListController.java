@@ -38,6 +38,7 @@ public class WorkListController {
     List<ListVO> selectList(@RequestBody HashMap<String, String> map) throws Exception {
         String listWsid = map.get("ws_id");
 
+        log.info("map" + map);
         log.info("listWsid: " + listWsid);
 
         List<ListVO> listList = workListService.selectList(listWsid);
@@ -54,24 +55,27 @@ public class WorkListController {
 
 	@RequestMapping("/insert")
 	public @ResponseBody ListVO insertList(@RequestBody ListVO listVO) {
-		listVO.setList_id(workListService.selectListId());
+		log.info(listVO);
+    	listVO.setList_id(workListService.selectListId());
 		workListService.insertList(listVO);
 		log.info("listVO insert info after:"+listVO);
 		return listVO;
 	}
 
 	@RequestMapping("/update")
-	public void updateList(@RequestBody ListVO listVO) {
+	public @ResponseBody ListVO updateList(@RequestBody ListVO listVO) {
 		// System.out.println("here1");
 		System.out.println(listVO);
 		workListService.updateList(listVO);
 		// System.out.println("here");
+		return listVO;
 	}
 
 	@RequestMapping("/delete")
-	public void deleteList(@RequestBody ListVO listVO) {
-		log.info("listVO delete info before"+listVO);
+	public @ResponseBody ListVO deleteList(@RequestBody ListVO listVO) {
+    	log.info(listVO);
 		workListService.deleteList(listVO.getList_id());
+		return listVO;
 	}
 
 	// Card CRUD
