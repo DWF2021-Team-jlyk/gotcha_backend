@@ -9,14 +9,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class WorkspaceDto {
-	
-	private char is_fav; 
+public class UserDto {
 	private int ws_id;
-	private String ws_name;
 	private String user_id;
+	private String user_pwd;
 	private String user_name;
-	private int role_id;
+	private String user_enabled;
 	private String role_type;
-	
 }
