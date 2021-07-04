@@ -27,19 +27,7 @@ public class CardDetailServiceImpl implements CardDetailService{
         this.cardDetailDAO = cardDetailDAO;
     }
 
-    @Override
-    public CardDetailVO getCardInfo(int card_id){
-        CardDetailVO cardDetailVO = CardDetailVO.builder()
-                .cardVO(workListDAO.selectOneCard(card_id))
-                .cardMembers(cardDetailDAO.selectMember(card_id))
-                .cardTodos(cardDetailDAO.selectTodoList(card_id))
-                .cardFiles(cardDetailDAO.selectFile(card_id))
-                .cardActs(cardDetailDAO.selectCardAct(card_id))
-                .build();
-
-        return cardDetailVO;
-    }
-
+ 
     @Override
     public List<CardActDTO> getCardAct(int card_id) {
         return cardDetailDAO.selectCardAct(card_id);
