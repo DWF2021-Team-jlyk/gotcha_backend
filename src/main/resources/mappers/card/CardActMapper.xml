@@ -2,10 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gotcha.www.card.dao.CardActDAO">
+
     <select id="selectActId" resultType="int">
         select ACT_SEQ.nextval
         from DUAL
     </select>
+    
     <select id="selectCardAct"
             parameterType="int"
             resultType="com.gotcha.www.card.vo.CardActDTO"

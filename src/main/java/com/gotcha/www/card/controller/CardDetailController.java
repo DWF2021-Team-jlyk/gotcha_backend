@@ -1,13 +1,19 @@
 package com.gotcha.www.card.controller;
 
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.gotcha.www.card.service.CardDetailService;
 import com.gotcha.www.card.vo.CardActDTO;
 import com.gotcha.www.card.vo.CardFileDTO;
 import com.gotcha.www.card.vo.CardMemberDTO;
 import com.gotcha.www.card.vo.CardTodoDTO;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("/cardDetail")
 @RestController
@@ -20,7 +26,10 @@ public class CardDetailController {
 
     @PostMapping("/act")
     public @ResponseBody List<CardActDTO> getCardAct(@RequestBody int card_id){
-        return cardDetailService.getCardAct(card_id);
+   
+    	System.out.println(cardDetailService.getCardAct(card_id));
+        return cardDetailService.getCardAct((card_id));
+        
     }
 
     @PostMapping("/todo")
@@ -32,7 +41,9 @@ public class CardDetailController {
         return cardDetailService.getCardFile(card_id);
     }
     @PostMapping("/member")
-    public @ResponseBody List<CardMemberDTO> getCardMem(@RequestBody int card_id){
-        return cardDetailService.getCardMem(card_id);
+    public @ResponseBody List<CardMemberDTO> getCardMem(@RequestBody HashMap<String, String> map){
+    	String card_id = map.get("card_id");
+    	List<CardMemberDTO> list = cardDetailService.getCardMem(Integer.parseInt(card_id));
+        return list;
     }
 }

@@ -1,6 +1,7 @@
 package com.gotcha.www.card.service;
 
 import com.gotcha.www.card.dao.CardDetailDAO;
+import com.gotcha.www.card.dao.CardTodoDAO;
 import com.gotcha.www.card.vo.*;
 import com.gotcha.www.workList.dao.WorkListDAO;
 import org.apache.commons.logging.Log;
@@ -23,24 +24,10 @@ public class CardDetailServiceImpl implements CardDetailService{
     private final CardTodoDAO cardTodoDAO;
 
     @Autowired
-    public CardDetailServiceImpl(WorkListDAO workListDAO, CardDetailDAO cardDetailDAO) {
+    public CardDetailServiceImpl(WorkListDAO workListDAO, CardDetailDAO cardDetailDAO, CardTodoDAO cardTodoDAO) {
         this.workListDAO = workListDAO;
         this.cardDetailDAO = cardDetailDAO;
         this.cardTodoDAO = cardTodoDAO;
-    }
-
-    @Override
-    public CardDetailVO getCardInfo(int card_id){
-        CardDetailVO cardDetailVO = CardDetailVO.builder()
-                .cardVO(workListDAO.selectOneCard(card_id))
-                .cardMembers(cardDetailDAO.selectMember(card_id))
-                .cardTodos(cardDetailDAO.selectTodoList(card_id))
-                .cardFiles(cardDetailDAO.selectFile(card_id))
-                .cardActs(cardDetailDAO.selectCardAct(card_id))
-                .build();
-
-        System.out.println(cardDetailVO.toString());
-        return cardDetailVO;
     }
 
     @Override
@@ -62,4 +49,6 @@ public class CardDetailServiceImpl implements CardDetailService{
     public List<CardTodoDTO> getCardTodo(int card_id) {
         return cardDetailDAO.selectTodoList(card_id);
     }
+
+
 }
