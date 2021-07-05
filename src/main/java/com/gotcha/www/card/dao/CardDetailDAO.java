@@ -14,4 +14,7 @@ public interface CardDetailDAO {
     List<CardMemberDTO> selectMember(int card_id);
     List<CardFileDTO> selectFile(int card_id);
     List<CardActDTO> selectCardAct(int card_id);
+    void insertCardMember(CardMemberDTO cardMemberDTO);
+
+    
 }

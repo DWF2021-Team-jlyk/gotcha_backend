@@ -30,8 +30,8 @@ public class HomeServiceImpl implements HomeService{
 	public List<NotiJoinVO> selectNotice(String user_id) {
 		List<NotiJoinVO> notiList = homeDAO.selectNoti(user_id);
 		log.info(notiList);
-		log.info(notiList.getClass());
-		log.info(notiList.get(0).getClass());
+//		log.info(notiList.getClass());
+//		log.info(notiList.get(0).getClass());
 		return notiList;
 	}
 

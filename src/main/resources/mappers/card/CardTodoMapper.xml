@@ -38,6 +38,7 @@
                 #{todo_end_date},
                 #{todo_isdone})
     </insert>
+<<<<<<< HEAD
 
     <delete id="deleteCardTodo" parameterType="int">
         delete
@@ -54,4 +55,12 @@
             TODO_ISDONE     = #{todo_isdone}
         where TODO_ID = #{todo_id}
     </update>
+=======
+    
+    <update id="updateTodoIsDone" parameterType="com.gotcha.www.card.vo.CardTodoDTO">
+			UPDATE gc_card_todo
+			set todo_isdone = #{todo_isdone}
+			where todo_id = #{todo_id}
+	</update>
+>>>>>>> 62c348b280fa1c257dfed7aedd35adf9f1a30f97
 </mapper>
