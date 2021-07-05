@@ -24,6 +24,7 @@ public class CardMemberController {
 	@PostMapping("")
     public @ResponseBody List<CardMemberDTO> getCardMem(@RequestBody HashMap<String, String> map){
     	String card_id = map.get("card_id");
+    	System.out.println("card member"+card_id);	
     	List<CardMemberDTO> list = cardMemberService.getCardMem(Integer.parseInt(card_id));
         return list;
     }
