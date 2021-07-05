@@ -7,14 +7,24 @@
         from GC_CARD_MEM
         where CARD_ID = #{card_id}
     </select>
+    
     <select id="selectCardMember" parameterType="int" resultType="com.gotcha.www.card.vo.CardMemberDTO">
         select *
         from GC_CARD_MEM
         where CARD_ID = #{card_id}
     </select>
+    
     <delete id="deleteCardMember" parameterType="String">
         delete
         from GC_CARD_MEM
         where USER_ID = #{user_id} and CARD_ID = #{card_id}
     </delete>
+    
+    <!-- card member 중복체크 --> 
+    <select id="checkCardInMember" parameterType="com.gotcha.www.card.vo.CardMemberDTO" resultType="int">
+    	select count(*) 
+    	from gc_card_mem 
+    	where card_id = #{card_id} and user_id = #{user_id}
+    </select>
+    
 </mapper>

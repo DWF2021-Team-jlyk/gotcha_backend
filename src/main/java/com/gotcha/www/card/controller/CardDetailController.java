@@ -26,20 +26,20 @@ public class CardDetailController {
 
     @PostMapping("/act")
     public @ResponseBody List<CardActDTO> getCardAct(@RequestBody int card_id){
-   
     	System.out.println(cardDetailService.getCardAct(card_id));
-        return cardDetailService.getCardAct((card_id));
-        
+        return cardDetailService.getCardAct((card_id));  
     }
 
     @PostMapping("/todo")
     public @ResponseBody List<CardTodoDTO> getCardTodo(@RequestBody int card_id){
         return cardDetailService.getCardTodo(card_id);
     }
+    
     @PostMapping("/file")
     public @ResponseBody List<CardFileDTO> getCardFile(@RequestBody int card_id){
         return cardDetailService.getCardFile(card_id);
     }
+    
     @PostMapping("/member")
     public @ResponseBody List<CardMemberDTO> getCardMem(@RequestBody HashMap<String, String> map){
     	String card_id = map.get("card_id");
