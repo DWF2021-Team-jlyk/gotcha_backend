@@ -57,8 +57,8 @@ public class WorkListController {
 	public @ResponseBody ListVO insertList(@RequestBody ListVO listVO) {
 		log.info(listVO);
     	listVO.setList_id(workListService.selectListId());
-		workListService.insertList(listVO);
 		log.info("listVO insert info after:"+listVO);
+		workListService.insertList(listVO);
 		return listVO;
 	}
 
