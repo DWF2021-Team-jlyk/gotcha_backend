@@ -1,9 +1,10 @@
 package com.gotcha.www.card.vo;
 
-import lombok.AllArgsConstructor;
+import com.gotcha.www.workList.vo.CardVO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardDetailVO {
-    private CardDTO cardDTO;
+    private CardVO cardVO;
     private List<CardActDTO> cardActs;
     private List<CardFileDTO> cardFiles;
     private List<CardMemberDTO> cardMembers;

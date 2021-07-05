@@ -1,10 +1,7 @@
 package com.gotcha.www.home.controller;
 
-<<<<<<< HEAD
 import java.security.Principal;
-=======
 import java.util.HashMap;
->>>>>>> 62c348b280fa1c257dfed7aedd35adf9f1a30f97
 import java.util.List;
 
 import com.gotcha.www.user.service.PrincipalDetailsService;
@@ -30,7 +27,6 @@ import com.gotcha.www.home.vo.WorkspaceDto;
 @RequestMapping("/home")
 @RestController
 public class HomeController {
-<<<<<<< HEAD
     @Autowired
     HomeService homeService;
 
@@ -84,38 +80,4 @@ public class HomeController {
 		}
 		return userId;
     }
-=======
-	@Autowired
-	HomeService homeService;
-	
-	
-	@PostMapping("/wsList")
-	public @ResponseBody List<WorkspaceDto> selectWorkspace(@RequestBody UserVO userVO) {
-		System.out.println(userVO.toString());
-		List<WorkspaceDto> mainList = homeService.selectWorkspace(userVO.getUser_id());
-		System.out.println(mainList);
-		return mainList;
-	}
-	
-	@PostMapping("/notiList")
-	public @ResponseBody List<NotiJoinVO> selectNotice(@RequestBody UserVO userVO) {
-//		List<NotiJoinVO> mainList = homeService.selectNotice(userVO.getUser_id());
-//		System.out.println("노티" + mainList);
-		return homeService.selectNotice(userVO.getUser_id());
-	}
-	
-	@PostMapping("/favUpdate")
-	public @ResponseBody void UpdateFav(@RequestBody WorkspaceDto workspaceDto) {
-		homeService.updateFav(workspaceDto);
-	}
-	
-	@PostMapping("/wsUserList")
-	public @ResponseBody List<String> selecWsUserList(@RequestBody int ws_id)
-			throws Exception {
-		
-		List<String> wsUserList = homeService.selecWsUserList(ws_id);
-		return wsUserList;
-		
-	}
->>>>>>> 62c348b280fa1c257dfed7aedd35adf9f1a30f97
 }

@@ -40,18 +40,6 @@
         where card_id = #{card_id}
     </select>
     
-    <insert id="insertCardMember" parameterType="com.gotcha.www.card.vo.CardMemberDTO">
-    	insert 
-    	into gc_card_mem(card_id, user_id)
-    	values (#{card_id}, #{user_id})
-    </insert>
-    
-    <update id="updateCardDesc" parameterType="com.gotcha.www.card.vo.CardDTO">
-    	UPDATE GC_CARD
-		SET
-		card_desc = #{card_desc}
-		WHERE
-		card_id = #{card_id}
-    </update>
+
 
 </mapper>
