@@ -4,6 +4,9 @@ import com.gotcha.www.card.vo.CardActDTO;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
 public interface CardActDAO {
     int selectActId();
     List<CardActDTO> selectCardAct(int card_id);

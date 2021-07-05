@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gotcha.www.card.vo.CardMemberDTO">
+<mapper namespace="com.gotcha.www.card.dao.CardMemberDAO">
     <select id="MemberCount" parameterType="int" resultType="int">
         select count(*)
         from GC_CARD_MEM
@@ -20,11 +20,9 @@
         where USER_ID = #{user_id} and CARD_ID = #{card_id}
     </delete>
     
-    <!-- card member 중복체크 --> 
-    <select id="checkCardInMember" parameterType="com.gotcha.www.card.vo.CardMemberDTO" resultType="int">
-    	select count(*) 
-    	from gc_card_mem 
-    	where card_id = #{card_id} and user_id = #{user_id}
-    </select>
+    <insert id="insertCardMember" parameterType="com.gotcha.www.card.vo.CardMemberDTO">
+    	INSERT INTO GC_CARD_MEM (card_id, user_id) 
+		VALUES (#{card_id},#{user_id})
+    </insert>
     
 </mapper>

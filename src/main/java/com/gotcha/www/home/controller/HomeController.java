@@ -61,16 +61,6 @@ public class HomeController {
         homeService.updateFav(workspaceDto);
     }
     
-//    @PostMapping("/wsUserList")
-//    public @ResponseBody
-//    List<String> selectWsUserList(@RequestBody int ws_id)
-//            throws Exception {
-//        List<String> wsUserList = homeService.selectWsUserList(ws_id);
-//        System.out.println(wsUserList);
-//        log.info("로그" + wsUserList);
-//        return wsUserList;
-//    }
-
     @PostMapping("/wsUserList")
     public @ResponseBody
     List<String> selectWsUserList(@RequestBody HashMap<String, String> map)           
