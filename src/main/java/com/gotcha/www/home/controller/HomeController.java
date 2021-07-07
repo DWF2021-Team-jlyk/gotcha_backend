@@ -79,4 +79,9 @@ public class HomeController {
 		}
 		return userId;
     }
+
+    @PostMapping("/getAllUsers")
+    public @ResponseBody List<String> selectUserList(){
+        return homeService.getAllUserId();
+    }
 }

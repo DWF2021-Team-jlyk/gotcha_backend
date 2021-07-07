@@ -47,4 +47,9 @@ public class HomeServiceImpl implements HomeService{
 		return wsUserList;
 	}
 
+	@Override
+	public List<String> getAllUserId() {
+		return homeDAO.getAllUserId();
+	}
+
 }

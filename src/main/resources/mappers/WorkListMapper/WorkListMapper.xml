@@ -83,12 +83,14 @@
          CARD_DESC)
         values (#{card_id},
                 #{card_name},
-                #{card_desc},
                 #{list_id},
                 #{ws_id},
-                #{position},
+                #{card_isdone},
                 #{card_start_date,jdbcType=VARCHAR},
-                #{card_end_date,jdbcType=VARCHAR})
+                #{card_end_date,jdbcType=VARCHAR},
+                #{position},
+                #{card_desc}
+                )
     </insert>
 
     <!-- update Card (list_id, ws_id, card_start_date, card_end_date 받아옴) -->

@@ -8,11 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.gotcha.www.user.vo.PrincipalDetails;
 import com.gotcha.www.workList.dao.WorkListDAO;
@@ -94,15 +90,18 @@ public class WorkListController {
 
 	@RequestMapping("/card/insert")
 	public @ResponseBody CardVO insertCard(@RequestBody CardVO cardVO) {
+    	log.info(cardVO);
 		cardVO.setCard_id(workListService.selectCardId());
 		workListService.insertCard(cardVO);
 		log.info("cardVO insert info after:"+cardVO);
 		return cardVO;
 	}
-	
+
 	@RequestMapping("card/update")
-	public void updateCard(@RequestBody CardVO cardVO) {
+	public @ResponseBody CardVO updateCard(@RequestBody CardVO cardVO) {
+    	log.info("\n updateCard : " + cardVO);
 		workListService.updateCard(cardVO);
+		return cardVO;
 	}
 	
 	@RequestMapping("card/delete")

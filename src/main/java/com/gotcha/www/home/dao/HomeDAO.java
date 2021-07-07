@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.gotcha.www.home.vo.NotiJoinVO;
 import com.gotcha.www.home.vo.WorkspaceDto;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface HomeDAO <T>{
@@ -19,4 +20,6 @@ public interface HomeDAO <T>{
 	
 	List<String> selecWsUserList(int ws_id);
 
+	@Select("Select user_id from GC_USER")
+	List<String> getAllUserId();
 }
