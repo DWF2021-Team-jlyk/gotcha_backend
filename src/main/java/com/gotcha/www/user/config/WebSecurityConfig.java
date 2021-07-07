@@ -1,5 +1,6 @@
 package com.gotcha.www.user.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,11 +9,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.filter.CorsFilter;
 
 import com.gotcha.www.user.dao.UserDAO;
 import com.gotcha.www.user.exception.CustomAccessDeniedHandler;
+import com.gotcha.www.user.exception.CustomAuthenticationEntryPoint;
 import com.gotcha.www.user.filter.JwtAuthenticationFilter;
 import com.gotcha.www.user.filter.JwtAuthorizationFilter;
 
@@ -43,10 +44,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 //    }
 	
-	@Bean
-	public AccessDeniedHandler accessDeniedHandler(){
-	    return new CustomAccessDeniedHandler();
-	}
+	@Autowired
+	CustomAuthenticationEntryPoint authenticationEntryPoint;
+	
+	@Autowired
+	CustomAccessDeniedHandler accessDeniedHandler;
 	
 	@Override
     public void configure(WebSecurity web) throws Exception {
@@ -71,6 +73,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //			.anonymous().disable()
 //			.formLogin().loginPage("/login").and()
 			.httpBasic().disable() //			
+//			.exceptionHandling()
+//			.authenticationEntryPoint(authenticationEntryPoint) // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
+//			.accessDeniedHandler(new CustomAccessDeniedHandler()) // 권한에서 예외가 발생;
+//			.accessDeniedHandler(accessDeniedHandler)
+//			.and()
 			.authorizeRequests()
 			.antMatchers("/home/*").access("hasRole('ROLE_USER')")
 			.antMatchers("/main/wsList/list/**").access("hasAnyRole('ROLE_ADMIN') or hasAnyRole('ROLE_MEMBER')")
@@ -79,10 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.anyRequest().permitAll()
 			.and()
 			.addFilter(new JwtAuthenticationFilter(authenticationManager(), userDAO))
-			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO))
-			.exceptionHandling()
-//			.authenticationEntryPoint(authenticationEntryPoint) // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
-			.accessDeniedHandler(new CustomAccessDeniedHandler()); // 권한에서 예외가 발생;
+			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
 //			.accessDeniedPage("/user/accessDenied");
 
 	}	

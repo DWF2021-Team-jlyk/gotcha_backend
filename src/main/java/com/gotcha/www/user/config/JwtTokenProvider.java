@@ -12,6 +12,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 
+// 사용안함
+
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {

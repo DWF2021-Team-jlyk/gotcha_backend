@@ -17,6 +17,10 @@ spring:
 
   jwt:
     secret: gotcharProject
+    
+  servlet:
+    multipart:
+      max-file-size: 20MB
         
 mybatis:
   type-aliases-package: com.example.test.vo

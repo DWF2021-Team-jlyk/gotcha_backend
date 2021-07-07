@@ -1,6 +1,9 @@
 package com.gotcha.www.home.controller;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,13 +14,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.gotcha.www.home.service.HomeService;
 import com.gotcha.www.home.vo.NotiJoinVO;
 import com.gotcha.www.home.vo.UserVO;
 import com.gotcha.www.home.vo.WorkspaceDto;
+import com.gotcha.www.user.file.UploadFileUtil;
 import com.gotcha.www.user.service.UserService;
 import com.gotcha.www.user.vo.PrincipalDetails;
 
@@ -110,6 +117,29 @@ public class HomeController {
     	boolean status = userService.withdrawal(userId);
     	return status;
     }
+    
+    @PostMapping("/addWorkspace")
+	public void addWorkspace(@AuthenticationPrincipal PrincipalDetails principalDetails,
+							@RequestParam("ws_name") String ws_name,
+							@RequestParam("ws_isImage") MultipartFile file,
+							MultipartHttpServletRequest req) throws IOException {
+    	if(req.getFile("ws_isImage") != null) {
+			log.info("[REQUEST ADD WORKSPACE]");
+			log.info("[FILE] "+file);
+			String fileName = file.getOriginalFilename();
+			log.info("[fileName] " + file.getOriginalFilename());
+			byte[] fileByte = file.getBytes();
+			userId = getLoginUser(principalDetails);
+			homeService.createWorkspace(userId,ws_name, file.getOriginalFilename());
+			boolean fileUpload = homeService.fileUpload(ws_name,fileName,fileByte);
+			log.info("[FILE UPLOAD STATE] "+fileUpload);
+
+//			if(fileUpload == true) {
+//				homeService.addWorkspace(ws_name, file.getOriginalFilename());
+//			}
+			log.info("[FILE UPLOAD] " + fileUpload);
+		}	
+	}
     
     // get login id
     public String getLoginUser(PrincipalDetails principalDetails) {

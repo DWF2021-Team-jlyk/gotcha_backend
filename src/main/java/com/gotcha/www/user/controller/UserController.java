@@ -1,5 +1,7 @@
 package com.gotcha.www.user.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,16 +11,24 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import com.gotcha.www.home.service.HomeService;
+import com.gotcha.www.home.vo.UserVO;
+import com.gotcha.www.user.file.UploadFileUtil;
 import com.gotcha.www.user.service.UserService;
 import com.gotcha.www.user.vo.PrincipalDetails;
-import com.gotcha.www.home.vo.UserVO;
 
 @RestController
 @RequestMapping("/user")
@@ -27,7 +37,20 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
+    @Autowired
+    HomeService homeService;
+	
+	@Autowired
+	UploadFileUtil uploadFileUtil;
+	
 	HttpSession session;
+	
+	@Bean
+    public MultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(2000000000);
+        return multipartResolver;
+    }
 	
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
     
@@ -97,9 +120,32 @@ public class UserController {
 		return false;
 	}
 	
-	@PostMapping("/accessDenied")
-	public void accessDenied() {
+	@PostMapping("/addWorkspace")
+	public void addWorkspace(@AuthenticationPrincipal PrincipalDetails principalDetails,
+							@RequestParam("ws_name") String ws_name,
+							@RequestParam("ws_isImage") MultipartFile file,
+							MultipartHttpServletRequest req) throws IOException {
+    	if(req.getFile("ws_isImage") != null) {
+			log.info("[REQUEST ADD WORKSPACE]");
+			log.info("[FILE] "+file);
+			String fileName = file.getOriginalFilename();
+			log.info("[fileName] " + file.getOriginalFilename());
+			byte[] fileByte = file.getBytes();
+			homeService.createWorkspace("user01@naver.com",ws_name, file.getOriginalFilename());
+			boolean fileUpload = homeService.fileUpload(ws_name,fileName,fileByte);
+			log.info("[FILE UPLOAD STATE] "+fileUpload);
+
+//			if(fileUpload == true) {
+//				homeService.addWorkspace(ws_name, file.getOriginalFilename());
+//			}
+			log.info("[FILE UPLOAD] " + fileUpload);
+		}	
+	}
+	
+	@GetMapping("/accessDenied")
+	public String accessDenied() {
 		log.info("[accessDenied....]");
+		return "/Login";
 	}
 
 }

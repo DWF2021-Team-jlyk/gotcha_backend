@@ -17,16 +17,16 @@
 		WHERE UR.USER_ID=#{user_id}
 	</select>
 
-	<resultMap id="NotiList" type="HashMap">
+<!-- 	<resultMap id="NotiList" type="HashMap">
 		<result property="ws_id" column="ws_id" />
 		<result property="user_id" column="user_id" />
 		<result property="ws_name" column="ws_name" />
 		<result property="noti_type" column="noti_type" />
 		<result property="noti_desc" column="noti_desc" jdbcType="CLOB" javaType="java.lang.String"/>
 		<result property="noti_checked" column="noti_checked" />
-	</resultMap>
+	</resultMap> -->
 
-	<select id="selectNoti" parameterType="String" resultMap="NotiList">
+	<select id="selectNoti" parameterType="String" resultType="HashMap">
 		SELECT w.ws_id, w.ws_name, n.noti_type, n.noti_desc, n.noti_time, n.noti_checked
 		FROM gc_noti n
 		JOIN gc_ws w ON w.ws_id = n.ws_id
@@ -43,6 +43,22 @@
 	<select id="selectWsUserList" parameterType="int" resultType="String">
 		select user_id from gc_user_role where ws_id = #{ws_id}
 	</select>
+	
+	<select id="getWsLastIndex" resultType="int">
+		SELECT ws_seq.nextval
+		FROM dual
+	</select>
+	
+	<insert id="createWorkspace" parameterType="String">
+		INSERT INTO GC_WS (ws_id, ws_name, ws_isimage)
+		VALUES(#{ws_id}, #{ws_name}, #{ws_isImage})
+	</insert>
+	
+	<insert id="createUserRole" parameterType="HashMap">
+		INSERT INTO GC_USER_ROLE
+		VALUES(#{ws_id}, #{user_id}, 1, 0)
+	</insert>
+	
 </mapper>
 
 

@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +19,8 @@ import lombok.RequiredArgsConstructor;
  * 작성자 : 장승업
  * 시큐리티 필터에서 발생하는 예외 처리
 */
-@RequiredArgsConstructor
+@Component
+//@RequiredArgsConstructor
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 	
@@ -28,7 +30,15 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
 		String exception = (String)request.getAttribute("exception");
+		log.info("entryPoint");
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		int status = response.getStatus();
+		
+		log.info("[getStatus] "+status);
+		
+		response.sendRedirect("/user/accessDenied");
 		log.debug("log: exception: {} ", exception);
+		
 	}
 
 }
