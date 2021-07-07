@@ -24,4 +24,6 @@ public interface HomeService {
 	
 	// add workspace
 	void createWorkspace(String user_id, String ws_name, String originalFilename);
+	
+	List<String> getAllUserId();
 }

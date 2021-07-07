@@ -1,7 +1,5 @@
 package com.gotcha.www.workList.vo;
 
-import java.sql.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,4 +18,5 @@ public class CardVO {
 	private char card_isdone;
 	private int list_id;
 	private int ws_id;
+	private int position;
 }	

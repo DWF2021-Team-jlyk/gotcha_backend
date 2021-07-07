@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CardMemberDAO {
     int MemberCount(int card_id);
-    List<CardMemberDTO> selectCardMember(int user_id);
+    List<CardMemberDTO> selectCardMember(int card_id);
     void deleteCardMember(String user_id);
     void updateCardMember(CardMemberDTO cardMember);
     void insertCardMember(CardMemberDTO cardMember);

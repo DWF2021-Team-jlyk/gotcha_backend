@@ -104,4 +104,8 @@ public class HomeServiceImpl implements HomeService{
 		
 	}
 	
+	public List<String> getAllUserId() {
+		return homeDAO.getAllUserId();
+	}
+
 }

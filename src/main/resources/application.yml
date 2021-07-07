@@ -26,7 +26,3 @@ mybatis:
   type-aliases-package: com.example.test.vo
   config-location: classpath:config/mybatis-config.xml
   mapper-locations: classpath:mappers/**/*.xml
-  
-
-
-

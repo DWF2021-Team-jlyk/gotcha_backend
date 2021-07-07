@@ -85,9 +85,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //			.antMatchers("/user/*").permitAll()
 			.anyRequest().permitAll()
 			.and()
-			.addFilter(new JwtAuthenticationFilter(authenticationManager(), userDAO))
-			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
-//			.accessDeniedPage("/user/accessDenied");
+			.addFilter(new JwtAuthenticationFilter(authenticationManager(), userDAO));
+//			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
+//			.exceptionHandling()
+//			.authenticationEntryPoint(authenticationEntryPoint) // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
+//			.accessDeniedHandler(accessDeniedHandler) // 권한에서 예외가 발생;
 
 	}	
 	

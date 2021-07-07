@@ -19,9 +19,8 @@ import com.gotcha.www.workList.service.WorkListService;
 import com.gotcha.www.workList.vo.CardVO;
 import com.gotcha.www.workList.vo.ListVO;
 
-@RestController
 @RequestMapping("/main/wsList/list")
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@RestController
 public class WorkListController {
 
     @Autowired
@@ -38,6 +37,7 @@ public class WorkListController {
     List<ListVO> selectList(@RequestBody HashMap<String, String> map) throws Exception {
         String listWsid = map.get("ws_id");
 
+        log.info("map" + map);
         log.info("listWsid: " + listWsid);
 
         List<ListVO> listList = workListService.selectList(listWsid);
@@ -49,50 +49,66 @@ public class WorkListController {
 //		list.setCard(cardList);
 //		}
 
-        return listList;
-    }
+		return listList;
+	}
 
-    @RequestMapping("/insert")
-    public @ResponseBody
-    ListVO insertList(@RequestBody ListVO listVO) {
-        listVO.setList_id(workListService.selectListId());
-        workListService.insertList(listVO);
-        return listVO;
-    }
+	@RequestMapping("/insert")
+	public @ResponseBody ListVO insertList(@RequestBody ListVO listVO) {
+		log.info(listVO);
+    	listVO.setList_id(workListService.selectListId());
+		log.info("listVO insert info after:"+listVO);
+		workListService.insertList(listVO);
+		return listVO;
+	}
 
-    @RequestMapping("/update")
-    public void updateList(@RequestBody ListVO listVO) {
-        // System.out.println("here1");
-        System.out.println(listVO);
-        workListService.updateList(listVO);
-        // System.out.println("here");
-    }
+	@RequestMapping("/update")
+	public @ResponseBody ListVO updateList(@RequestBody ListVO listVO) {
+		// System.out.println("here1");
+		System.out.println(listVO);
+		workListService.updateList(listVO);
+		// System.out.println("here");
+		return listVO;
+	}
 
-    @RequestMapping("/delete")
-    public void deleteList(@RequestBody ListVO listVO) {
-        workListService.deleteList(listVO.getList_id());
-    }
+	@RequestMapping("/delete")
+	public @ResponseBody ListVO deleteList(@RequestBody ListVO listVO) {
+    	log.info(listVO);
+		workListService.deleteList(listVO.getList_id());
+		return listVO;
+	}
 
-    // Card CRUD
-    @RequestMapping("/card")
-    public @ResponseBody
-    List<CardVO> selectCard(@RequestBody HashMap<String, String> map) throws Exception {
-        String cardWsid = map.get("ws_id");
+	// Card CRUD
+	@RequestMapping("/card")
+	public @ResponseBody List<CardVO> selectCard(@RequestBody HashMap<String, String> map) throws Exception {
+		String cardWsid = map.get("ws_id");
 
-        log.info("\ncardWsid: " + cardWsid);
+		log.info("\ncardWsid: " + cardWsid);
 
-        List<CardVO> cardList = workListService.selectCard(cardWsid);
+		List<CardVO> cardList = workListService.selectCard(cardWsid);
 
-        log.info("cards: " + cardList);
+		log.info("cards: " + cardList);
 
-        return cardList;
-    }
+		return cardList;
+	}
 
-    @RequestMapping("/card/insert")
-    public void insertCard(@RequestBody CardVO cardVO) {
-        System.out.println(cardVO);
-        workListService.insertCard(cardVO);
-        System.out.println(cardVO);
-    }
+	@RequestMapping("/card/insert")
+	public @ResponseBody CardVO insertCard(@RequestBody CardVO cardVO) {
+    	log.info(cardVO);
+		cardVO.setCard_id(workListService.selectCardId());
+		workListService.insertCard(cardVO);
+		log.info("cardVO insert info after:"+cardVO);
+		return cardVO;
+	}
 
+	@RequestMapping("card/update")
+	public @ResponseBody CardVO updateCard(@RequestBody CardVO cardVO) {
+    	log.info("\n updateCard : " + cardVO);
+		workListService.updateCard(cardVO);
+		return cardVO;
+	}
+	
+	@RequestMapping("card/delete")
+	public void deleteCard(@RequestBody CardVO cardVO) {
+		workListService.deleteCard(cardVO.getCard_id());
+	}
 }

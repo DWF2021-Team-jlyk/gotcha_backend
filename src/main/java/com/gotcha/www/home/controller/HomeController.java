@@ -29,8 +29,8 @@ import com.gotcha.www.user.service.UserService;
 import com.gotcha.www.user.vo.PrincipalDetails;
 
 
-@RestController
 @RequestMapping("/home")
+@RestController
 public class HomeController {
     @Autowired
     HomeService homeService;
@@ -143,12 +143,18 @@ public class HomeController {
     
     // get login id
     public String getLoginUser(PrincipalDetails principalDetails) {
-    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+    	String userId="";
+    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (principal instanceof PrincipalDetails) {
 			userId = ((PrincipalDetails) principal).getUsername();
 		} else {
 			userId = principal.toString();
 		}
 		return userId;
+    }
+
+    @PostMapping("/getAllUsers")
+    public @ResponseBody List<String> selectUserList(){
+        return homeService.getAllUserId();
     }
 }

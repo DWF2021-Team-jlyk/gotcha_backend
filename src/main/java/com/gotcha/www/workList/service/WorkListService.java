@@ -21,6 +21,8 @@ public interface WorkListService {
 
 	// List<Map<String, CardVO>> selectCard(CardVO cvo);
 	List<CardVO> selectCard(String cardWsid);
+	
+	int selectCardId();
 
 	void insertCard(CardVO cardVO);
 

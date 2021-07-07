@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.gotcha.www.home.vo.NotiJoinVO;
 import com.gotcha.www.home.vo.WorkspaceDto;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface HomeDAO{
@@ -30,4 +31,6 @@ public interface HomeDAO{
 	// create user role
 	void createUserRole(HashMap<String, Object> map);
 
+	@Select("Select user_id from GC_USER")
+	List<String> getAllUserId();
 }
