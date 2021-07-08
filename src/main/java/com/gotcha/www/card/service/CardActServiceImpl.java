@@ -29,8 +29,38 @@ public class CardActServiceImpl implements CardActService {
 
 	@Override
 	public List<CardActDTO> getCardAct(int card_id) {
-		// TODO Auto-generated method stub
-		return null;
+		List<CardActDTO> cardActList = cardActDAO.selectCardAct(card_id);
+		return cardActList;
+	
+	}
+
+	@Override
+	public int selectActId() {
+		int act_id =  cardActDAO.selectActId();
+		return act_id;
+	}
+
+	@Override
+	public void insertCardAct(CardActDTO cardActDTO) {
+		 cardActDAO.insertCardAct(cardActDTO);
+	}
+
+
+	@Override
+	public void deleteCardAct(int act_id) {
+		cardActDAO.deleteCardAct(act_id);
+		
+	}
+
+	@Override
+	public void updateCardAct(CardActDTO cardActDTO) {
+		cardActDAO.updateCardAct(cardActDTO);
+		
+	}
+	
+	@Override
+	public CardActDTO getOneCardAct(int card_act_id) {
+		return cardActDAO.getOneCardAct(card_act_id);
 	}
 
 }

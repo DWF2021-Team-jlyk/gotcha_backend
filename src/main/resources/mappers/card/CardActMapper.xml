@@ -15,25 +15,30 @@
         select *
         from GC_CARD_ACT
         where CARD_ID = #{card_id}
+        order by created_date desc
+          
     </select>
     <delete id="deleteCardAct" parameterType="int">
         delete
         from GC_CARD_ACT
         where ACT_ID = #{act_id}
     </delete>
+    
     <insert id="insertCardAct"
             parameterType="com.gotcha.www.card.vo.CardActDTO">
-        insert into GC_CARD_ACT(CARD_ID, ACT_ID, USER_ID, ACT_DESC, CREATED_DATE, ISLOG)
-        VALUES (#{card_id}, #{ACT_ID}, #{USER_ID}, #{ACT_DESC}, #{created_date}, #{islog})
+        insert into GC_CARD_ACT(CARD_ID, ACT_ID, USER_ID, ACT_DESC, CREATED_DATE, ISLOG, ISEDIT)
+        VALUES (#{card_id}, #{act_id}, #{user_id}, #{act_desc}, sysdate, #{islog}, 0)
     </insert>
+    
     <update id="updateCardAct"
             parameterType="com.gotcha.www.card.vo.CardActDTO">
         update GC_CARD_ACT
         set CARD_ID      = #{card_id},
             USER_ID      = #{user_id},
             ACT_DESC     = #{act_desc},
-            CREATED_DATE = #{created_date},
-            ISLOG        = #{islog}
+            CREATED_DATE = sysdate,
+            ISLOG        = #{islog},
+            ISEDIT       = 1
         where ACT_ID = #{act_id}
     </update>
 </mapper>

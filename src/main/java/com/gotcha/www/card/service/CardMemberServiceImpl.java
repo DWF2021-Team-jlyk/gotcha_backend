@@ -29,8 +29,20 @@ public class CardMemberServiceImpl implements CardMemberService {
 
 	@Override
 	public List<CardMemberDTO> getCardMem(int card_id) {
-		System.out.println("service " + card_id);
-		return cardMemberDAO.selectCardMember(card_id);
+		List<CardMemberDTO> cardMemberList = cardMemberDAO.selectCardMember(card_id);
+		System.out.println(cardMemberList);
+		return cardMemberList;
+	}
+
+	@Override
+	public void insertCardMember(CardMemberDTO cardMemberDTO) {
+		cardMemberDAO.insertCardMember(cardMemberDTO);
+	}
+
+	@Override
+	public void deleteCardMember(CardMemberDTO cardMemberDTO) {
+		cardMemberDAO.deleteCardMember(cardMemberDTO);
+		
 	}
 
 }
