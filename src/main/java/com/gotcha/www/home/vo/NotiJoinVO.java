@@ -13,11 +13,10 @@ import lombok.ToString;
 @ToString
 public class NotiJoinVO {
 	private int ws_id;
-	private String user_id;
 	private String ws_name;
 	private String noti_type;
 	private String noti_desc;
-	private Date noti_time;
+	private String noti_time;
 	private char noti_checked;
 	
 }

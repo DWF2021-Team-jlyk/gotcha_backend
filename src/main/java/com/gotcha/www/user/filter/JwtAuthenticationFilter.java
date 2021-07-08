@@ -27,6 +27,9 @@ import com.gotcha.www.user.vo.PrincipalDetails;
 //import com.gotcha.www.user.filter.User;
 import com.gotcha.www.user.vo.UserDto;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 
 /* 
@@ -43,8 +46,8 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
 	
-	
 	private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
 	
 	private final AuthenticationManager authenticationManager;
 	private final UserDAO userDAO;
