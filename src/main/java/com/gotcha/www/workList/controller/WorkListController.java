@@ -100,12 +100,15 @@ public class WorkListController {
 		return cardVO;
 	}
 	
-	@RequestMapping("card/update")
-	public void updateCard(@RequestBody CardVO cardVO) {
+	@RequestMapping("/card/update")
+	public @ResponseBody  CardVO updateCard(@RequestBody CardVO cardVO) {
+		System.out.println("Cardvo" + cardVO);
 		workListService.updateCard(cardVO);
+		
+		return cardVO;
 	}
 	
-	@RequestMapping("card/delete")
+	@RequestMapping("/card/delete")
 	public void deleteCard(@RequestBody CardVO cardVO) {
 		workListService.deleteCard(cardVO.getCard_id());
 	}

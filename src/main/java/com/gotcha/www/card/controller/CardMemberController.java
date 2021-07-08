@@ -40,4 +40,10 @@ public class CardMemberController {
     	List<CardMemberDTO> list = cardMemberService.getCardMem(Integer.parseInt(card_id));
         return list;
     }
+	
+	@PostMapping("/deleteCardMember")
+	public @ResponseBody CardMemberDTO deleteCardMember(@RequestBody CardMemberDTO cardMemberDTO) {
+		cardMemberService.deleteCardMember(cardMemberDTO);
+		return cardMemberDTO;
+	}
 }

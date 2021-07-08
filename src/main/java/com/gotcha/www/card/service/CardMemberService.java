@@ -7,4 +7,5 @@ import com.gotcha.www.card.vo.CardMemberDTO;
 public interface CardMemberService {
 	List<CardMemberDTO> getCardMem(int card_id);
 	void insertCardMember(CardMemberDTO cardMemberDTO);
+	void deleteCardMember(CardMemberDTO cardMemberDTO);
 }

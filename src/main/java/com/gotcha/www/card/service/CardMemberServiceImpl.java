@@ -39,4 +39,10 @@ public class CardMemberServiceImpl implements CardMemberService {
 		cardMemberDAO.insertCardMember(cardMemberDTO);
 	}
 
+	@Override
+	public void deleteCardMember(CardMemberDTO cardMemberDTO) {
+		cardMemberDAO.deleteCardMember(cardMemberDTO);
+		
+	}
+
 }

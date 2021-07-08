@@ -10,4 +10,5 @@ public class CardActDTO {
     private String act_desc;
     private String created_date;
     private String islog;
+    private String isedit;
 }

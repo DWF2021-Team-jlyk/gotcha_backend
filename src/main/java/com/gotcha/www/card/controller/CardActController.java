@@ -1,5 +1,8 @@
 package com.gotcha.www.card.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,11 +24,46 @@ public class CardActController {
 		this.cardActService = cardActService;
 	}
 	
-	@PostMapping("")
-	public @ResponseBody List<CardActDTO> getCardAct(@RequestBody int card_id){
-		   
-    	System.out.println(cardActService.getCardAct(card_id));
-        return cardActService.getCardAct((card_id));
+	@PostMapping("selectList")
+	public @ResponseBody List<CardActDTO> getCardAct(@RequestBody  HashMap<String, String> map){
+
+		String card_id = map.get("card_id");
+        return cardActService.getCardAct(Integer.parseInt(card_id));
     }
+	
+	
+	@PostMapping("insertCardAct")
+	public @ResponseBody CardActDTO insertCardAct(@RequestBody CardActDTO cardActDTO){
+		Date today = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		int act_id = cardActService.selectActId();
+
+		
+		cardActDTO.setAct_id(act_id);
+		cardActDTO.setCreated_date(format.format(today));
+
+
+		cardActService.insertCardAct(cardActDTO);
+		return cardActDTO;
+    }
+	
+	@PostMapping("deleteCardAct")
+	public @ResponseBody CardActDTO deleteCardAct(@RequestBody HashMap<String, String> map){
+		String act_id = map.get("act_id");
+		 CardActDTO cardActDTO = new CardActDTO();
+		 cardActDTO.setAct_id(Integer.parseInt(act_id));
+		
+		cardActService.deleteCardAct(Integer.parseInt(act_id));
+		return cardActDTO;
+    }
+	
+	@PostMapping("updateCardAct")
+	public @ResponseBody CardActDTO updateCardAct(@RequestBody CardActDTO cardActDTO) {
+		cardActService.updateCardAct(cardActDTO);
+		return cardActDTO;
+	}
+	
+
+	
 
 }

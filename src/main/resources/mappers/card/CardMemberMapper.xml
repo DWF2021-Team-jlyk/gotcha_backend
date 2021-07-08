@@ -14,7 +14,7 @@
         where CARD_ID = #{card_id}
     </select>
     
-    <delete id="deleteCardMember" parameterType="String">
+    <delete id="deleteCardMember" parameterType="com.gotcha.www.card.vo.CardMemberDTO">
         delete
         from GC_CARD_MEM
         where USER_ID = #{user_id} and CARD_ID = #{card_id}
