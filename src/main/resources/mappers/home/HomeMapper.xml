@@ -26,7 +26,7 @@
 		<result property="noti_checked" column="noti_checked" />
 	</resultMap> -->
 
-	<select id="selectNoti" parameterType="String" resultType="HashMap">
+	<select id="selectNoti" parameterType="String" resultType="com.gotcha.www.home.vo.NotiJoinVO">
 		SELECT w.ws_id, w.ws_name, n.noti_type, n.noti_desc, n.noti_time, n.noti_checked
 		FROM gc_noti n
 		JOIN gc_ws w ON w.ws_id = n.ws_id

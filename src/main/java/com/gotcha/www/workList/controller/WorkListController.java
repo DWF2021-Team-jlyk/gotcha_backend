@@ -63,8 +63,7 @@ public class WorkListController {
 
 	@RequestMapping("/update")
 	public @ResponseBody ListVO updateList(@RequestBody ListVO listVO) {
-		// System.out.println("here1");
-		System.out.println(listVO);
+		log.info(listVO);
 		workListService.updateList(listVO);
 		// System.out.println("here");
 		return listVO;

@@ -80,13 +80,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //			.and()
 			.authorizeRequests()
 			.antMatchers("/home/*").access("hasRole('ROLE_USER')")
-			.antMatchers("/main/wsList/list/**").access("hasAnyRole('ROLE_ADMIN') or hasAnyRole('ROLE_MEMBER')")
+			.antMatchers("/main/wsList/list/**").access("hasRole('ROLE_USER')")
 //			.antMatchers("member").hasAnyRole("ADMIN, MEMBER")
 //			.antMatchers("/user/*").permitAll()
 			.anyRequest().permitAll()
 			.and()
-			.addFilter(new JwtAuthenticationFilter(authenticationManager(), userDAO));
-//			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
+			.addFilter(new JwtAuthenticationFilter(authenticationManager(), userDAO))
+			.addFilter(new JwtAuthorizationFilter(authenticationManager(),userDAO));
 //			.exceptionHandling()
 //			.authenticationEntryPoint(authenticationEntryPoint) // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
 //			.accessDeniedHandler(accessDeniedHandler) // 권한에서 예외가 발생;
