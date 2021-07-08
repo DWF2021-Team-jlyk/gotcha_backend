@@ -4,7 +4,7 @@
 <mapper namespace="com.gotcha.www.card.dao.CardTodoDAO">
     <select
             id="selectTodoId"
-            resultType="int"
+            resultType="Integer"
     >
         select TODO_SEQ.nextval from dual
     </select>
@@ -34,9 +34,9 @@
         values (#{todo_id},
                 #{todo_name},
                 #{card_id},
-                #{todo_start_date},
-                #{todo_end_date},
-                #{todo_isdone})
+                #{todo_start_date,jdbcType=VARCHAR},
+                #{todo_end_date,jdbcType=VARCHAR},
+                0)
     </insert>
 
     <delete id="deleteCardTodo" parameterType="int">
@@ -49,9 +49,9 @@
         update GC_CARD_TODO
         set CARD_ID         = #{card_id},
             TODO_NAME       = #{todo_name},
-            TODO_START_DATE = #{todo_start_date},
-            TODO_END_DATE   = #{todo_end_date},
-            TODO_ISDONE     = #{todo_isdone}
+            TODO_START_DATE = #{todo_start_date,jdbcType=VARCHAR},
+            TODO_END_DATE   = #{todo_end_date,jdbcType=VARCHAR},
+            TODO_ISDONE     = #{todo_isdone,jdbcType=CHAR}
         where TODO_ID = #{todo_id}
     </update>
 </mapper>

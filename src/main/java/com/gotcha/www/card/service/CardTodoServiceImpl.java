@@ -29,8 +29,31 @@ public class CardTodoServiceImpl implements CardTodoService {
 
 	@Override
 	public List<CardTodoDTO> getCardTodo(int card_id) {
-		// TODO Auto-generated method stub
-		return null;
+		return cardTodoDAO.selectCardTodo(card_id);
+	}
+
+	@Override
+	public int selectTodoId() {
+		return cardTodoDAO.selectTodoId();
+	}
+
+	@Override
+	public void deleteCardTodo(int todo_id) {
+		cardTodoDAO.deleteCardTodo(todo_id);
+	}
+
+	@Override
+	public void updateCardTodo(CardTodoDTO cardTodo) {
+		cardTodoDAO.updateCardTodo(cardTodo);
+		
+	}
+
+	@Override
+	@Transactional
+	public void insertCardTodo(CardTodoDTO cardTodo) {
+		cardTodo.setTodo_id(cardTodoDAO.selectTodoId());
+		log.info("CardTodoServiceImpl"+cardTodo.getTodo_id());
+		cardTodoDAO.insertCardTodo(cardTodo);
 	}
 
 }

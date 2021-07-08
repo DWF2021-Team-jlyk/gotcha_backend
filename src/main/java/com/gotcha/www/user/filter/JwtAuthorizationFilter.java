@@ -1,6 +1,5 @@
 package com.gotcha.www.user.filter;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Calendar;
 
@@ -48,6 +47,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+		
 //		super.doFilterInternal(request, response, chain);
 		System.out.println("path: " + request.getServletPath());
 		//System.out.println("request.getInputStream() : " + request.getInputStream());

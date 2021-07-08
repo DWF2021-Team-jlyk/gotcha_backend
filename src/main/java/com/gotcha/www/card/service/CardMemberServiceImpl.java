@@ -29,8 +29,8 @@ public class CardMemberServiceImpl implements CardMemberService {
 
 	@Override
 	public List<CardMemberDTO> getCardMem(int card_id) {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("service " + card_id);
+		return cardMemberDAO.selectCardMember(card_id);
 	}
 
 }

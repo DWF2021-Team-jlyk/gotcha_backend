@@ -64,10 +64,7 @@ public class WorkListController {
 
 	@RequestMapping("/update")
 	public @ResponseBody ListVO updateList(@RequestBody ListVO listVO) {
-		// System.out.println("here1");
-		System.out.println(listVO);
 		workListService.updateList(listVO);
-		// System.out.println("here");
 		return listVO;
 	}
 
@@ -101,8 +98,10 @@ public class WorkListController {
 	}
 	
 	@RequestMapping("card/update")
-	public void updateCard(@RequestBody CardVO cardVO) {
+	public @ResponseBody CardVO updateCard(@RequestBody CardVO cardVO) {
 		workListService.updateCard(cardVO);
+		log.info("update Card after service"+cardVO);
+		return cardVO;
 	}
 	
 	@RequestMapping("card/delete")
