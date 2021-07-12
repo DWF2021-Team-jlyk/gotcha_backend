@@ -11,7 +11,7 @@
 		from dual
 	</select>
 	<!-- select List -->
-	<select id="selectList" parameterType="String"
+	<select id="selectList" parameterType="int"
 		resultType="com.gotcha.www.workList.vo.ListVO">
 		select * from gc_list
 		where

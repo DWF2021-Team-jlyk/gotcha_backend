@@ -20,8 +20,7 @@ public class WorkListServiceImpl implements WorkListService {
 	WorkListDAO workListDAO;
 
 	@Override
-	public List<ListVO> selectList(String listWsid) {
-		
+	public List<ListVO> selectList(int listWsid) {
 		return workListDAO.selectList(listWsid);
 	}
 
@@ -80,7 +79,6 @@ public class WorkListServiceImpl implements WorkListService {
 		workListDAO.deleteCard(card_id);
 		
 	}
-
 	
 
 

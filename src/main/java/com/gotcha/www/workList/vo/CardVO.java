@@ -20,4 +20,5 @@ public class CardVO {
 	private char card_isdone;
 	private int list_id;
 	private int ws_id;
+	private int position;
 }	

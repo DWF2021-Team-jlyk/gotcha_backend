@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gotcha.www.card.dao.CardActionDAO">
+
+    <select id="getMaxPosition" resultType="int">
+        select max(position)
+        from gc_card
+        where list_id = #{list_id} and ws_id = #{ws_id}
+    </select>
+  
+
+	<update id="updateCardMove" parameterType="com.gotcha.www.workList.vo.CardVO">
+		update GC_CARD
+		set list_id = #{list_id} , ws_id = #{ws_id}, position = #{position}
+		where card_id = #{card_id} 
+	</update>
+	
+	<update id="updateDestPosition" parameterType="com.gotcha.www.workList.vo.CardVO">
+		update gc_card
+		set position = position+1
+		where card_id in (
+			  select card_id
+			  from gc_card
+			  where list_id = #{list_id} AND 
+					ws_id = #{ws_id} AND 
+					position >= #{position} AND
+					not card_id in(#{card_id})
+			 )
+	</update>
+	
+	<update id="updateNowPosition" parameterType="com.gotcha.www.workList.vo.CardVO">
+		update gc_card
+		set position = position-1
+		where list_id = #{list_id} and position > #{position}
+	</update>
+</mapper>
