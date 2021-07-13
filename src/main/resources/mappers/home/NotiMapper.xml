@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gotcha.www.home.dao.NotiDAO">
+    <select id="getNotiId" resultType="int">
+        select noti_seq.nextval
+        from dual
+    </select>
+    <insert id="insertNoti" parameterType="com.gotcha.www.home.vo.NotiVO">
+        insert into GC_NOTI(
+            WS_ID,
+            NOTI_TYPE,
+            NOTI_TYPE_ID,
+            NOTI_CHECKED,
+            NOTI_TIME,
+            NOTI_ID,
+            NOTI_DESC
+        )values (
+            #{ws_id},
+            #{noti_type},
+            #{noti_type_id},
+            #{noti_checked},
+            #{noti_time},
+            #{noti_id},
+            #{noti_desc}
+        )
+    </insert>
+
+    <insert id="insertNotiUser" parameterType="com.gotcha.www.home.vo.NotiUserVO">
+        insert into GC_NOTI_USER(noti_id, user_id)
+        VALUES (#{noti_id}, #{user_id})
+    </insert>
+
+    <update id="changeNotiCheck" parameterType="int">
+        DECLARE
+            checked char;
+        BEGIN
+            SELECT noti_checked
+            INTO checked
+            FROM gc_noti
+            where noti_id = #{noti_id};
+
+            IF checked = '1' THEN
+                UPDATE gc_noti
+                SET noti_checked = '0'
+                WHERE noti_id = #{noti_id};
+            ELSE
+                UPDATE gc_noti
+                set noti_checked = '1'
+                where noti_id = #{noti_id};
+            END IF;
+        END;
+    </update>
+
+    <delete id="deleteNoti" parameterType="int">
+        delete from GC_NOTI where NOTI_ID=#{noti_id}
+    </delete>
+</mapper>

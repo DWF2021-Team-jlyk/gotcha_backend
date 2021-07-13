@@ -31,6 +31,6 @@ public interface HomeDAO{
 	// create user role
 	void createUserRole(HashMap<String, Object> map);
 
-	@Select("Select user_id from GC_USER")
+//	@Select("Select user_id from GC_USER")
 	List<String> getAllUserId();
 }

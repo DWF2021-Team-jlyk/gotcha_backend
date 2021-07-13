@@ -118,7 +118,14 @@
             resultType="com.gotcha.www.workList.vo.CardVO">
         select *
         from gc_card
-        where list_id = #{card_id}
+        where list_id = #{list_id}
+    </select>
+
+    <select id="selectOneCard" parameterType="int"
+            resultType="com.gotcha.www.workList.vo.CardVO">
+        select *
+        from GC_CARD
+        where CARD_ID=#{card_id}
     </select>
 
 </mapper>

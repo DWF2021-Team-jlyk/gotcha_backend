@@ -59,7 +59,6 @@ public class HomeController {
 
     @PostMapping("/notiList")
     public @ResponseBody List<NotiJoinVO> selectNotice(
-            @RequestBody UserVO userVO,
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
         userId = getLoginUser(principalDetails);

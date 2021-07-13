@@ -29,8 +29,7 @@ public class WorkListServiceImpl implements WorkListService {
 	public int selectListId() {
 		return workListDAO.selectListId();
 	}
-	
-	
+
 	@Override
 	@Transactional
 	public void insertList(ListVO listVO) {

@@ -58,7 +58,10 @@
 		INSERT INTO GC_USER_ROLE
 		VALUES(#{ws_id}, #{user_id}, 1, 0)
 	</insert>
-	
+
+	<select id="getAllUserId" resultType="String">
+		Select user_id from GC_USER
+	</select>
 </mapper>
 
 

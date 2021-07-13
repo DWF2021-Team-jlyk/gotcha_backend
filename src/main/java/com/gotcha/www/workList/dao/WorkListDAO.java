@@ -36,7 +36,5 @@ public interface WorkListDAO {
 	void deleteCard(int card_id);
 
 	CardVO selectOneCard(int card_id);
-	//public List<CardVO> selectCardList(int list_id);
-	
-	
+	List<CardVO> selectCardList(int list_id);
 }
