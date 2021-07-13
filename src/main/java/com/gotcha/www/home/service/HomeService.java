@@ -2,6 +2,9 @@ package com.gotcha.www.home.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import com.gotcha.www.home.vo.NotiJoinVO;
 import com.gotcha.www.home.vo.WorkspaceDto;
 
@@ -16,4 +19,11 @@ public interface HomeService {
 	//workspace setting userlist받아오기
 	List<String> selectWsUserList(int ws_id);
 	
+	// file upload
+	boolean fileUpload(String ws_name, String fileName, byte[] fileByte);
+	
+	// add workspace
+	void createWorkspace(String user_id, String ws_name, String originalFilename);
+	
+	List<String> getAllUserId();
 }

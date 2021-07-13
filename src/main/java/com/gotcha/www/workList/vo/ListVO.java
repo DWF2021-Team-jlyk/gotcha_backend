@@ -15,7 +15,7 @@ public class ListVO {
 	private int ws_id;
 	private int list_id;
 	private String list_name;
-	
+	private int position;
 	
 	//private List<CardVO> card;
 	

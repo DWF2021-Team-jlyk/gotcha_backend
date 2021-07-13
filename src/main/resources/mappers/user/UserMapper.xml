@@ -53,6 +53,30 @@
 		WHERE user_id = #{user_id}
 	</select>
 
+	<select id="getUserInfo" parameterType="String" resultType="com.gotcha.www.home.vo.UserVO">
+		SELECT user_id, user_name
+		FROM gc_user
+		WHERE user_id = #{user_id}
+	</select>
+
+	<select id="checkPwd" parameterType="String" resultType="int">
+		SELECT count(*)
+		FROM gc_user
+		WHERE user_id = #{user_id} and user_pwd = #{user_pwd}
+	</select>
+	
+	<select id="getUserPwd" parameterType="String" resultType="com.gotcha.www.home.vo.UserVO">
+		SELECT *
+		FROM gc_user
+		WHERE user_id = #{user_id}
+	</select>
+	
+	<select id="checkWorkspaceAdmin" parameterType="String" resultType="int">
+		SELECT count(*)
+		FROM gc_user_role
+		WHERE user_id = #{user_id} AND role_id = 1
+	</select>
+	
 	<insert id="insertUser" parameterType="userVO">
 		INSERT INTO gc_user 
 		VALUES(#{user_id}, #{user_pwd}, 0, #{user_name}, null)
@@ -75,4 +99,35 @@
 		SET user_pwd = #{user_pwd}
 		WHERE user_id = #{user_id}
 	</update>
+	
+	<update id="updateUserName" parameterType="String">
+		UPDATE gc_user
+		SET user_name = #{user_name}
+		WHERE user_id = #{user_id}
+	</update>
+	
+	<delete id="deleteCardReply" parameterType="String">
+		DELETE FROM GC_CARD_ACT 
+		WHERE user_id = #{user_id} AND ISLOG = 0 
+	</delete>
+	
+	<delete id="deleteCardMember" parameterType="String">
+		DELETE FROM GC_CARD_MEM
+		WHERE user_id = #{user_id}
+	</delete>
+	
+	<delete id="deleteNotiUser" parameterType="String">
+		DELETE FROM GC_NOTI_USER
+		WHERE user_id = #{user_id}
+	</delete>
+	
+	<delete id="deleteUserRole" parameterType="String">
+		DELETE FROM GC_USER_ROLE
+		WHERE user_id = #{user_id}
+	</delete>
+	
+	<delete id="deleteUser" parameterType="String">
+		DELETE FROM GC_USER
+		WHERE user_id = #{user_id}
+	</delete>
 </mapper>

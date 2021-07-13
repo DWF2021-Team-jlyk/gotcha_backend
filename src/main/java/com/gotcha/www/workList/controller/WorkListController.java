@@ -8,13 +8,13 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.gotcha.www.card.service.CardActService;
 import com.gotcha.www.card.vo.CardActDTO;
@@ -66,17 +66,15 @@ public class WorkListController {
 	public @ResponseBody ListVO insertList(@RequestBody ListVO listVO) {
 		log.info(listVO);
     	listVO.setList_id(workListService.selectListId());
-		workListService.insertList(listVO);
 		log.info("listVO insert info after:"+listVO);
+		workListService.insertList(listVO);
 		return listVO;
 	}
 
 	@RequestMapping("/update")
 	public @ResponseBody ListVO updateList(@RequestBody ListVO listVO) {
-		// System.out.println("here1");
-		System.out.println(listVO);
+		log.info(listVO);
 		workListService.updateList(listVO);
-		// System.out.println("here");
 		return listVO;
 	}
 
@@ -103,6 +101,7 @@ public class WorkListController {
 
 	@RequestMapping("/card/insert")
 	public @ResponseBody CardVO insertCard(@RequestBody CardVO cardVO) {
+    	log.info(cardVO);
 		cardVO.setCard_id(workListService.selectCardId());
 		workListService.insertCard(cardVO);
 		log.info("cardVO insert info after:"+cardVO);
@@ -110,12 +109,11 @@ public class WorkListController {
 		
 		return cardVO;
 	}
-	
-	@RequestMapping("/card/update")
-	public @ResponseBody  CardVO updateCard(@RequestBody CardVO cardVO) {
-		System.out.println("Cardvo" + cardVO);
+
+	@RequestMapping("card/update")
+	public @ResponseBody CardVO updateCard(@RequestBody CardVO cardVO) {
+    	log.info("\n updateCard : " + cardVO);
 		workListService.updateCard(cardVO);
-		
 		return cardVO;
 	}
 	
@@ -124,4 +122,3 @@ public class WorkListController {
 		workListService.deleteCard(cardVO.getCard_id());
 	}
 }
-

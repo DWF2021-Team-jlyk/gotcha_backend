@@ -1,3 +1,7 @@
+service:
+  file:
+    uploadurl: C:/sojeong/workspace/gotcha_frontend/public/upload
+
 
 spring:
   datasource:
@@ -5,9 +9,25 @@ spring:
     url: jdbc:oracle:thin:@192.168.20.19:1521:xe
     username: gotcha
     password: oracle
-  jackson:
-    property-naming-strategy: LOWER_CASE
+
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+  jwt:
+    secret: gotcharProject
     
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+      
+        
 mybatis:
   type-aliases-package: com.example.test.vo
   config-location: classpath:config/mybatis-config.xml

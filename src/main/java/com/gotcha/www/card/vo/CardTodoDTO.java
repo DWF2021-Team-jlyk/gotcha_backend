@@ -9,5 +9,5 @@ public class CardTodoDTO {
     private int card_id;
     private String todo_start_date;
     private String todo_end_date;
-    private int todo_isdone;
+    private char todo_isdone;
 }

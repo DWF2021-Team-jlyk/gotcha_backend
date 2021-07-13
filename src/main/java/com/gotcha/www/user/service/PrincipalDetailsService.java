@@ -1,5 +1,7 @@
 package com.gotcha.www.user.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,19 +19,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PrincipalDetailsService implements UserDetailsService{
 	
+	private static final Logger log = LoggerFactory.getLogger(PrincipalDetailsService.class);
+	
 	private final UserDAO userDAO;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		System.out.println("PrincipalDetailsService의 loadUserByUsername()");
-		System.out.println("username: " + username);
+		log.info("PrincipalDetailsService의 loadUserByUsername()");
+		log.info("username: " + username);
 		UserDto userDto = userDAO.findByUsername(username);
 		
 		if(userDto.getRole_type() == null || userDto.getRole_type().equals("")) {
 			userDto.setRole_type("ROLE_USER");
 		}
 
-		System.out.println("userDtoRepository : " + userDto);
+		log.info("principalDetails findByUsername : " + userDto);
 		return new PrincipalDetails(userDto);
 	}
 	
