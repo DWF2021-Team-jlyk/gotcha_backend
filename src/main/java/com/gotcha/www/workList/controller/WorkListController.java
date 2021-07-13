@@ -40,8 +40,9 @@ public class WorkListController {
 
         log.info("map" + map);
         log.info("listWsid: " + listWsid);
-        log.info(listWsid.getClass());
+//        log.info(listWsid.getClass());
 
+        System.out.println("listWsiddddddddddddddddddddddddddddddddddddddddddd: " + listWsid);
         List<ListVO> listList = workListService.selectList(Integer.parseInt(listWsid));
 
         log.info("lists: " + listList);
