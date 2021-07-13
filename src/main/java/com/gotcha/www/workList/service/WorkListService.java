@@ -8,8 +8,6 @@ import com.gotcha.www.workList.vo.ListVO;
 
 public interface WorkListService {
 	// List Service
-
-	List<ListVO> selectList(String listWsid);
 	
 	int selectListId();
 
@@ -29,6 +27,8 @@ public interface WorkListService {
 	void updateCard(CardVO cardVO);
 
 	void deleteCard(int card_id);
+
+	List<ListVO> selectList(int listWsid);
 
 	//List<CardVO> selectCartList(int list_id);
 }

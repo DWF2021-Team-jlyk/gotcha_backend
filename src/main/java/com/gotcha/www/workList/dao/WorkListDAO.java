@@ -11,7 +11,7 @@ import com.gotcha.www.workList.vo.ListVO;
 @Mapper
 public interface WorkListDAO {
 	// List Mapper
-	public List<ListVO> selectList(String listWsid);
+	public List<ListVO> selectList(int listWsid);
 	
 	public int selectListId();
 	

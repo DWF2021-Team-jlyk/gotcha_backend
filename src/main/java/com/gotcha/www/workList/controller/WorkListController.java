@@ -39,8 +39,10 @@ public class WorkListController {
 
         log.info("map" + map);
         log.info("listWsid: " + listWsid);
+//        log.info(listWsid.getClass());
 
-        List<ListVO> listList = workListService.selectList(listWsid);
+        System.out.println("listWsiddddddddddddddddddddddddddddddddddddddddddd: " + listWsid);
+        List<ListVO> listList = workListService.selectList(Integer.parseInt(listWsid));
 
         log.info("lists: " + listList);
         // 리스트와 카드를 한 번에 가져오고 싶으면 아래 주석 해제
