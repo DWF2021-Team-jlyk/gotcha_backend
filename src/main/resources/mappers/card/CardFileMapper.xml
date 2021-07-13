@@ -13,27 +13,31 @@
 		where CARD_ID = #{card_id}
 	</select>
 	<select id="fileCount" parameterType="int" resultType="int">
-		select count(*)
+		select
+		count(*)
 		from GC_CARD_FILE
 		where CARD_ID = #{card_id}
 	</select>
-	
+
 	<delete id="deleteCardFile" parameterType="int">
 		delete
-		from GC_CARD_FILE
+		from
+		GC_CARD_FILE
 		where FILE_ID = #{file_id}
 	</delete>
-	
+
 	<insert id="insertCardFile"
 		parameterType="com.gotcha.www.card.vo.CardFileDTO">
-		insert into GC_CARD_FILE(CARD_ID, FILE_ID, FILE_NAME, FILE_ISCHECKED)
-		VALUES (#{card_id}, #{file_id}, #{file_name},0)
+		insert into GC_CARD_FILE(CARD_ID, FILE_ID, FILE_NAME,FILE_PATH
+		,FILE_ISCHECKED)
+		VALUES (#{card_id}, #{file_id}, #{file_name},#{file_path,jdbcType=VARCHAR},0)
 	</insert>
-	
+
 	<update id="updateCardFile"
 		parameterType="com.gotcha.www.card.vo.CardFileDTO">
-		update GC_CARD_FILE set FILE_ISCHECKED = #{file_ischecked}
+		update GC_CARD_FILE set FILE_ISCHECKED =
+		#{file_ischecked}
 		where FILE_ID = #{file_id}
 	</update>
-	
+
 </mapper>

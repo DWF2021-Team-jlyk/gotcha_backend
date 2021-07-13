@@ -1,7 +1,11 @@
 package com.gotcha.www.card.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,6 +35,8 @@ public class CardFileController {
 
 //	private static final Logger log = LoggerFactory.getLogger(CardFileController.class);
 	private final Log log = LogFactory.getLog(this.getClass());
+	
+	private FileOutputStream fos = null;
 
 	public CardFileController(CardFileService cardFileService) {
 		this.cardFileService = cardFileService;
@@ -54,94 +60,60 @@ public class CardFileController {
 	}
 
 	@PostMapping("/upload")
-	public ResponseEntity<Object> handleFileUpload(
+	public @ResponseBody CardFileDTO handleFileUpload(
 			@RequestParam("card_id") int card_id, 
-			//@RequestParam("file_ischecked")char file_ischecked,
 			@RequestParam("file") MultipartFile file) throws JsonProcessingException {
+		CardFileDTO cardFileDTO = new CardFileDTO();
 		try {
 		cardFileService.store(file);
 		log.info("fileupload"+file.getName());
-		String fileName = file.getOriginalFilename();
-		CardFileDTO cardFileDTO = new CardFileDTO();
+		
+		String originalFile = file.getOriginalFilename();
+		String fileExtension = originalFile.substring(originalFile.lastIndexOf("\\")+1);
+		String storedFileName = UUID.randomUUID().toString().replaceAll("-", "") +"_"+ fileExtension;
+		//String filePath = "C:\\sojeong\\workspace\\gotcha_frontend\\public\\upload\\";
+		String filePath = "/upload/"+storedFileName;
+		File getFile = new File("C:/sojeong/workspace/gotcha_frontend/public"+filePath);
+		
+		file.transferTo(getFile); //첫 번째 방법
+//		try {
+//			byte fileData[]=file.getBytes();
+//			fos = new FileOutputStream(filePath+file.getOriginalFilename());
+//			fos.write(fileData);
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}finally {
+//			if(fos != null) {
+//				fos.close();
+//			}
+//		}
+
+		log.info("filePath:"+filePath);
+		
 		cardFileDTO.setFile_id(cardFileService.selectFileId());
-		cardFileDTO.setFile_name(fileName);
+		cardFileDTO.setFile_name(storedFileName);
 		cardFileDTO.setCard_id(card_id);
-		//cardFileDTO.setFile_ischecked(file_ischecked);
+		cardFileDTO.setFile_path(filePath);
+	
 		log.info("[UPLOAD CardFileController cardFileDTO] :"+cardFileDTO);
 		cardFileService.insertCardFile(cardFileDTO);
 		
 		
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<Object>(null,HttpStatus.CONFLICT);
+			return null;
 	}
-
-			return new ResponseEntity<Object>("Success",HttpStatus.OK);
-
-//	@PostMapping(value="/upload", consumes = {MediaType.APPLICATION_JSON_VALUE,
-//											  MediaType.MULTIPART_FORM_DATA_VALUE})
-//	public CardFileDTO handleFileUpload(@RequestPart("cardFileDTO") String cardFileDTO, @RequestPart("file") List<MultipartFile> file) {
-//		CardFileDTO cardFileDTOJson= cardFileService.getJson(cardFileDTO, file);
-//		log.info("[cardFileDTOJson]:"+cardFileDTOJson);
-//		return cardFileDTOJson;
+			return cardFileDTO;
 	}
 	
-//	@RequestMapping("/delete")
-//	public @ResponseBody CardFileDTO deleteCardFile(@RequestParam("file_id") int file_id) {
-//		cardFileService.deleteCardFile(file_id);
-//		return (CardFileDTO) cardFileService;
-//		
-//	}
-
-//	@RequestMapping("/delete") //return: CardFileDTO, Service parameter: CardFileDTO,  DAO parameter: getFile_id
-//	public @ResponseBody CardFileDTO deleteCardFile(@RequestBody CardFileDTO cardFileDTO) {
-//		cardFileService.deleteCardFile(cardFileDTO);
-//		log.info("[DELETE CardFileController cardFileDTO] :" + cardFileDTO);
-//		return cardFileDTO;
-//	}
+	//@GetMapping
 	
-//	@PostMapping("/delete") //return: CardFileDTO, Service parameter: getFile_id
-//	public @ResponseBody CardFileDTO deleteCardFile(@RequestBody CardFileDTO cardFileDTO) {
-//		log.info("[DELETE CardFileController cardFileDTO.getFile_id()] :" + cardFileDTO.getFile_id());
-//		cardFileService.deleteCardFile(cardFileDTO.getFile_id());
-//		return cardFileDTO;
-//	}
-//	@GetMapping("/delete/:{fileId}") //return: CardFileDTO, Service parameter: getFile_id
-//	public @ResponseBody int deleteCardFile(@PathVariable int fileId) {
-//		log.info("[DELETE CardFileController cardFileDTO.getFile_id()] :" + fileId);
-//		cardFileService.deleteCardFile(fileId);
-//		return fileId;
-//	}
-//	
-	@PostMapping("/delete") //return: List<CardFileDTO>, Service parameter: Integer.parseInt(file_id)
-	public @ResponseBody CardFileDTO deleteCardFile(@RequestBody HashMap<String, Object> map) {
-		log.info(map);
-		map.values().forEach(log::info);
-		map.values().forEach(value->log.info(value.getClass()));
-		int file_id = (int)map.get("file_id");
-		log.info(file_id);
-		CardFileDTO dto = new CardFileDTO();
-		dto.setFile_id(file_id);
-		log.info(dto);
-		cardFileService.deleteCardFile(file_id);
-		log.info(dto);
-//		String file_id = map.get("file_id");
-//		log.info("CardFileController delete file_id : " + file_id);
-//		log.info("[DELETE CardFileController] :" + deleteFileList);
-//		return Integer.parseInt(file_id);
-		return dto;
+	@PostMapping("/delete") //return: CardFileDTO, Service parameter: getFile_id
+	public @ResponseBody CardFileDTO deleteCardFile(@RequestBody CardFileDTO cardFileDTO) {
+		log.info("[DELETE CardFileController cardFileDTO.getFile_id()] :" + cardFileDTO.getFile_id());
+		log.info("[DELETE CardFileController cardFileDTO] :" + cardFileDTO);
+		cardFileService.deleteCardFile(cardFileDTO.getFile_id());
+		return cardFileDTO;
 	}
-
-//	@RequestMapping("/delete") //return: List<CardFileDTO>, Service parameter: Integer.parseInt(file_id)
-//	public @ResponseBody int deleteCardFile(HttpServletRequest request) {
-//		log.info(request.getParameterMap().values());
-//		log.info(request.getParameterMap().keySet());
-////		String file_id = map.get("file_id");
-////		log.info("CardFileController delete file_id : " + file_id);
-////		cardFileService.deleteCardFile(Integer.parseInt(file_id)); 
-////		log.info("[DELETE CardFileController] :" + deleteFileList);
-////		return Integer.parseInt(file_id);
-//		return -1;
-//	}
 	
 }

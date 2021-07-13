@@ -1,5 +1,7 @@
 package com.gotcha.www.card.vo;
 
+import java.nio.file.Path;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +17,5 @@ public class CardFileDTO {
     private int file_id;
     private String file_name;
     private char file_ischecked;
+    private String file_path;
 }

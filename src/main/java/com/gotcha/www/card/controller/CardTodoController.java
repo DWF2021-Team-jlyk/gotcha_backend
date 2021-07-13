@@ -55,6 +55,7 @@ public class CardTodoController {
 	public @ResponseBody CardTodoDTO deleteCardTodo(@RequestBody CardTodoDTO cardTodoDTO) {
     	log.info("delete controller, service befor"+cardTodoDTO);
     	cardTodoService.deleteCardTodo(cardTodoDTO.getTodo_id());
+    	log.info("delete controller, service after getTodo_id()"+cardTodoDTO.getTodo_id());
     	log.info("delete controller, service after"+cardTodoDTO);
 		return cardTodoDTO;
 	}
