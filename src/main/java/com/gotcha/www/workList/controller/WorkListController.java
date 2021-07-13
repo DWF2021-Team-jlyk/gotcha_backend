@@ -1,5 +1,7 @@
 package com.gotcha.www.workList.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gotcha.www.card.service.CardActService;
+import com.gotcha.www.card.vo.CardActDTO;
 import com.gotcha.www.user.vo.PrincipalDetails;
 import com.gotcha.www.workList.dao.WorkListDAO;
 import com.gotcha.www.workList.service.WorkListService;
@@ -29,6 +33,9 @@ public class WorkListController {
 
     @Autowired
     WorkListDAO workListDAO;
+
+	@Autowired
+	CardActService cardActService;
 
     private Log log = LogFactory.getLog(this.getClass());
 
@@ -99,6 +106,8 @@ public class WorkListController {
 		cardVO.setCard_id(workListService.selectCardId());
 		workListService.insertCard(cardVO);
 		log.info("cardVO insert info after:"+cardVO);
+	
+		
 		return cardVO;
 	}
 	

@@ -1,18 +1,22 @@
 package com.gotcha.www.card.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gotcha.www.card.service.CardActService;
 import com.gotcha.www.card.service.CardMemberService;
+import com.gotcha.www.card.vo.CardActDTO;
 import com.gotcha.www.card.vo.CardMemberDTO;
 
 @RequestMapping("/cardDetail/member")
@@ -21,6 +25,9 @@ public class CardMemberController {
 	private final CardMemberService cardMemberService;
 	private final Log log = LogFactory.getLog(this.getClass());
 
+	@Autowired
+	CardActService cardActService;
+	
 	public CardMemberController(CardMemberService cardMemberService) {
 		this.cardMemberService = cardMemberService;
 	}
@@ -29,6 +36,11 @@ public class CardMemberController {
 	 public @ResponseBody CardMemberDTO insertCardMember(@RequestBody CardMemberDTO cardMemberDTO){
 		log.info("\n + cardMemberDTO" + cardMemberDTO);
 		cardMemberService.insertCardMember(cardMemberDTO);
+		
+		Date today = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		int act_id = cardActService.selectActId();
+		
 		return cardMemberDTO;
     }
 	

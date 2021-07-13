@@ -1,5 +1,7 @@
 package com.gotcha.www.card.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gotcha.www.card.service.CardActService;
 import com.gotcha.www.card.service.CardActionService;
+import com.gotcha.www.card.vo.CardActDTO;
 import com.gotcha.www.workList.service.WorkListService;
 import com.gotcha.www.workList.vo.CardVO;
 
@@ -22,9 +26,12 @@ public class CardActionController {
 	@Autowired
 	WorkListService workListService;
 	
+	@Autowired
+	CardActService cardActService;
+	
 	public CardActionController(CardActionService cardActionService) {
 		this.cardActionService = cardActionService;
-	}
+	} 
 	
 	@PostMapping("selectMaxPosition")
 	public @ResponseBody int getMaxPosition(@RequestBody CardVO cardVO) {
@@ -37,6 +44,22 @@ public class CardActionController {
 		System.out.println("cardVO" + cardVO);
 		cardActionService.updateCardMove(cardVO);
 		cardActionService.updateDestPosition(cardVO);
+		
+
+		Date today = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		int act_id = cardActService.selectActId();
+		
+		CardActDTO cardActDTO = new CardActDTO();
+		cardActDTO.setCard_id(cardVO.getCard_id());
+		cardActDTO.setAct_id(act_id);
+		cardActDTO.setUser_id("user01@naver.com");
+		cardActDTO.setCreated_date(format.format(today));
+		cardActDTO.setIslog("1");
+		cardActDTO.setAct_desc("user_name(이)가 card를 " + cardVO.getList_id()  + "(으)로 이동하였습니다.");	
+		cardActDTO.setIsedit("0");
+		cardActService.insertCardAct(cardActDTO);
+		
 		return cardVO;
 	}
 	

@@ -1,5 +1,7 @@
 package com.gotcha.www.card.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gotcha.www.card.service.CardTodoService;
+import com.gotcha.www.card.vo.CardActDTO;
 import com.gotcha.www.card.vo.CardTodoDTO;
 
 @RequestMapping("/cardDetail/todo")
@@ -26,5 +29,6 @@ public class CardTodoController {
     	String card_id = map.get("card_id");
     	List<CardTodoDTO> todoList = cardDetailService.getCardTodo(Integer.parseInt(card_id));
         return todoList;
+
     }
 }

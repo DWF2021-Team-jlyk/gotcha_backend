@@ -44,7 +44,6 @@ public class CardActController {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		int act_id = cardActService.selectActId();
 
-		
 		cardActDTO.setAct_id(act_id);
 		cardActDTO.setCreated_date(format.format(today));
 
