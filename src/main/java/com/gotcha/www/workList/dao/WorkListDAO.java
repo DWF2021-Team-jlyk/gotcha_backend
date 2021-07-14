@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.gotcha.www.workList.vo.CardLogVO;
 import com.gotcha.www.workList.vo.CardVO;
 import com.gotcha.www.workList.vo.ListVO;
 
@@ -29,7 +30,7 @@ public interface WorkListDAO {
 	
 	public int selectCardId();
 	
-	void insertCard(CardVO cardVO);
+	void insertCard(CardLogVO cardLogVO);
 	
 	void updateCard(CardVO cardVO);
 	
@@ -38,5 +39,6 @@ public interface WorkListDAO {
 	CardVO selectOneCard(int card_id);
 	//public List<CardVO> selectCardList(int list_id);
 	
+	int selectLastCardId();
 	
 }

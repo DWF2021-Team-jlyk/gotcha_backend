@@ -21,6 +21,7 @@ import com.gotcha.www.card.vo.CardActDTO;
 import com.gotcha.www.user.vo.PrincipalDetails;
 import com.gotcha.www.workList.dao.WorkListDAO;
 import com.gotcha.www.workList.service.WorkListService;
+import com.gotcha.www.workList.vo.CardLogVO;
 import com.gotcha.www.workList.vo.CardVO;
 import com.gotcha.www.workList.vo.ListVO;
 
@@ -49,7 +50,6 @@ public class WorkListController {
         log.info("listWsid: " + listWsid);
 //        log.info(listWsid.getClass());
 
-        System.out.println("listWsiddddddddddddddddddddddddddddddddddddddddddd: " + listWsid);
         List<ListVO> listList = workListService.selectList(Integer.parseInt(listWsid));
 
         log.info("lists: " + listList);
@@ -100,14 +100,33 @@ public class WorkListController {
 	}
 
 	@RequestMapping("/card/insert")
-	public @ResponseBody CardVO insertCard(@RequestBody CardVO cardVO) {
-    	log.info(cardVO);
-		cardVO.setCard_id(workListService.selectCardId());
-		workListService.insertCard(cardVO);
-		log.info("cardVO insert info after:"+cardVO);
-	
+	public @ResponseBody CardLogVO insertCard(@RequestBody CardLogVO cardLogVO) {
+    	log.info("cardLogVO11" + cardLogVO);
+    	int card_id = workListService.selectCardId();
+    	String desc = cardLogVO.getUser_id() + "(이)가 " + cardLogVO.getCard_name() + "(을)를 추가했습니다.";
+    	cardLogVO.setCard_id(card_id);
+    	log.info("cardLogVO222" + cardLogVO);
+		workListService.insertCard(cardLogVO);
+
 		
-		return cardVO;
+		Date today = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		int act_id = cardActService.selectActId();
+
+		CardActDTO cardActDTO = new CardActDTO();
+		cardActDTO.setAct_id(act_id);
+		cardActDTO.setCreated_date(format.format(today));
+		cardActDTO.setCard_id(card_id);
+		cardActDTO.setIslog("1");
+		cardActDTO.setUser_id(cardLogVO.getUser_id());
+		cardActDTO.setAct_desc(desc);
+		
+    	log.info("cardActDTO" + cardActDTO);	
+    	
+		cardActService.insertCardAct(cardActDTO);
+		
+	
+		return cardLogVO;
 	}
 
 	@RequestMapping("card/update")
@@ -121,4 +140,12 @@ public class WorkListController {
 	public void deleteCard(@RequestBody CardVO cardVO) {
 		workListService.deleteCard(cardVO.getCard_id());
 	}
+	
+	@RequestMapping("/card/selectLastCardId")
+	public int selectLastCardId() {
+		int cardid = workListService.selectLastCardId();
+		System.out.println("selectLastCardId"+ cardid);
+		return cardid;
+	}
+	
 }

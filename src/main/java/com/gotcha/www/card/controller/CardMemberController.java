@@ -41,6 +41,8 @@ public class CardMemberController {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		int act_id = cardActService.selectActId();
 		
+		
+		
 		return cardMemberDTO;
     }
 	

@@ -65,7 +65,7 @@ public class CardFileController {
 			@RequestParam("file") MultipartFile file) throws JsonProcessingException {
 		CardFileDTO cardFileDTO = new CardFileDTO();
 		try {
-		cardFileService.store(file);
+		//cardFileService.store(file);
 		log.info("fileupload"+file.getName());
 		
 		String originalFile = file.getOriginalFilename();
@@ -73,7 +73,7 @@ public class CardFileController {
 		String storedFileName = UUID.randomUUID().toString().replaceAll("-", "") +"_"+ fileExtension;
 		//String filePath = "C:\\sojeong\\workspace\\gotcha_frontend\\public\\upload\\";
 		String filePath = "/upload/"+storedFileName;
-		File getFile = new File("C:/sojeong/workspace/gotcha_frontend/public"+filePath);
+		File getFile = new File("C:/Users/pc-21/Desktop/gotcha/gotcha_frontend/public/"+filePath);
 		
 		file.transferTo(getFile); //첫 번째 방법
 //		try {

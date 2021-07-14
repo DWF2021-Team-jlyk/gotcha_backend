@@ -11,7 +11,7 @@
         from dual
     </select>
     <!-- select List -->
-    <select id="selectList" parameterType="String"
+    <select id="selectList" parameterType="int"
             resultType="com.gotcha.www.workList.vo.ListVO">
         select *
         from gc_list
@@ -50,6 +50,7 @@
         select card_seq.nextval
         from dual
     </select>
+    
     <!-- select Card -->
     <!-- <resultMap type="map" id="CardList">
 
@@ -69,7 +70,7 @@
 
     <!-- insert Card (list_id, ws_id, card_start_date, card_end_date 받아옴) -->
     <insert id="insertCard"
-            parameterType="com.gotcha.www.workList.vo.CardVO"
+            parameterType="com.gotcha.www.workList.vo.CardLogVO"
             keyProperty="card_id" keyColumn="card_id">
         insert into gc_card
         (CARD_ID,
@@ -121,4 +122,8 @@
         where list_id = #{card_id}
     </select>
 
+	<select id="selectLastCardId" resultType="int">
+		select max(card_id)
+		from gc_card
+	</select>
 </mapper>

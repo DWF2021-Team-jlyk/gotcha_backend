@@ -47,7 +47,6 @@ public class CardActController {
 		cardActDTO.setAct_id(act_id);
 		cardActDTO.setCreated_date(format.format(today));
 
-
 		cardActService.insertCardAct(cardActDTO);
 		log.info("insertCardAct cardActDTO after service"+cardActDTO);
 		return cardActDTO;

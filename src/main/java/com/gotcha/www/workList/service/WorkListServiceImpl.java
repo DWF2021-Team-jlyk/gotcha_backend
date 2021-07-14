@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gotcha.www.workList.dao.WorkListDAO;
+import com.gotcha.www.workList.vo.CardLogVO;
 import com.gotcha.www.workList.vo.CardVO;
 import com.gotcha.www.workList.vo.ListVO;
 
@@ -62,9 +63,10 @@ public class WorkListServiceImpl implements WorkListService {
 
 	@Override
 	@Transactional
-	public void insertCard(CardVO cardVO) {
-		cardVO.setCard_id(workListDAO.selectCardId());
-		workListDAO.insertCard(cardVO);
+	public void insertCard(CardLogVO cardLogVO) {
+		//cardVO.setCard_id(workListDAO.selectCardId());
+		workListDAO.insertCard(cardLogVO);
+		
 		
 	}
 
@@ -79,11 +81,13 @@ public class WorkListServiceImpl implements WorkListService {
 		workListDAO.deleteCard(card_id);
 		
 	}
+
+	@Override
+	public int selectLastCardId() {
+		return workListDAO.selectLastCardId();
+		
+	}
 	
-
-
-
-
 
 //	@Override
 //	public List<CardVO> selectCartList(int list_id) {

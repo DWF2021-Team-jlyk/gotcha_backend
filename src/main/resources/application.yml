@@ -1,6 +1,6 @@
 service:
   file:
-    uploadurl: C:/sojeong/workspace/gotcha_frontend/public/upload
+    uploadurl: C:\Users\pc-21\Desktop\gotcha\gotcha_frontend\public\upload
 
 
 spring:

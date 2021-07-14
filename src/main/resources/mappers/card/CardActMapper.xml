@@ -27,7 +27,7 @@
     <insert id="insertCardAct"
             parameterType="com.gotcha.www.card.vo.CardActDTO">
         insert into GC_CARD_ACT(CARD_ID, ACT_ID, USER_ID, ACT_DESC, CREATED_DATE, ISLOG, ISEDIT)
-        VALUES (#{card_id}, #{act_id}, #{user_id}, #{act_desc}, sysdate, #{islog}, 0)
+        VALUES (#{card_id}, #{act_id}, #{user_id}, #{act_desc}, #{created_date}, #{islog}, '0')
     </insert>
     
     <update id="updateCardAct"

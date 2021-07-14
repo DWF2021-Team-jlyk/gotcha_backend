@@ -3,6 +3,7 @@ package com.gotcha.www.workList.service;
 import java.util.List;
 import java.util.Map;
 
+import com.gotcha.www.workList.vo.CardLogVO;
 import com.gotcha.www.workList.vo.CardVO;
 import com.gotcha.www.workList.vo.ListVO;
 
@@ -22,7 +23,7 @@ public interface WorkListService {
 	
 	int selectCardId();
 
-	void insertCard(CardVO cardVO);
+	void insertCard(CardLogVO cardLogVO);
 
 	void updateCard(CardVO cardVO);
 
@@ -30,5 +31,6 @@ public interface WorkListService {
 
 	List<ListVO> selectList(int listWsid);
 
+	int selectLastCardId();
 	//List<CardVO> selectCartList(int list_id);
 }
