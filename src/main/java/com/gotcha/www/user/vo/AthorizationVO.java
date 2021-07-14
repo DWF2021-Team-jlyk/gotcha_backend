@@ -1,6 +1,8 @@
-package com.gotcha.www.workList.vo;
+package com.gotcha.www.user.vo;
 
 import java.util.HashMap;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
@@ -13,9 +15,7 @@ public class AthorizationVO {
 	private String ws_name;
 	private int list_id;
 	private int card_id;
-	private String accessToken;
 	private char is_fav;
 	private int role_id;
 	private String role_type;
-	private HashMap<String, Object> formData;
 }

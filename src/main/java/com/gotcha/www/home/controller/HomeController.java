@@ -1,14 +1,15 @@
 package com.gotcha.www.home.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,10 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.gotcha.www.home.service.HomeService;
+import com.gotcha.www.home.vo.InviteMemberVO;
 import com.gotcha.www.home.vo.NotiJoinVO;
 import com.gotcha.www.home.vo.UserVO;
 import com.gotcha.www.home.vo.WorkspaceDto;
-import com.gotcha.www.user.file.UploadFileUtil;
 import com.gotcha.www.user.service.UserService;
 import com.gotcha.www.user.vo.PrincipalDetails;
 
@@ -68,13 +69,45 @@ public class HomeController {
 	}
 	
 	@PostMapping("/wsUserList")
-	public @ResponseBody List<String> selecWsUserList(@RequestBody int ws_id)
+	public @ResponseBody List<String> selecWsUserList(@RequestBody HashMap<String, Integer> map,
+			@AuthenticationPrincipal PrincipalDetails principalDetails)
 			throws Exception {
+		userId = getLoginUser(principalDetails);
+		int ws_id = map.get("ws_id");
+		log.info("[USERLIST] " + ws_id);
 		List<String> wsUserList = homeService.selectWsUserList(ws_id);
+		log.info("[USERLISTS] " + wsUserList);
 		return wsUserList;
-		
 	}
     
+	@PostMapping("/getFileName")
+	public String getFileName(@RequestBody HashMap<String, Integer> map) {
+		log.info("[REQUEST FILE NAME]");
+		int ws_id = map.get("ws_id");
+		log.info("[WS_ID] " + ws_id);
+		String ws_isImage = homeService.getFileName(ws_id);
+		return ws_isImage;
+	}
+	
+	@PostMapping("/updateWsName")
+	public void updateWsName(@RequestBody WorkspaceDto workspaceDto) {
+		log.info("[UPDATE WORKSPACE NAME] " + workspaceDto);
+		homeService.updateWsName(workspaceDto);
+	}
+	
+	// 멤버 추가
+	@PostMapping("/inviteMember")
+	public void inviteMember(@RequestBody InviteMemberVO inviteMemberVO ) {
+		log.info("[email] " + inviteMemberVO);
+		homeService.addMember(inviteMemberVO);
+	}
+	
+	@PostMapping("/deleteMember")
+	public void deleteMember(@RequestBody HashMap<String, Object> map) {
+		log.info("[DELETE MEMBER] ");
+		homeService.deleteMember(map);
+	}
+	
     @PostMapping("/myPage")
 	public UserVO myPage(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		userId = getLoginUser(principalDetails);
@@ -91,6 +124,30 @@ public class HomeController {
     	userId = getLoginUser(principalDetails);
     	log.info("[login id] " + userId);
     	userService.updateUserName(userId, userVO.getUser_name());
+    }
+    
+    @PostMapping("/updateImg")
+    public void updateImg(@RequestParam("ws_id") int ws_id,
+    		@RequestParam(required = false, value = "ws_isImage") MultipartFile file, 
+    		MultipartHttpServletRequest req) throws IOException {
+		
+    	boolean fileUpload = false;
+    	if(req.getFile("ws_isImage") != null) {
+    		
+    		log.info("[WS_ID] " + ws_id);
+        	log.info("[FILE] " + file);
+        	String fileName = file.getOriginalFilename();
+        	log.info("[FILE NAME] " + fileName);
+    		log.info("[WS_ID] " + ws_id);
+    		
+    		log.info("[FILE NAME] " + fileName);
+    		
+    		byte[] fileByte = file.getBytes();
+    		fileUpload = homeService.fileUpdate(ws_id, fileName,fileByte);
+    		if(fileUpload) {
+    			homeService.updateFileName(ws_id, fileName);
+    		}
+    	}
     }
     
     @PostMapping("/checkCurrentPwd")
@@ -119,27 +176,53 @@ public class HomeController {
     }
     
     @PostMapping("/addWorkspace")
-	public void addWorkspace(@AuthenticationPrincipal PrincipalDetails principalDetails,
-							@RequestParam("ws_name") String ws_name,
-							@RequestParam("ws_isImage") MultipartFile file,
-							MultipartHttpServletRequest req) throws IOException {
+    public boolean addWorkspace(@RequestParam("ws_name") String ws_name,
+							@RequestParam(required = false, value = "ws_isImage") MultipartFile file,
+							@RequestParam(required = false, value = "member") List<String> member_id,
+							@AuthenticationPrincipal PrincipalDetails principalDetails,
+							MultipartHttpServletRequest req,
+							HttpServletRequest request) throws IOException {
+    	
+    	boolean fileUpload = false;
+    	userId = getLoginUser(principalDetails);
+    	log.info("req.getFile('ws_isImage') :"+req.getFile("ws_isImage"));
+    	log.info("[MEMBER] " + member_id);
     	if(req.getFile("ws_isImage") != null) {
 			log.info("[REQUEST ADD WORKSPACE]");
 			log.info("[FILE] "+file);
 			String fileName = file.getOriginalFilename();
 			log.info("[fileName] " + file.getOriginalFilename());
 			byte[] fileByte = file.getBytes();
-			userId = getLoginUser(principalDetails);
-			homeService.createWorkspace(userId,ws_name, file.getOriginalFilename());
-			boolean fileUpload = homeService.fileUpload(ws_name,fileName,fileByte);
+			
+			log.info("[userId] "+userId);
+			
+			fileUpload = homeService.fileUpload(ws_name, fileName ,fileByte);
 			log.info("[FILE UPLOAD STATE] "+fileUpload);
 
-//			if(fileUpload == true) {
-//				homeService.addWorkspace(ws_name, file.getOriginalFilename());
-//			}
+			if(fileUpload == true) {
+				homeService.createWorkspace(userId,ws_name, file.getOriginalFilename(),member_id);
+			}
+			
 			log.info("[FILE UPLOAD] " + fileUpload);
-		}	
+		}else {
+			
+			log.info("[NULL]");
+			homeService.createWorkspace(userId,ws_name, null, member_id);
+		}
+    	
+    	log.info("[UPLOAD FILE] " + file);
+//    	homeService.store(file);
+    	return fileUpload;
 	}
+
+    @PostMapping("/getAllUsers")
+    public @ResponseBody List<String> selectUserList(@RequestBody InviteMemberVO inviteMemberVO,
+    		@AuthenticationPrincipal PrincipalDetails principalDetails){
+    	userId = getLoginUser(principalDetails);
+    	log.info("[MEMBER LIST] " + inviteMemberVO);
+    	inviteMemberVO.setUser_id(userId);
+        return homeService.getAllUserId(inviteMemberVO);
+    }
     
     // get login id
     public String getLoginUser(PrincipalDetails principalDetails) {
@@ -153,8 +236,4 @@ public class HomeController {
 		return userId;
     }
 
-    @PostMapping("/getAllUsers")
-    public @ResponseBody List<String> selectUserList(){
-        return homeService.getAllUserId();
-    }
 }
