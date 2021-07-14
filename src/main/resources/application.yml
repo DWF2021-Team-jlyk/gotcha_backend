@@ -3,12 +3,18 @@ service:
     uploadurl: C:/sojeong/workspace/gotcha_frontend/public/upload
 
 
+
+
+#file:
+#  upload:
+#    location: C:/gotcha/workspace
 spring:
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
     url: jdbc:oracle:thin:@192.168.20.19:1521:xe
     username: gotcha
     password: oracle
+
 
   jpa:
     database-platform: org.hibernate.dialect.Oracle10gDialect
@@ -35,3 +41,8 @@ mybatis:
   type-aliases-package: com.example.test.vo
   config-location: classpath:config/mybatis-config.xml
   mapper-locations: classpath:mappers/**/*.xml
+
+
+service:
+    file:
+      uploadurl: E:/Douzone/8_Servlet_Jsp_Spring/gitworkspace/gotcha_frontend/public/upload/workspaces/

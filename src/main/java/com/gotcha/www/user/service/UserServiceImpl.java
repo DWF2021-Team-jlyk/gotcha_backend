@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean checkId(String user_id) {
 		int countId = userDAO.checkId(user_id);
+		log.info("[COUNT ID] " + countId);
 		if(countId > 0) {
 			return false;
 		}else {

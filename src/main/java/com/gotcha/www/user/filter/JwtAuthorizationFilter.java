@@ -66,15 +66,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 			throws IOException, ServletException {
 
 		String ws_id = "0", jwtHeader= "", jwtToken = "";
-
 		String requestURL = request.getServletPath();
 		log.info("[REQUEST PATH] " + request.getServletPath());
 
 		jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
+		log.info("[jwtHeader] "+jwtHeader);
 		jwtToken = jwtHeader.replace("Bearer ", "");
 		log.info("[jwtToken] "+jwtToken);
 //		jwtToken = token.replace("Bearer ", "");
-
+		
 		// header가 있는지 확인
 		if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
 //			PrintWriter out = response.getWriter();
@@ -87,16 +87,16 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 			chain.doFilter(request, response);
 			return;
 		}
-
+		
 		RequestBodyWrapper requestWrapper = new RequestBodyWrapper(request);
 		log.info("[requestWrapper] " + requestWrapper.getInputStream().read());
 		log.info("[requestWrapper] " + requestWrapper.getReader());
 		log.info("[requestWrapper] " + requestWrapper.getUserPrincipal());
-
+		
 		if((requestWrapper.getInputStream().read()) > -1) {
 
 		}
-
+		
 		if(requestURL.equals("/home/workspaceUpdate")) {
 			ObjectMapper om = new ObjectMapper();
 			AthorizationVO authorizationVO = om.readValue(requestWrapper.getInputStream(), AthorizationVO.class);
@@ -104,49 +104,48 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 			log.info("[authorizationVO INFO] " + authorizationVO.toString());
 			ws_id = Integer.toString(authorizationVO.getWs_id());
 			log.info("[authorizationVO WS_ID] " + authorizationVO.getWs_id());
-			log.info("[getWs_name] " + authorizationVO.getWs_name());
+			log.info("[getWs_name] " + authorizationVO.getWs_name());			
 		}
-
+		
 		if (JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken).getExpiresAt()
 				.before(Calendar.getInstance().getTime())) {
 			chain.doFilter(requestWrapper, response);
 			throw new RuntimeException("[Exired token~!]");
 		} else {
+				
+				// Jwt 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어준다.
+				Authentication authentication = checkAuthorization(ws_id, jwtToken);
 
-			// Jwt 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어준다.
-			Authentication authentication = checkAuthorization(ws_id, jwtToken);
-
-			// session 공간
-			// 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			log.info("[JwtAuthorize] 인증이나 권한이 필요한 주소 요청이 됨.");
-			chain.doFilter(requestWrapper, response);
+				// session 공간
+				// 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+				log.info("[JwtAuthorize] 인증이나 권한이 필요한 주소 요청이 됨.");
+				chain.doFilter(requestWrapper, response);
 		}
-	}
+}
 
-	// JWT 토큰을 검증을 해서 정상적인 사용자인지 확인
-	private Authentication checkAuthorization(String ws_id, String jwtToken) {
-
-		Authentication authentication = null;
-		String userId = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken).getClaim("id").asString();
-		log.info("[TOKEN LOGIN ID] " + userId);
-		// 서명이 정상적으로 됨
-		if (userId != null) {
-			log.info("username 정상");
-			UserDto userEntity = new UserDto();
-			// select workspace
-			if (!ws_id.equals("0")) {
-				log.info("[SELECT WORKSPACE]");
-				userEntity = userDAO.findByWsUsername(userId, ws_id);
-			} else if (ws_id.equals("0")) {
-				log.info("[NOT SELECT WORKSPACE]");
-				// not select workspace
-				userEntity = userDAO.findByUsername(userId);
-				log.info("[USERENTITY] " + userEntity);
-				if (userEntity.getRole_type() == null || userEntity.getRole_type().equals("")) {
-					log.info("[NULL ROLETYPE]");
-					userEntity.setRole_type("ROLE_USER");
-				}
+// JWT 토큰을 검증을 해서 정상적인 사용자인지 확인
+private Authentication checkAuthorization(String ws_id, String jwtToken) {
+	
+	Authentication authentication = null;
+	String userId = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken).getClaim("id").asString();
+	log.info("[TOKEN LOGIN ID] " + userId);
+	// 서명이 정상적으로 됨
+	if (userId != null) {
+		log.info("username 정상");
+		UserDto userEntity = new UserDto();
+		// select workspace
+		if (!ws_id.equals("0")) {
+			log.info("[SELECT WORKSPACE]");
+			userEntity = userDAO.findByWsUsername(userId, ws_id);
+		} else if (ws_id.equals("0")) {
+			log.info("[NOT SELECT WORKSPACE]");
+			// not select workspace
+			userEntity = userDAO.findByUsername(userId);
+			log.info("[USERENTITY] " + userEntity);
+			if (userEntity.getRole_type() == null || userEntity.getRole_type().equals("")) {
+				log.info("[NULL ROLETYPE]");
+				userEntity.setRole_type("ROLE_USER");
 			}
 			log.info("[USERENTITY GET ID] " + userEntity.getUser_id());
 			log.info("[USERENTITY ROLE_TYPE] " + userEntity.getRole_type());
@@ -158,8 +157,18 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 					principalDetails.getAuthorities());
 
 		}
-		return authentication;
+		log.info("[USERENTITY GET ID] " + userEntity.getUser_id());
+		log.info("[USERENTITY ROLE_TYPE] " + userEntity.getRole_type());
+		PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
+		log.info("[PRINCIPALDETAILS GET ID] " + principalDetails.getUsername() + ".....");
+
+		// Jwt 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어준다.
+		authentication = new UsernamePasswordAuthenticationToken(principalDetails, null,
+				principalDetails.getAuthorities());
+
 	}
+	return authentication;
+}
 
 
 //	private Authentication getAuthentication(HttpServletRequest request) {
