@@ -69,6 +69,11 @@ public class CardFileServiceImpl implements CardFileService {
 		return cardFileDAO.selectCardFile(card_id);
 	}
 
+	@Override
+	public CardFileDTO getOneCardFile(int file_id) {
+		return cardFileDAO.selectOneCardFile(file_id);
+	}
+
 
 	@Override
 	public Path getPath() {

@@ -40,4 +40,11 @@
 		where FILE_ID = #{file_id}
 	</update>
 
+	<select id="selectOneCardFile"
+			parameterType="int"
+			resultType="com.gotcha.www.card.vo.CardFileDTO"
+	>
+		select * from GC_CARD_FILE WHERE FILE_ID = #{file_id}
+	</select>
+
 </mapper>

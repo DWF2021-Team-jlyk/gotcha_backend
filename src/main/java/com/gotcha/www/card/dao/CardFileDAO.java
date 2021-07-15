@@ -14,6 +14,8 @@ public interface CardFileDAO {
 
 	List<CardFileDTO> selectCardFile(int card_id);
 
+	CardFileDTO selectOneCardFile(int file_id);
+
 	void deleteCardFile(int file_id);
 
 	// CardFileDTO deleteCardFile(int file_id);

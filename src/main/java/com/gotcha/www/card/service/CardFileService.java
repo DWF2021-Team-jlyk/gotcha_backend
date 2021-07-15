@@ -11,6 +11,8 @@ import com.gotcha.www.card.vo.CardFileDTO;
 public interface CardFileService {
 //	List<CardFileDTO> getCardFile(CardFileDTO cardFileDTO);
 	List<CardFileDTO> getCardFile(int card_id);
+
+	CardFileDTO getOneCardFile(int file_id);
 	
 	int selectFileId();
 	
