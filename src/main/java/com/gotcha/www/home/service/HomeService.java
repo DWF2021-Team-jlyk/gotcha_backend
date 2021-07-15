@@ -1,5 +1,6 @@
 package com.gotcha.www.home.service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,6 +48,10 @@ public interface HomeService {
 
 	// 멤버 제거
 	void deleteMember(HashMap<String, Object> map);
+
+	void leaveWorkspace(int ws_id, String user_id, String userId);
+
+	void deleteWorkspace(int ws_id, String userId) throws IOException;
 	
 	// 파일 업로드
 //	void store(MultipartFile file);

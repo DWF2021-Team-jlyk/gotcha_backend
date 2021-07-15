@@ -215,6 +215,25 @@ public class HomeController {
     	return fileUpload;
 	}
 
+    @PostMapping("/leaveWorkspace")
+    public void leaveWorkspace(@RequestBody HashMap<String,Object> map,
+    		@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    	userId = getLoginUser(principalDetails);
+    	int ws_id = (int) map.get("ws_id");
+    	String user_id = (String) map.get("user_id");
+    	log.info("[LEAVE WORKSPACE]" + ws_id + user_id + userId);
+    	homeService.leaveWorkspace(ws_id, user_id, userId);
+    }
+    
+    @PostMapping("/deleteWorkspace")
+    public void deleteWorkspace(@RequestBody HashMap<String,Object> map,
+    		@AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException {
+    	userId = getLoginUser(principalDetails);
+    	int ws_id = (int) map.get("ws_id");
+    	log.info("[DELETE CONTROLLER REQUEST] " + ws_id);
+    	homeService.deleteWorkspace(ws_id, userId);
+    }
+    
     @PostMapping("/getAllUsers")
     public @ResponseBody List<String> selectUserList(@RequestBody InviteMemberVO inviteMemberVO,
     		@AuthenticationPrincipal PrincipalDetails principalDetails){

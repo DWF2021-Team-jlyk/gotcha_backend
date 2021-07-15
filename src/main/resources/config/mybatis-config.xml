@@ -5,6 +5,7 @@
 	<typeAliases>
 		<typeAlias alias="userVO" type="com.gotcha.www.user.vo.UserVO"/>
 		<typeAlias alias="userDto" type="com.gotcha.www.user.vo.UserDto"/>
+		<typeAlias alias="cardFileVO" type="com.gotcha.www.home.vo.CardFileVO"/>
 	</typeAliases>
 	
 </configuration>

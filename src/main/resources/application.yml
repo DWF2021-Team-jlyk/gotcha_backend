@@ -38,3 +38,6 @@ mybatis:
 service:
     file:
       uploadurl: E:/Douzone/8_Servlet_Jsp_Spring/gitworkspace/gotcha_frontend/public/upload/workspaces/
+
+    card:
+      uploadurl:  E:/Douzone/8_Servlet_Jsp_Spring/gitworkspace/gotcha_frontend/public/upload/
