@@ -41,4 +41,5 @@ public interface WorkListDAO {
 	
 	int selectLastCardId();
 	
+	List<CardVO> selectCardList(int list_id);
 }

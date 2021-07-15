@@ -16,15 +16,15 @@ public class CardDetailDAOTests {
 
     private Log log = LogFactory.getLog(this.getClass());
 
-    @Autowired
-    private CardDetailDAO cardDetailDAO;
-
-    @Test
-    public void selectCardTodoTest() {
-        List<CardTodoDTO> todoList = cardDetailDAO.selectTodoList(1);
-        Assertions.assertNotNull(todoList);
-        log.info("\n"+todoList);
-    }
+//    @Autowired
+//    private CardDetailDAO cardDetailDAO;
+//
+//    @Test
+//    public void selectCardTodoTest() {
+//        List<CardTodoDTO> todoList = cardDetailDAO.selectTodoList(1);
+//        Assertions.assertNotNull(todoList);
+//        log.info("\n"+todoList);
+//    }
 
     @Test
     public void selectCardActTest() {

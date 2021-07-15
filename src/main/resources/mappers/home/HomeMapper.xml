@@ -6,7 +6,7 @@
 	<select id="selectWorkspace"
 			parameterType="String"
 			resultType="com.gotcha.www.home.vo.WorkspaceDto">
-		SELECT UR.IS_FAV, W.WS_ID, W.WS_NAME, UR.USER_ID, U.USER_NAME, R.ROLE_ID, R.ROLE_TYPE
+		SELECT UR.IS_FAV, W.WS_ID, W.WS_NAME, W.WS_ISIMAGE, UR.USER_ID, R.ROLE_ID, R.ROLE_TYPE
 		from GC_USER_ROLE UR
 		INNER JOIN GC_USER U
 		ON (U.user_id = UR.user_id)
@@ -45,44 +45,71 @@
 	</select>
 	
 	<select id="getWsLastIndex" resultType="int">
+		SELECT LAST_NUMBER
+		FROM USER_SEQUENCES 
+		WHERE SEQUENCE_NAME = 'WS_SEQ'
+	</select>
+	
+	<select id="getWsNextIndex" resultType="int">
 		SELECT ws_seq.nextval
 		FROM dual
 	</select>
 	
-	<insert id="createWorkspace" parameterType="String">
+	<select id="getAllUserId" parameterType="com.gotcha.www.home.vo.InviteMemberVO" resultType="String">
+		SELECT user_id 
+		FROM gc_user
+		<if test="emailList == null">
+		WHERE user_id != #{user_id}
+		</if>
+		<if test="emailList != null">
+		WHERE user_id NOT IN (
+        <foreach collection="emailList" item="item" separator=",">
+            #{item}
+        </foreach> )
+        </if>
+	</select>
+	
+	<select id="preFileName" parameterType="int" resultType="String"> 
+		SELECT ws_isImage
+		FROM gc_ws
+		WHERE ws_id = #{ws_id}
+	</select>
+	
+	<insert id="createWorkspace" parameterType="HashMap">
 		INSERT INTO GC_WS (ws_id, ws_name, ws_isimage)
-		VALUES(#{ws_id}, #{ws_name}, #{ws_isImage})
+		VALUES(#{ws_id}, #{ws_name}, #{ws_isImage, jdbcType=VARCHAR})
 	</insert>
 	
-	<insert id="createUserRole" parameterType="HashMap">
+	<insert id="setRoleAdmin" parameterType="HashMap">
 		INSERT INTO GC_USER_ROLE
 		VALUES(#{ws_id}, #{user_id}, 1, 0)
 	</insert>
 	
+	<insert id="setRoleMember" parameterType="HashMap">
+		INSERT INTO GC_USER_ROLE
+		VALUES(#{ws_id}, #{user_id}, 2, 0)
+	</insert>
+	
+	<insert id="addMember" parameterType="String">
+		INSERT INTO GC_USER_ROLE
+		VALUES(#{ws_id}, #{user_id}, 2, 0)
+	</insert>
+	
+	<update id="updateWsName" parameterType="com.gotcha.www.home.vo.WorkspaceDto">
+		UPDATE gc_ws 
+		SET ws_name = #{ws_name}
+		WHERE ws_id = #{ws_id}
+	</update>
+	
+	<update id="updateFileName" parameterType="HashMap">
+		UPDATE gc_ws 
+		SET ws_isImage = #{ws_isImage}
+		WHERE ws_id = #{ws_id}
+	</update>
+	
+	<delete id="deleteMember" parameterType="HashMap">
+		DELETE gc_user_role
+		WHERE ws_id = #{ws_id} and user_id = #{user_id}
+	</delete>
+	
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

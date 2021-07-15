@@ -3,12 +3,16 @@ service:
     uploadurl: C:\Users\pc-21\Desktop\gotcha\gotcha_frontend\public\upload
 
 
+#file:
+#  upload:
+#    location: C:/gotcha/workspace
 spring:
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
     url: jdbc:oracle:thin:@192.168.20.19:1521:xe
     username: gotcha
     password: oracle
+
 
   jpa:
     database-platform: org.hibernate.dialect.Oracle10gDialect
@@ -26,9 +30,18 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
-      
-        
+
+  devtools:
+    remote:
+      restart:
+        enabled: true
+
 mybatis:
   type-aliases-package: com.example.test.vo
   config-location: classpath:config/mybatis-config.xml
   mapper-locations: classpath:mappers/**/*.xml
+
+
+# service:
+#     file:
+#       uploadurl: C:\Users\dalo9\IdeaProjects\gotcha\public\upload

@@ -2,7 +2,8 @@ package com.gotcha.www.user.vo;
 
 import java.util.HashMap;
 
-import com.gotcha.www.workList.vo.ListVO;
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -18,5 +19,4 @@ public class AthorizationVO {
 	private char is_fav;
 	private int role_id;
 	private String role_type;
-	private ListVO listVO;
 }

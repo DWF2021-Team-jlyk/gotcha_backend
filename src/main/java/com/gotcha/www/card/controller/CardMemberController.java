@@ -47,11 +47,12 @@ public class CardMemberController {
     }
 	
 	@PostMapping("/selectList")
-    public @ResponseBody List<CardMemberDTO> getCardMem(@RequestBody HashMap<String, String> map){
-		System.out.println(map);
-    	String card_id = map.get("card_id");
-    	System.out.println("card member"+card_id);	
-    	List<CardMemberDTO> list = cardMemberService.getCardMem(Integer.parseInt(card_id));
+    public @ResponseBody List<CardMemberDTO> getCardMem(@RequestBody HashMap<String, Object> map){
+//		log.info("getCardMember parameter" + map);
+//		log.info("getCardMember " + map.get("card_id").getClass());
+    	int card_id = (int)map.get("card_id");
+//    	log.info("card_id" + card_id);
+    	List<CardMemberDTO> list = cardMemberService.getCardMem(card_id);
         return list;
     }
 	

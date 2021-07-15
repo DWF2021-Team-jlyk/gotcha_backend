@@ -13,6 +13,7 @@ public class WorkspaceDto {
 	private int is_fav;
 	private int ws_id;
 	private String ws_name;
+	private String ws_isImage;
 	private String user_id;
 	private String user_name;
 	private int role_id;

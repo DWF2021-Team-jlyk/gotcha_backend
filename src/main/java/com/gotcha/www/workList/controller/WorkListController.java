@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,11 +49,11 @@ public class WorkListController {
 
         log.info("map" + map);
         log.info("listWsid: " + listWsid);
-//        log.info(listWsid.getClass());
+        log.info("selectList : " + listWsid.getClass());
 
         List<ListVO> listList = workListService.selectList(Integer.parseInt(listWsid));
 
-        log.info("lists: " + listList);
+//        log.info("lists: " + listList);
         // 리스트와 카드를 한 번에 가져오고 싶으면 아래 주석 해제
 //		for(ListVO list : listList) {
 //		List<CardVO> cardList = wokrListService.selectCartList(list.getList_id());
@@ -93,8 +94,6 @@ public class WorkListController {
 		log.info("\ncardWsid: " + cardWsid);
 
 		List<CardVO> cardList = workListService.selectCard(cardWsid);
-
-		log.info("cards: " + cardList);
 
 		return cardList;
 	}
