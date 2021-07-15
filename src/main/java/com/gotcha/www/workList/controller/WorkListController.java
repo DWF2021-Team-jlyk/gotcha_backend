@@ -40,12 +40,12 @@ public class WorkListController {
 
         log.info("map" + map);
         log.info("listWsid: " + listWsid);
-//        log.info(listWsid.getClass());
+        log.info("selectList : " + listWsid.getClass());
 
-        System.out.println("listWsiddddddddddddddddddddddddddddddddddddddddddd: " + listWsid);
+//        System.out.println("listWsiddddddddddddddddddddddddddddddddddddddddddd: " + listWsid);
         List<ListVO> listList = workListService.selectList(Integer.parseInt(listWsid));
 
-        log.info("lists: " + listList);
+//        log.info("lists: " + listList);
         // 리스트와 카드를 한 번에 가져오고 싶으면 아래 주석 해제
 //		for(ListVO list : listList) {
 //		List<CardVO> cardList = wokrListService.selectCartList(list.getList_id());
@@ -86,8 +86,6 @@ public class WorkListController {
 		log.info("\ncardWsid: " + cardWsid);
 
 		List<CardVO> cardList = workListService.selectCard(cardWsid);
-
-		log.info("cards: " + cardList);
 
 		return cardList;
 	}

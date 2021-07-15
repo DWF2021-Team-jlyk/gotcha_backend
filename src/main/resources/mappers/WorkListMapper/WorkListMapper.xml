@@ -91,7 +91,7 @@
                 #{card_start_date,jdbcType=VARCHAR},
                 #{card_end_date,jdbcType=VARCHAR},
                 #{position},
-                #{card_desc}
+                #{card_desc,jdbcType=VARCHAR}
                 )
     </insert>
 
@@ -99,12 +99,12 @@
     <update id="updateCard">
         update gc_card
         set card_name       = #{card_name},
-            card_desc       = #{card_desc},
+            card_desc       = #{card_desc,jdbcType=VARCHAR},
             list_id         = #{list_id},
             ws_id           = #{ws_id},
             card_isdone     = #{card_isdone},
             card_start_date = #{card_start_date,jdbcType=VARCHAR},
-            card_end_date   =#{card_end_date,jdbcType=VARCHAR},
+            card_end_date   = #{card_end_date,jdbcType=VARCHAR},
             POSITION        = #{position}
         where card_id = #{card_id}
     </update>

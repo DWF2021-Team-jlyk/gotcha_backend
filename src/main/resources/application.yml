@@ -1,6 +1,5 @@
-service:
-  file:
-    uploadurl: C:/sojeong/workspace/gotcha_frontend/public/upload
+#  file:
+#    uploadurl: C:/sojeong/workspace/gotcha_frontend/public/upload
 
 
 
@@ -37,6 +36,7 @@ spring:
     remote:
       restart:
         enabled: true
+
 mybatis:
   type-aliases-package: com.example.test.vo
   config-location: classpath:config/mybatis-config.xml
@@ -45,4 +45,4 @@ mybatis:
 
 service:
     file:
-      uploadurl: E:/Douzone/8_Servlet_Jsp_Spring/gitworkspace/gotcha_frontend/public/upload/workspaces/
+      uploadurl: C:\Users\dalo9\IdeaProjects\gotcha\public\upload

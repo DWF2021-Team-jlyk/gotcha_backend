@@ -30,7 +30,6 @@ public class CardMemberServiceImpl implements CardMemberService {
 	@Override
 	public List<CardMemberDTO> getCardMem(int card_id) {
 		List<CardMemberDTO> cardMemberList = cardMemberDAO.selectCardMember(card_id);
-		System.out.println(cardMemberList);
 		return cardMemberList;
 	}
 

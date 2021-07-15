@@ -50,37 +50,43 @@ public class HomeController {
 			, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 		userId = getLoginUser(principalDetails);
 		List<WorkspaceDto> mainList = homeService.selectWorkspace(userId);
-		log.info("[/wsList RESULT] " + mainList);
+//		log.info("[/wsList RESULT] " + mainList);
 		return mainList;
 	}
 	
 	@PostMapping("/notiList")
-	public @ResponseBody List<NotiJoinVO> selectNotice(@RequestBody UserVO userVO
-			, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+	public @ResponseBody List<NotiJoinVO> selectNotice(
+			@RequestBody UserVO userVO,
+			@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		userId = getLoginUser(principalDetails);
 		List<NotiJoinVO> mainList = homeService.selectNotice(userId);
-		log.info("노티" + mainList);
+//		log.info("노티" + mainList);
 		return mainList;
 	}
 	
 	@PostMapping("/favUpdate")
-	public @ResponseBody void UpdateFav(@RequestBody WorkspaceDto workspaceDto
-			, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+	public @ResponseBody void UpdateFav(
+			@RequestBody WorkspaceDto workspaceDto,
+			@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		userId = getLoginUser(principalDetails);
 		workspaceDto.setUser_id(userId);
 		homeService.updateFav(workspaceDto);
 	}
 	
 	@PostMapping("/wsUserList")
-	public @ResponseBody List<String> selecWsUserList(@RequestBody HashMap<String, Integer> map,
+	public @ResponseBody List<String> selectWsUserList(
+			@RequestBody HashMap<String, Object> map,
 			@AuthenticationPrincipal PrincipalDetails principalDetails)
 			throws Exception {
 		userId = getLoginUser(principalDetails);
-		int ws_id = map.get("ws_id");
-		log.info("[USERLIST] " + ws_id);
+		log.info("selectWsUserList " + map);
+		log.info("selectWsUserList get "+map.get("ws_id").getClass());
+		int ws_id = Integer.parseInt((String)map.get("ws_id"));
+//		log.info("[USERLIST] " + ws_id);
 		List<String> wsUserList = homeService.selectWsUserList(ws_id);
-		log.info("[USERLISTS] " + wsUserList);
+//		log.info("[USERLISTS] " + wsUserList);
 		return wsUserList;
+//		return null;
 	}
     
 	@PostMapping("/getFileName")
