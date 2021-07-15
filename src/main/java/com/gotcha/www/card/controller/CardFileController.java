@@ -65,7 +65,7 @@ public class CardFileController {
 			@RequestParam("file") MultipartFile file) throws JsonProcessingException {
 		CardFileDTO cardFileDTO = new CardFileDTO();
 		try {
-		cardFileService.store(file);
+		//cardFileService.store(file);
 		log.info("fileupload"+file.getName());
 		
 		String originalFile = file.getOriginalFilename();
