@@ -102,7 +102,7 @@ public class WorkListController {
 	public @ResponseBody CardLogVO insertCard(@RequestBody CardLogVO cardLogVO) {
     	log.info("cardLogVO11" + cardLogVO);
     	int card_id = workListService.selectCardId();
-    	String desc = cardLogVO.getUser_id() + "(이)가 " + cardLogVO.getCard_name() + "(을)를 추가했습니다.";
+    	String desc = cardLogVO.getUser_id() + "(이)가 카드 " + cardLogVO.getCard_name() + "(을)를 추가했습니다.";
     	cardLogVO.setCard_id(card_id);
     	log.info("cardLogVO222" + cardLogVO);
 		workListService.insertCard(cardLogVO);
@@ -114,7 +114,7 @@ public class WorkListController {
 
 		CardActDTO cardActDTO = new CardActDTO();
 		cardActDTO.setAct_id(act_id);
-		cardActDTO.setCreated_date(format.format(today));
+		cardActDTO.setCreated_date(format.format(today).toString());
 		cardActDTO.setCard_id(card_id);
 		cardActDTO.setIslog("1");
 		cardActDTO.setUser_id(cardLogVO.getUser_id());
