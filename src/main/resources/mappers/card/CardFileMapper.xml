@@ -21,9 +21,14 @@
 
 	<delete id="deleteCardFile" parameterType="int">
 		delete
-		from
-		GC_CARD_FILE
+		from GC_CARD_FILE
 		where FILE_ID = #{file_id}
+	</delete>
+
+	<delete id="deleteCard" parameterType="int">
+		delete
+		from GC_CARD_FILE
+		where CARD_ID = #{card_id}
 	</delete>
 
 	<insert id="insertCardFile"

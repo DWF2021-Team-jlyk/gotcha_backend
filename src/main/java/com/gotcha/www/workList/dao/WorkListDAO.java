@@ -22,24 +22,25 @@ public interface WorkListDAO {
 	
 	void deleteList(int list_id);
 	
+	List<CardVO> selectCardList(int list_id);
+
 	// Card Mapper
 
 	//public List<Map<String, CardVO>> selectCard(CardVO cvo);
-	
-	public List<CardVO> selectCard(String cardWsid);
-	
-	public int selectCardId();
-	
+
+	List<CardVO> selectCard(String cardWsid);
+
+	int selectCardId();
+
 	void insertCard(CardLogVO cardLogVO);
-	
+
 	void updateCard(CardVO cardVO);
-	
+
 	void deleteCard(int card_id);
 
 	CardVO selectOneCard(int card_id);
-	//public List<CardVO> selectCardList(int list_id);
-	
+
+
 	int selectLastCardId();
-	
-	List<CardVO> selectCardList(int list_id);
+
 }

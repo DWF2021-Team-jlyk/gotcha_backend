@@ -18,10 +18,17 @@
         order by created_date desc
           
     </select>
+
     <delete id="deleteCardAct" parameterType="int">
         delete
         from GC_CARD_ACT
         where ACT_ID = #{act_id}
+    </delete>
+
+    <delete id="deleteCard" parameterType="int">
+        delete
+        from GC_CARD_ACT
+        where CARD_ID = #{card_id}
     </delete>
     
     <insert id="insertCardAct"
@@ -36,9 +43,8 @@
         set CARD_ID      = #{card_id},
             USER_ID      = #{user_id},
             ACT_DESC     = #{act_desc},
-            CREATED_DATE = sysdate,
             ISLOG        = #{islog},
-            ISEDIT       = 1
+            ISEDIT       = #{isedit}
         where ACT_ID = #{act_id}
     </update>
 </mapper>

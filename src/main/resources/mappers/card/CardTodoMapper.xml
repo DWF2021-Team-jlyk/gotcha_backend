@@ -45,6 +45,12 @@
         where TODO_ID = #{todo_id}
     </delete>
 
+    <delete id="deleteCard" parameterType="int">
+        delete
+        from GC_CARD_TODO
+        where CARD_ID = #{card_id}
+    </delete>
+
     <update id="updateCardTodo" parameterType="com.gotcha.www.card.vo.CardTodoDTO">
         update GC_CARD_TODO
         set CARD_ID         = #{card_id},

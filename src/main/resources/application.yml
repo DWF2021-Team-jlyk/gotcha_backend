@@ -44,4 +44,6 @@ mybatis:
 
 service:
   file:
-    uploadurl: C:/Users/dalo9/IdeaProjects/gotcha/public/upload
+    uploadurl: C:/Users/dalo9/IdeaProjects/gotcha_backend/src/main/resources/static/upload/workspaces/
+  card:
+    uploadurl: C:/Users/dalo9/IdeaProjects/gotcha/public/upload/card/

@@ -46,6 +46,7 @@ public class CardActController {
 
 		cardActDTO.setAct_id(act_id);
 		cardActDTO.setCreated_date(format.format(today));
+		cardActDTO.setIsedit("0");
 
 		cardActService.insertCardAct(cardActDTO);
 		log.info("insertCardAct cardActDTO after service"+cardActDTO);
@@ -64,6 +65,7 @@ public class CardActController {
 	
 	@PostMapping("updateCardAct")
 	public @ResponseBody CardActDTO updateCardAct(@RequestBody CardActDTO cardActDTO) {
+		cardActDTO.setIsedit("1");
 		cardActService.updateCardAct(cardActDTO);
 		return cardActDTO;
 	}

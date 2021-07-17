@@ -21,10 +21,10 @@ public class FileServiceImpl implements FileService {
             throws IOException {
         final String filePath = storeFilePath(id, type, multipartFile);
         final String folderPath = String.format("%s/%s/%d", BASIC_PATH, type, id);
-        try{
+        try {
             File folder = new File(folderPath);
             File file = new File(filePath);
-            if(!folder.exists()){
+            if (!folder.exists()) {
                 folder.mkdirs();
             }
             multipartFile.transferTo(file);
@@ -45,14 +45,38 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public boolean deleteFile(final int id, final String type, final String fileName)
-            throws  IOException {
-        return false;
+            throws IOException {
+        final String filePath = getFilePath(id, type, fileName);
+
+        File deleteFile = new File(filePath);
+
+        if (deleteFile.exists()) {
+            deleteFile.delete();
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    private String storeFilePath(int id, String type, MultipartFile file){
+    @Override
+    public void deleteAllFile(final int id, final String type) throws IOException {
+        final String filePath = String.format("%s/%s/%d", BASIC_PATH, type, id);
+        File folder = new File(filePath);
+        while(folder.exists()){
+            File[] files = folder.listFiles();
+            for (File file:files){
+                file.delete();
+            }
+            if(files.length == 0 && folder.isDirectory()){
+                folder.delete(); //대상폴더 삭제
+            }
+        }
+    }
+
+    private String storeFilePath(int id, String type, MultipartFile file) {
         String originFileName = file.getOriginalFilename();
         String fileExtension = originFileName.substring(originFileName.lastIndexOf("."));
-        String storedFileName = UUID.randomUUID().toString().replaceAll("-","") + fileExtension;
+        String storedFileName = UUID.randomUUID().toString().replaceAll("-", "") + fileExtension;
         return getFilePath(id, type, storedFileName);
     }
 

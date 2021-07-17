@@ -12,6 +12,7 @@ public interface CardActDAO {
     int selectActId();
     List<CardActDTO> selectCardAct(int card_id);
     void deleteCardAct(int act_id);
+    void deleteCard(int card_id);
     void updateCardAct(CardActDTO cardAct);
     void insertCardAct(CardActDTO cardAct);
     

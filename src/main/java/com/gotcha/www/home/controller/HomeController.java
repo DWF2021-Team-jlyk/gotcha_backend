@@ -39,6 +39,7 @@ public class HomeController {
     private final Log log = LogFactory.getLog(this.getClass());
     private static String userId;
 
+
     @Autowired
     private HomeController(HomeService homeService, UserService userService) {
         this.homeService = homeService;
@@ -65,12 +66,13 @@ public class HomeController {
 	}
 	
 	@PostMapping("/favUpdate")
-	public @ResponseBody void UpdateFav(
+	public @ResponseBody WorkspaceDto UpdateFav(
 			@RequestBody WorkspaceDto workspaceDto,
 			@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		userId = getLoginUser(principalDetails);
 		workspaceDto.setUser_id(userId);
 		homeService.updateFav(workspaceDto);
+		return workspaceDto;
 	}
 	
 	@PostMapping("/wsUserList")
@@ -81,7 +83,7 @@ public class HomeController {
 		userId = getLoginUser(principalDetails);
 		log.info("selectWsUserList " + map);
 		log.info("selectWsUserList get "+map.get("ws_id").getClass());
-		int ws_id = Integer.parseInt((String)map.get("ws_id"));
+		int ws_id = (int)map.get("ws_id");
 //		log.info("[USERLIST] " + ws_id);
 		List<String> wsUserList = homeService.selectWsUserList(ws_id);
 //		log.info("[USERLISTS] " + wsUserList);
@@ -99,9 +101,10 @@ public class HomeController {
 	}
 	
 	@PostMapping("/updateWsName")
-	public void updateWsName(@RequestBody WorkspaceDto workspaceDto) {
+	public @ResponseBody WorkspaceDto updateWsName(@RequestBody WorkspaceDto workspaceDto) {
 		log.info("[UPDATE WORKSPACE NAME] " + workspaceDto);
 		homeService.updateWsName(workspaceDto);
+		return workspaceDto;
 	}
 	
 	// 멤버 추가

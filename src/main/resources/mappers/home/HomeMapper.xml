@@ -6,7 +6,7 @@
 	<select id="selectWorkspace"
 			parameterType="String"
 			resultType="com.gotcha.www.home.vo.WorkspaceDto">
-		SELECT UR.IS_FAV, W.WS_ID, W.WS_NAME, W.WS_ISIMAGE, UR.USER_ID, R.ROLE_ID, R.ROLE_TYPE
+		SELECT UR.IS_FAV, W.WS_ID, W.WS_NAME, W.WS_ISIMAGE, R.ROLE_ID, R.ROLE_TYPE
 		from GC_USER_ROLE UR
 		INNER JOIN GC_USER U
 		ON (U.user_id = UR.user_id)

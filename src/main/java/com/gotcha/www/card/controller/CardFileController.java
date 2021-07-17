@@ -78,9 +78,9 @@ public class CardFileController {
             log.info("fileupload" + file.getName());
 
             String fileName = fileService.addFile(file, card_id, "cards");
-            if(fileName.equals("fail")){
-            	throw new Exception();
-			}
+            if (fileName.equals("fail")) {
+                throw new Exception();
+            }
 
 //		String originalFile = file.getOriginalFilename();
 //		String fileExtension = originalFile.substring(originalFile.lastIndexOf("\\")+1);
@@ -109,26 +109,26 @@ public class CardFileController {
 //		cardFileDTO.setCard_id(card_id);
 //		cardFileDTO.setFile_path(filePath);
 
-			cardFileDTO.setFile_id(cardFileService.selectFileId());
-			cardFileDTO.setFile_name(file.getOriginalFilename());
-			cardFileDTO.setFile_path(fileName);
-			cardFileDTO.setCard_id(card_id);
+            cardFileDTO.setFile_id(cardFileService.selectFileId());
+            cardFileDTO.setFile_name(file.getOriginalFilename());
+            cardFileDTO.setFile_path(fileName);
+            cardFileDTO.setCard_id(card_id);
 
             log.info("[UPLOAD CardFileController cardFileDTO] :" + cardFileDTO);
             cardFileService.insertCardFile(cardFileDTO);
 
+            return cardFileDTO;
 
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        return cardFileDTO;
     }
 
     //@GetMapping
 
     @GetMapping("/download/{file_id}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable("file_id") int file_id) throws IOException{
+    public ResponseEntity<Resource> downloadFile(@PathVariable("file_id") int file_id) throws IOException {
         CardFileDTO cardFileDTO = cardFileService.getOneCardFile(file_id);
         File file = fileService.loadFile(cardFileDTO.getCard_id(), "cards", cardFileDTO.getFile_path());
         Resource resource = new InputStreamResource(Files.newInputStream(file.toPath()));
@@ -141,10 +141,12 @@ public class CardFileController {
 
     @PostMapping("/delete") //return: CardFileDTO, Service parameter: getFile_id
     public @ResponseBody
-    CardFileDTO deleteCardFile(@RequestBody CardFileDTO cardFileDTO) {
+    CardFileDTO deleteCardFile(@RequestBody CardFileDTO cardFileDTO) throws IOException {
         log.info("[DELETE CardFileController cardFileDTO.getFile_id()] :" + cardFileDTO.getFile_id());
         log.info("[DELETE CardFileController cardFileDTO] :" + cardFileDTO);
+        CardFileDTO dto = cardFileService.getOneCardFile(cardFileDTO.getFile_id());
         cardFileService.deleteCardFile(cardFileDTO.getFile_id());
+        fileService.deleteFile(dto.getCard_id(), "cards", dto.getFile_path());
         return cardFileDTO;
     }
 

@@ -4,44 +4,59 @@
 
 <mapper namespace="com.gotcha.www.workList.dao.WorkListDAO">
 
-	<!-- Control Lists -->
-	<!-- select ListId -->
-	<select id="selectListId" resultType="Integer">
-		select list_seq.nextval
-		from dual
-	</select>
-	<!-- select List -->
-	<select id="selectList" parameterType="int"
-		resultType="com.gotcha.www.workList.vo.ListVO">
-		select * from gc_list
-		where
-		ws_id = #{ws_id}
-	</select>
+    <!-- Control Lists -->
+    <!-- select ListId -->
+    <select id="selectListId" resultType="Integer">
+        select list_seq.nextval
+        from dual
+    </select>
 
-	<select id="selectLastCardId" resultType="int">
-		select max(card_id)
-		from gc_card
-	</select>
-	<!-- select Card -->
-	<!-- <resultMap type="map" id="CardList">
+    <!-- select List -->
+    <select id="selectList" parameterType="int"
+            resultType="com.gotcha.www.workList.vo.ListVO">
+        select *
+        from gc_list
+        where ws_id = #{ws_id}
+    </select>
 
-		<result property="card_desc" column="card_desc" jdbcType="CLOB"
-			javaType="java.lang.String" />
+    <insert id="insertList"
+            parameterType="com.gotcha.www.workList.vo.ListVO">
+        insert into GC_LIST
+            (LIST_ID, LIST_NAME, WS_ID, POSITION)
+        VALUES (#{list_id}, #{list_name}, #{ws_id}, #{position})
+    </insert>
 
-	</resultMap> -->
+    <update id="updateList">
+        update GC_LIST
+        set LIST_NAME = #{list_name}, POSITION=#{position}
+        where LIST_ID = #{list_id}
+    </update>
 
-	<select id="selectCard" parameterType="String"
-		resultType="com.gotcha.www.workList.vo.CardVO">
+    <delete id="deleteList" parameterType="int">
+        delete
+        from GC_LIST
+        where LIST_ID = #{list_id}
+    </delete>
 
-		select * from
-		gc_card
-		where
-		ws_id = #{ws_id}
+    <select id="selectCardId" resultType="int">
+        select CARD_SEQ.nextval
+        from dual
+    </select>
 
-	</select>
+    <select id="selectLastCardId" resultType="int">
+        select max(card_id)
+        from gc_card
+    </select>
 
-	<!-- insert Card (list_id, ws_id, card_start_date, card_end_date 받아옴) -->
-	<insert id="insertCard"
+    <select id="selectCard" parameterType="String"
+            resultType="com.gotcha.www.workList.vo.CardVO">
+        select *
+        from gc_card
+        where ws_id = #{ws_id}
+    </select>
+
+    <!-- insert Card (list_id, ws_id, card_start_date, card_end_date 받아옴) -->
+    <insert id="insertCard"
             parameterType="com.gotcha.www.workList.vo.CardVO"
             keyProperty="card_id" keyColumn="card_id">
         insert into gc_card
@@ -62,11 +77,10 @@
                 #{card_start_date,jdbcType=VARCHAR},
                 #{card_end_date,jdbcType=VARCHAR},
                 #{position},
-                #{card_desc,jdbcType=VARCHAR}
-                )
+                #{card_desc,jdbcType=VARCHAR})
     </insert>
 
-	<!-- update Card (list_id, ws_id, card_start_date, card_end_date 받아옴) -->
+    <!-- update Card (list_id, ws_id, card_start_date, card_end_date 받아옴) -->
     <update id="updateCard">
         update gc_card
         set card_name       = #{card_name},
@@ -80,23 +94,25 @@
         where card_id = #{card_id}
     </update>
 
-	<!-- delete Card -->
-	<delete id="deleteCard" parameterType="Integer">
-		delete from gc_card
-		where
-		card_id = #{card_id}
-	</delete>
+    <!-- delete Card -->
+    <delete id="deleteCard" parameterType="Integer">
+        delete
+        from gc_card
+        where card_id = #{card_id}
+    </delete>
 
-	<select id="selectCardList" parameterType="Integer"
-		resultType="com.gotcha.www.workList.vo.CardVO">
-		select * from gc_card where list_id = #{card_id}
-	</select>
+    <select id="selectCardList" parameterType="Integer"
+            resultType="com.gotcha.www.workList.vo.CardVO">
+        select *
+        from gc_card
+        where list_id = #{list_id}
+    </select>
 
     <select id="selectOneCard" parameterType="int"
-        resultType="com.gotcha.www.workList.vo.CardVO">
+            resultType="com.gotcha.www.workList.vo.CardVO">
         select *
         from GC_CARD
-        where CARD_ID=#{card_id}
+        where CARD_ID = #{card_id}
     </select>
 
 </mapper>

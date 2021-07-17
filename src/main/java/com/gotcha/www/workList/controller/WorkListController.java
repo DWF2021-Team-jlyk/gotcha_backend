@@ -1,10 +1,12 @@
 package com.gotcha.www.workList.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.gotcha.www.extra.service.FileService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class WorkListController {
 
     @Autowired
     WorkListService workListService;
+
+    @Autowired
+	FileService fileService;
 
     @Autowired
     WorkListDAO workListDAO;
@@ -136,8 +141,15 @@ public class WorkListController {
 	}
 	
 	@RequestMapping("/card/delete")
-	public void deleteCard(@RequestBody CardVO cardVO) {
+	public @ResponseBody CardVO deleteCard(@RequestBody CardVO cardVO) {
 		workListService.deleteCard(cardVO.getCard_id());
+		try{
+		fileService.deleteAllFile(cardVO.getCard_id(), "cards");
+
+		}catch (IOException e){
+			e.printStackTrace();
+		}
+		return cardVO;
 	}
 	
 	@RequestMapping("/card/selectLastCardId")

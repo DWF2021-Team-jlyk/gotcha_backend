@@ -19,6 +19,12 @@
         from GC_CARD_MEM
         where USER_ID = #{user_id} and CARD_ID = #{card_id}
     </delete>
+
+    <delete id="deleteCard" parameterType="int">
+        delete
+        from GC_CARD_MEM
+        where CARD_ID = #{card_id}
+    </delete>
     
     <insert id="insertCardMember" parameterType="com.gotcha.www.card.vo.CardMemberDTO">
     	INSERT INTO GC_CARD_MEM (card_id, user_id) 
