@@ -35,6 +35,14 @@ public interface WorkListDAO {
 	void updateCard(CardVO cardVO);
 	
 	void deleteCard(int card_id);
+	
+	void deleteCardAct(int card_id);
+
+	void deleteCardMember(int card_id);
+
+	void deleteCardTodo(int card_id);
+
+	void deleteCardFile(int card_id);
 
 	CardVO selectOneCard(int card_id);
 	//public List<CardVO> selectCardList(int list_id);

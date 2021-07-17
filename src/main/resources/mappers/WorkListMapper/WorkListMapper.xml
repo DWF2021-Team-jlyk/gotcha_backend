@@ -71,14 +71,18 @@
 	<update id="updateCard">
 		update gc_card
 		set card_name = #{card_name},
-		card_desc = #{card_desc,jdbcType=VARCHAR},
+		card_desc
+		= #{card_desc,jdbcType=VARCHAR},
 		list_id = #{list_id},
 		ws_id = #{ws_id},
 		card_isdone = #{card_isdone},
-		card_start_date = #{card_start_date,jdbcType=VARCHAR},
-		card_end_date = #{card_end_date,jdbcType=VARCHAR},
+		card_start_date =
+		#{card_start_date,jdbcType=VARCHAR},
+		card_end_date =
+		#{card_end_date,jdbcType=VARCHAR},
 		POSITION = #{position}
-		where card_id = #{card_id}
+		where card_id
+		= #{card_id}
 	</update>
 
 	<!-- delete Card -->
@@ -87,6 +91,34 @@
 		where
 		card_id = #{card_id}
 	</delete>
+
+	<delete id="deleteCardAct" parameterType="Integer">
+		delete from gc_card_act
+		where
+		card_id = #{card_id}
+	</delete>
+
+
+	<delete id="deleteCardMember" parameterType="Integer">
+		delete from gc_card_mem
+		where
+		card_id = #{card_id}
+	</delete>
+
+
+	<delete id="deleteCardTodo" parameterType="Integer">
+		delete from gc_card_todo
+		where
+		card_id = #{card_id}
+	</delete>
+
+	<delete id="deleteCardFile" parameterType="Integer">
+		delete from gc_card_file
+		where
+		card_id = #{card_id}
+	</delete>
+
+
 
 	<select id="selectCardList" parameterType="Integer"
 		resultType="com.gotcha.www.workList.vo.CardVO">

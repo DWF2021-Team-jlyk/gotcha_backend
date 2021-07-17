@@ -86,6 +86,30 @@ public class WorkListServiceImpl implements WorkListService {
 		return workListDAO.selectLastCardId();
 		
 	}
+
+	@Override
+	public void deleteCardAct(int card_id) {
+		 workListDAO.deleteCardAct(card_id);
+		
+	}
+
+	@Override
+	public void deleteCardMember(int card_id) {
+		 workListDAO.deleteCardMember(card_id);
+		
+	}
+
+	@Override
+	public void deleteCardTodo(int card_id) {
+		 workListDAO.deleteCardTodo(card_id);
+		
+	}
+
+	@Override
+	public void deleteCardFile(int card_id) {
+		 workListDAO.deleteCardFile(card_id);
+		
+	}
 	
 
 //	@Override

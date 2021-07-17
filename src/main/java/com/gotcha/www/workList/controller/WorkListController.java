@@ -136,8 +136,15 @@ public class WorkListController {
 	}
 	
 	@RequestMapping("/card/delete")
-	public void deleteCard(@RequestBody CardVO cardVO) {
+	public CardVO deleteCard(@RequestBody CardVO cardVO) {
 		workListService.deleteCard(cardVO.getCard_id());
+		workListService.deleteCardAct(cardVO.getCard_id());
+		workListService.deleteCardMember(cardVO.getCard_id());
+		workListService.deleteCardTodo(cardVO.getCard_id());
+		workListService.deleteCardFile(cardVO.getCard_id());
+		
+		return cardVO;
+		
 	}
 	
 	@RequestMapping("/card/selectLastCardId")

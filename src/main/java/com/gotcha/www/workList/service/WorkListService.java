@@ -9,7 +9,7 @@ import com.gotcha.www.workList.vo.ListVO;
 
 public interface WorkListService {
 	// List Service
-	
+
 	int selectListId();
 
 	void insertList(ListVO listVO);
@@ -20,7 +20,7 @@ public interface WorkListService {
 
 	// List<Map<String, CardVO>> selectCard(CardVO cvo);
 	List<CardVO> selectCard(String cardWsid);
-	
+
 	int selectCardId();
 
 	void insertCard(CardLogVO cardLogVO);
@@ -29,8 +29,16 @@ public interface WorkListService {
 
 	void deleteCard(int card_id);
 
+	void deleteCardAct(int card_id);
+
+	void deleteCardMember(int card_id);
+
+	void deleteCardTodo(int card_id);
+
+	void deleteCardFile(int card_id);
+
 	List<ListVO> selectList(int listWsid);
 
 	int selectLastCardId();
-	//List<CardVO> selectCartList(int list_id);
+	// List<CardVO> selectCartList(int list_id);
 }
