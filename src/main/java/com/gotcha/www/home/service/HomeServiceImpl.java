@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 
+import com.gotcha.www.home.dao.NotiDAO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class HomeServiceImpl implements HomeService{
 	
 	@Autowired
 	HomeDAO homeDAO;
+
+	@Autowired
+	NotiService notiService;
 
 	@Value("${service.file.uploadurl}")
 	private String fileUploadPath;
@@ -128,7 +132,7 @@ public class HomeServiceImpl implements HomeService{
 			roleMemberMap.put("ws_id", nextIndex);
 			homeDAO.setRoleMember(roleMemberMap);
 		}
-		
+		notiService.makeInviteNoti(ws_name, nextIndex, member_id);
 	}
 	
 	@Override
@@ -174,7 +178,12 @@ public class HomeServiceImpl implements HomeService{
 		inviteMemberVO.getEmailList().forEach(email -> {
 			homeDAO.addMember(ws_id, email);
 		});
-		
+		inviteMemberVO.getEmailList().forEach(log::info);
+		notiService.makeInviteNoti(
+				homeDAO.getWsNameById(inviteMemberVO.getWs_id()),
+				inviteMemberVO.getWs_id(),
+				inviteMemberVO.getEmailList()
+		);
 	}
 
 	@Override

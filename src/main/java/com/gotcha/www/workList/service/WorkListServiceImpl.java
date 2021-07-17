@@ -90,7 +90,6 @@ public class WorkListServiceImpl implements WorkListService {
 	
 	@Override
 	public List<CardVO> selectCard(String cardWsid) {
-		
 		return workListDAO.selectCard(cardWsid);
 	}
 	

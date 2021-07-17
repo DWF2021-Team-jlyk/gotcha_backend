@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.gotcha.www.home.service.NotiService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,16 @@ import com.gotcha.www.card.vo.CardMemberDTO;
 @RestController
 public class CardMemberController {
 	private final CardMemberService cardMemberService;
+	private final NotiService notiService;
 	private final Log log = LogFactory.getLog(this.getClass());
 
 	@Autowired
 	CardActService cardActService;
-	
-	public CardMemberController(CardMemberService cardMemberService) {
+
+	@Autowired
+	public CardMemberController(CardMemberService cardMemberService, NotiService notiService) {
 		this.cardMemberService = cardMemberService;
+		this.notiService = notiService;
 	}
 	
 	@PostMapping("/insertCardMember")
@@ -40,8 +44,8 @@ public class CardMemberController {
 		Date today = new Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		int act_id = cardActService.selectActId();
-		
-		
+
+		notiService.makeCardNoti(cardMemberDTO.getCard_id(), cardMemberDTO.getUser_id());
 		
 		return cardMemberDTO;
     }

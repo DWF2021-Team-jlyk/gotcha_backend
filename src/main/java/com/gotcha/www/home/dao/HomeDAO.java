@@ -11,6 +11,7 @@ import com.gotcha.www.home.vo.CardFileVO;
 import com.gotcha.www.home.vo.InviteMemberVO;
 import com.gotcha.www.home.vo.NotiJoinVO;
 import com.gotcha.www.home.vo.WorkspaceDto;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface HomeDAO{
@@ -87,5 +88,6 @@ public interface HomeDAO{
 
 	List<CardFileVO> selectFiles(HashMap<String, Object> deleteMap);
 
-
+	@Select("select ws_name from GC_WS where ws_id = #{ws_id}")
+	String getWsNameById(int ws_id);
 }

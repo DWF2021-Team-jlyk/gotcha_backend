@@ -26,14 +26,12 @@
 
 	<select id="selectNoti" parameterType="String"
 		resultType="HashMap">
-		SELECT w.ws_id, w.ws_name, n.noti_type, n.noti_desc,
+		SELECT n.noti_id, w.ws_id, w.ws_name, n.noti_type, n.noti_desc,
 		n.noti_time, n.noti_checked
 		FROM gc_noti n
-		JOIN gc_ws w ON w.ws_id =
-		n.ws_id
+		JOIN gc_ws w ON w.ws_id = n.ws_id
 		JOIN gc_noti_user nu ON nu.noti_id = n.noti_id
-		WHERE nu.user_id=
-		#{user_id}
+		WHERE nu.user_id=#{user_id}
 	</select>
 
 	<update id="updateFav"

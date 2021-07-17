@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,51 +39,70 @@ public class NotiServiceImpl implements NotiService {
     }
 
     @Override
-    public void makeBoardNoti(BoardVO boardVO, String[] userId) {
+    @Transactional
+    public void makeBoardNoti(BoardVO boardVO, List<String> userIdList) {
         NotiVO notiVO = new NotiVO();
         final String notiDesc = "" +
-                "공지 사항입니다. ";
+                "공지 사항 : " + boardVO.getBoard_title() + "\n" +
+                "등록일 : " + boardVO.getBoard_reg_time() + "\n" +
+                "수정일 : " + boardVO.getBoard_mod_time() != null ?
+                boardVO.getBoard_mod_time() : "";
+
+        notiVO.setNoti_id(notiDAO.getNotiId());
+        notiVO.setNoti_desc(notiDesc);
+        notiVO.setNoti_id(boardVO.getWs_id());
+        notiVO.setNoti_type('b');
+        notiVO.setNoti_checked('0');
+        notiVO.setNoti_time(getNotiTime());
+        notiVO.setNoti_type_id(boardVO.getId());
+
+        notiDAO.insertNoti(notiVO);
+        userIdList.forEach(userId ->
+                notiDAO.insertNotiUser(new NotiUserVO(notiVO.getNoti_id(), userId))
+        );
     }
 
     @Override
-    public void makeInviteNoti(WorkspaceDto workspaceDto, List<String> userIdList) {
+    @Transactional
+    public void makeInviteNoti(String ws_name, int ws_id, List<String> userIdList) {
 
         NotiVO notiVO = new NotiVO();
 
         final String notiDesc =
-                "초대 : " + workspaceDto.getWs_name() + "\n" +
-                        "역할 : " + workspaceDto.getRole_type() + "\n" +
+                "초대 : " +  ws_name + "\n" +
                         "초대 날짜 : " + getNotiTime();
 
         notiVO.setNoti_id(notiDAO.getNotiId());
         notiVO.setNoti_desc(notiDesc);
-        notiVO.setWs_id(workspaceDto.getWs_id());
+        notiVO.setWs_id(ws_id);
         notiVO.setNoti_type('i');
         notiVO.setNoti_checked('0');
         notiVO.setNoti_time(getNotiTime());
-        notiVO.setNoti_type_id(workspaceDto.getWs_id());
+        notiVO.setNoti_type_id(ws_id);
 
         notiDAO.insertNoti(notiVO);
-        userIdList.forEach(userId->
-                notiDAO.insertNotiUser(
-                        new NotiUserVO(notiVO.getNoti_id(), userId)
-                )
+        userIdList.forEach(userId ->
+                notiDAO.insertNotiUser(new NotiUserVO(notiVO.getNoti_id(), userId))
         );
 
         log.info("Invite Noti 호출");
     }
 
     @Override
+    @Transactional
     public void makeTodoNoti(CardTodoDTO cardTodoDTO, String userId) {
         NotiVO notiVO = new NotiVO();
-        final String notiDesc = "할당된 업무 : " + cardTodoDTO.getTodo_name() + "\n" +
-                "시작 날짜 : " +
-                (cardTodoDTO.getTodo_start_date() == null ?
-                        "미정" : cardTodoDTO.getTodo_start_date()) + "\n" +
-                "종료 날짜 : " +
-                (cardTodoDTO.getTodo_start_date() == null ?
-                        "미정" : cardTodoDTO.getTodo_start_date()) +
-                "\n";
+        CardVO cardVO = workListDAO.selectOneCard(cardTodoDTO.getCard_id());
+        final String notiDesc =
+                "할당된 업무 : " + cardTodoDTO.getTodo_name() + "\n" +
+                        "업무가 위치한 카드 : " + cardVO.getCard_name() + "\n" +
+                        "시작 날짜 : " +
+                        (cardTodoDTO.getTodo_start_date() == null ?
+                                "미정" : cardTodoDTO.getTodo_start_date()) + "\n" +
+                        "종료 날짜 : " +
+                        (cardTodoDTO.getTodo_start_date() == null ?
+                                "미정" : cardTodoDTO.getTodo_start_date()) +
+                        "\n";
 
         notiVO.setNoti_id(notiDAO.getNotiId());
         notiVO.setNoti_type('t');
@@ -90,24 +110,27 @@ public class NotiServiceImpl implements NotiService {
         notiVO.setNoti_checked('0');
         notiVO.setNoti_type_id(cardTodoDTO.getTodo_id());
         notiVO.setNoti_desc(notiDesc);
-        notiVO.setWs_id(workListDAO.selectOneCard(cardTodoDTO.getCard_id()).getWs_id());
+        notiVO.setWs_id(cardVO.getWs_id());
 
         notiDAO.insertNoti(notiVO);
         notiDAO.insertNotiUser(new NotiUserVO(notiVO.getNoti_id(), userId));
     }
 
     @Override
-    public void makeCardNoti(CardVO cardVO, String userId) {
+    @Transactional
+    public void makeCardNoti(int cardId, String userId) {
 
         NotiVO notiVO = new NotiVO();
+        CardVO cardVO = workListDAO.selectOneCard(cardId);
 
-        final String notiDesc = "할당된 업무 : " + cardVO.getCard_name() + "\n" +
-                "시작 날짜 : " +
-                (cardVO.getCard_start_date() == null ?
-                        "미정" : cardVO.getCard_start_date()) + "\n" +
-                "종료 날짜 : " +
-                (cardVO.getCard_end_date() == null ?
-                        "미정" : cardVO.getCard_end_date()) + "\n";
+        final String notiDesc =
+                "할당된 업무 : " + cardVO.getCard_name() + "\n" +
+                        "시작 날짜 : " +
+                        (cardVO.getCard_start_date() == null ?
+                                "미정" : cardVO.getCard_start_date()) + "\n" +
+                        "종료 날짜 : " +
+                        (cardVO.getCard_end_date() == null ?
+                                "미정" : cardVO.getCard_end_date()) + "\n";
 
         notiVO.setNoti_id(notiDAO.getNotiId());
         notiVO.setNoti_type('c');
@@ -119,5 +142,15 @@ public class NotiServiceImpl implements NotiService {
 
         notiDAO.insertNoti(notiVO);
         notiDAO.insertNotiUser(new NotiUserVO(notiVO.getNoti_id(), userId));
+    }
+
+    @Override
+    public void deleteNoti(int notiId) {
+        notiDAO.deleteNoti(notiId);
+    }
+
+    @Override
+    public void toggleNoti(int notiId) {
+        notiDAO.changeNotiCheck(notiId);
     }
 }

@@ -9,8 +9,10 @@ import com.gotcha.www.workList.vo.CardVO;
 import java.util.List;
 
 public interface NotiService {
-    void makeBoardNoti(BoardVO boardVO, String[] userId);
-    void makeInviteNoti(WorkspaceDto workspaceDto, List<String> userId);
+    void makeBoardNoti(BoardVO boardVO, List<String> userId);
+    void makeInviteNoti(String ws_name, int ws_id, List<String> userIdList);
     void makeTodoNoti(CardTodoDTO cardTodoDTO, String userId);
-    void makeCardNoti(CardVO cardVO, String userId);
+    void makeCardNoti(int cardId, String userId);
+    void deleteNoti(int notiId);
+    void toggleNoti(int notiId);
 }

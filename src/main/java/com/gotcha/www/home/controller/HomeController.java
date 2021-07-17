@@ -77,13 +77,13 @@ public class HomeController {
 	
 	@PostMapping("/wsUserList")
 	public @ResponseBody List<String> selectWsUserList(
-			@RequestBody HashMap<String, Object> map,
+			@RequestBody HashMap<String, String> map,
 			@AuthenticationPrincipal PrincipalDetails principalDetails)
 			throws Exception {
 		userId = getLoginUser(principalDetails);
 		log.info("selectWsUserList " + map);
 		log.info("selectWsUserList get "+map.get("ws_id").getClass());
-		int ws_id = (int)map.get("ws_id");
+		int ws_id = Integer.parseInt(map.get("ws_id"));
 //		log.info("[USERLIST] " + ws_id);
 		List<String> wsUserList = homeService.selectWsUserList(ws_id);
 //		log.info("[USERLISTS] " + wsUserList);
