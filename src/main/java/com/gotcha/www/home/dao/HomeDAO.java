@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 //import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Param;
 
+import com.gotcha.www.home.vo.CardFileVO;
 import com.gotcha.www.home.vo.InviteMemberVO;
 import com.gotcha.www.home.vo.NotiJoinVO;
 import com.gotcha.www.home.vo.WorkspaceDto;
@@ -29,7 +30,6 @@ public interface HomeDAO{
 	int getWsNextIndex();
 	
 	// add workspace
-//	void addWorkspace(HashMap<String, Object> map);
 	void createWorkspace(HashMap<String, Object> workspaceMap);
 	
 	// create user role admin
@@ -54,5 +54,38 @@ public interface HomeDAO{
 	String preFileName(int ws_id);
 	
 	List<String> getAllUserId(InviteMemberVO inviteMemberVO);
+
+	// admin 위임
+	void mandateAdmin(HashMap<String, Object> map);
+
+	// 카드 멤버 삭제
+	void deleteCardMember(HashMap<String, Object> deleteMap);
 	
+	// 가입한 워크스페이스 삭제
+	void deleteUserRole(HashMap<String, Object> deleteMap);
+
+	// 즐겨찾기 삭제
+	void deleteFav(HashMap<String, Object> deleteMap);
+
+	// card todo 삭제
+	void deleteTodos(HashMap<String, Object> deleteMap);
+
+	// card file 삭제
+	void deleteFiles(HashMap<String, Object> deleteMap);
+
+	// card 삭제
+	void deleteCards(HashMap<String, Object> deleteMap);
+
+	// list 삭제
+	void deleteLists(HashMap<String, Object> deleteMap);
+
+	// 게시판 삭제
+	void deleteBoard(HashMap<String, Object> deleteMap);
+
+	// 워크스페이스 삭제
+	void deleteWorkspace(HashMap<String, Object> deleteMap);
+
+	List<CardFileVO> selectFiles(HashMap<String, Object> deleteMap);
+
+
 }

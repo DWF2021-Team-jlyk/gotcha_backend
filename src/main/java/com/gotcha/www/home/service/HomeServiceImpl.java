@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.gotcha.www.home.dao.HomeDAO;
+import com.gotcha.www.home.vo.CardFileVO;
 import com.gotcha.www.home.vo.InviteMemberVO;
 import com.gotcha.www.home.vo.NotiJoinVO;
 import com.gotcha.www.home.vo.WorkspaceDto;
@@ -28,6 +28,9 @@ public class HomeServiceImpl implements HomeService{
 
 	@Value("${service.file.uploadurl}")
 	private String fileUploadPath;
+	
+	@Value("${service.card.uploadurl}")
+	private String fileDeletePath;
 	
 //	@Autowired
 //    public HomeServiceImpl(FileUploadProperties fileUploadProperties) {
@@ -182,6 +185,79 @@ public class HomeServiceImpl implements HomeService{
 	// search user
 	public List<String> getAllUserId(InviteMemberVO inviteMemberVO) {
 		return homeDAO.getAllUserId(inviteMemberVO);
+	}
+
+	@Override
+	@Transactional
+	public void leaveWorkspace(int ws_id, String user_id, String userId) {
+		
+		HashMap<String,Object> mandateMap = new HashMap<String,Object>();
+		mandateMap.put("ws_id", ws_id);
+		mandateMap.put("user_id", user_id);
+		
+		homeDAO.mandateAdmin(mandateMap);
+		log.info("[SUCCESS MANDATE]");
+		HashMap<String,Object> deleteMap = new HashMap<String,Object>();
+		deleteMap.put("ws_id", ws_id);
+		deleteMap.put("user_id", userId);
+		
+		homeDAO.deleteCardMember(deleteMap);
+		log.info("[SUCCESS deleteCardMember]");
+		homeDAO.deleteMember(deleteMap);
+		log.info("[SUCCESS deleteUserRole]");
+		
+		homeDAO.deleteFav(deleteMap);
+	}
+
+	@Override
+	@Transactional
+	public void deleteWorkspace(int ws_id, String userId) throws IOException {
+		
+		HashMap<String,Object> deleteMap = new HashMap<String,Object>();
+		deleteMap.put("ws_id", ws_id);
+		deleteMap.put("user_id", userId);
+		log.info("[DELETE REQUEST] " + ws_id);
+		
+		// 카드 관련 테이블 삭제
+		homeDAO.deleteTodos(deleteMap);
+		
+		List<CardFileVO> fileInfo = homeDAO.selectFiles(deleteMap);
+		fileInfo.forEach(index -> {
+			if(index.getFile_path() != null) {				
+				UploadFileUtil.fileDelete(fileDeletePath, index.getFile_name());
+				log.info("[FILE INFO] " + index);
+			}
+		});
+		log.info("[CARD FILE VO] " + fileInfo);
+		
+		homeDAO.deleteFiles(deleteMap);
+		
+		homeDAO.deleteCardMember(deleteMap);
+		homeDAO.deleteCards(deleteMap);
+		log.info("[CARD TABLES DELETE SUCCESS]");
+		
+		// 리스트 테이블 삭제
+		homeDAO.deleteLists(deleteMap);
+		log.info("[LIST TABLES DELETE SUCCESS]");
+		
+		// 게시판 삭제
+		homeDAO.deleteBoard(deleteMap);
+		log.info("[BOARD TABLES DELETE SUCCESS]");
+		
+		// user role 삭제
+		homeDAO.deleteMember(deleteMap);
+		homeDAO.deleteFav(deleteMap);
+		log.info("[USER TABLES DELETE SUCCESS]");
+		
+		// 이미지 파일 삭제
+		String uploadFolder = fileUploadPath + ws_id + "/bg";
+		String preFileName = homeDAO.preFileName(ws_id);
+		UploadFileUtil.fileDelete(uploadFolder, preFileName);
+		log.info("[WORKSPACE IMAGE DELETE SUCCESS]");
+		
+		// 워크스페이스 삭제
+		homeDAO.deleteWorkspace(deleteMap);
+		log.info("[WORKSPACE TABLES DELETE SUCCESS]");
 	}
 	
 	/**

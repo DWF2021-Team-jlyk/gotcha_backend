@@ -3,113 +3,196 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.gotcha.www.home.dao.HomeDAO">
-	<select id="selectWorkspace"
-			parameterType="String"
-			resultType="com.gotcha.www.home.vo.WorkspaceDto">
-		SELECT UR.IS_FAV, W.WS_ID, W.WS_NAME, W.WS_ISIMAGE, R.ROLE_ID, R.ROLE_TYPE
+	<select id="selectWorkspace" parameterType="String"
+		resultType="com.gotcha.www.home.vo.WorkspaceDto">
+		SELECT UR.IS_FAV, W.WS_ID, W.WS_NAME, W.WS_ISIMAGE,
+		UR.USER_ID, R.ROLE_ID, R.ROLE_TYPE
 		from GC_USER_ROLE UR
-		INNER JOIN GC_USER U
+		INNER JOIN
+		GC_USER U
 		ON (U.user_id = UR.user_id)
-		INNER JOIN GC_ROLE R 
-		ON (R.role_id = UR.role_id) 
-		INNER JOIN GC_WS W 
+		INNER JOIN GC_ROLE R
+		ON (R.role_id = UR.role_id)
+		INNER JOIN GC_WS W
 		ON(W.WS_ID = UR.WS_ID)
 		WHERE UR.USER_ID=#{user_id}
 	</select>
 
-<!-- 	<resultMap id="NotiList" type="HashMap">
-		<result property="ws_id" column="ws_id" />
-		<result property="user_id" column="user_id" />
-		<result property="ws_name" column="ws_name" />
-		<result property="noti_type" column="noti_type" />
-		<result property="noti_desc" column="noti_desc" jdbcType="CLOB" javaType="java.lang.String"/>
-		<result property="noti_checked" column="noti_checked" />
-	</resultMap> -->
+	<!-- <resultMap id="NotiList" type="HashMap"> <result property="ws_id" column="ws_id" 
+		/> <result property="user_id" column="user_id" /> <result property="ws_name" 
+		column="ws_name" /> <result property="noti_type" column="noti_type" /> <result 
+		property="noti_desc" column="noti_desc" jdbcType="CLOB" javaType="java.lang.String"/> 
+		<result property="noti_checked" column="noti_checked" /> </resultMap> -->
 
-	<select id="selectNoti" parameterType="String" resultType="com.gotcha.www.home.vo.NotiJoinVO">
-		SELECT w.ws_id, w.ws_name, n.noti_type, n.noti_desc, n.noti_time, n.noti_checked
+	<select id="selectNoti" parameterType="String"
+		resultType="HashMap">
+		SELECT w.ws_id, w.ws_name, n.noti_type, n.noti_desc,
+		n.noti_time, n.noti_checked
 		FROM gc_noti n
-		JOIN gc_ws w ON w.ws_id = n.ws_id
+		JOIN gc_ws w ON w.ws_id =
+		n.ws_id
 		JOIN gc_noti_user nu ON nu.noti_id = n.noti_id
-		WHERE nu.user_id= #{user_id}
+		WHERE nu.user_id=
+		#{user_id}
 	</select>
-	
-	<update id="updateFav" parameterType="com.gotcha.www.home.vo.WorkspaceDto">
-			UPDATE gc_user_role
-			set is_fav = #{is_fav}
-			where ws_id = #{ws_id} and user_id = #{user_id}
+
+	<update id="updateFav"
+		parameterType="com.gotcha.www.home.vo.WorkspaceDto">
+		UPDATE gc_user_role
+		set is_fav = #{is_fav}
+		where ws_id = #{ws_id} and user_id = #{user_id}
 	</update>
-	
-	<select id="selectWsUserList" parameterType="int" resultType="String">
+
+	<select id="selectWsUserList" parameterType="int"
+		resultType="String">
 		select user_id from gc_user_role where ws_id = #{ws_id}
 	</select>
-	
+
 	<select id="getWsLastIndex" resultType="int">
 		SELECT LAST_NUMBER
-		FROM USER_SEQUENCES 
+		FROM
+		USER_SEQUENCES
 		WHERE SEQUENCE_NAME = 'WS_SEQ'
 	</select>
-	
+
 	<select id="getWsNextIndex" resultType="int">
 		SELECT ws_seq.nextval
 		FROM dual
 	</select>
-	
-	<select id="getAllUserId" parameterType="com.gotcha.www.home.vo.InviteMemberVO" resultType="String">
-		SELECT user_id 
+
+	<select id="getAllUserId"
+		parameterType="com.gotcha.www.home.vo.InviteMemberVO"
+		resultType="String">
+		SELECT user_id
 		FROM gc_user
 		<if test="emailList == null">
-		WHERE user_id != #{user_id}
+			WHERE user_id != #{user_id}
 		</if>
 		<if test="emailList != null">
-		WHERE user_id NOT IN (
-        <foreach collection="emailList" item="item" separator=",">
-            #{item}
-        </foreach> )
-        </if>
+			WHERE user_id NOT IN (
+			<foreach collection="emailList" item="item" separator=",">
+				#{item}
+			</foreach>
+			)
+		</if>
 	</select>
-	
-	<select id="preFileName" parameterType="int" resultType="String"> 
+
+	<select id="preFileName" parameterType="int" resultType="String">
 		SELECT ws_isImage
 		FROM gc_ws
 		WHERE ws_id = #{ws_id}
 	</select>
-	
+
+	<select id="selectFiles" parameterType="HashMap" resultType="cardFileVO"> 
+		SELECT * FROM gc_card_file
+		WHERE card_id IN (
+			SELECT card_id
+			FROM gc_card
+			WHERE ws_id = #{ws_id}
+		)
+	</select>
+
 	<insert id="createWorkspace" parameterType="HashMap">
-		INSERT INTO GC_WS (ws_id, ws_name, ws_isimage)
-		VALUES(#{ws_id}, #{ws_name}, #{ws_isImage, jdbcType=VARCHAR})
+		INSERT INTO GC_WS
+		(ws_id, ws_name, ws_isimage)
+		VALUES(#{ws_id}, #{ws_name}, #{ws_isImage,
+		jdbcType=VARCHAR})
 	</insert>
-	
+
 	<insert id="setRoleAdmin" parameterType="HashMap">
 		INSERT INTO GC_USER_ROLE
 		VALUES(#{ws_id}, #{user_id}, 1, 0)
 	</insert>
-	
+
 	<insert id="setRoleMember" parameterType="HashMap">
-		INSERT INTO GC_USER_ROLE
+		INSERT INTO
+		GC_USER_ROLE
 		VALUES(#{ws_id}, #{user_id}, 2, 0)
 	</insert>
-	
+
 	<insert id="addMember" parameterType="String">
 		INSERT INTO GC_USER_ROLE
 		VALUES(#{ws_id}, #{user_id}, 2, 0)
 	</insert>
-	
-	<update id="updateWsName" parameterType="com.gotcha.www.home.vo.WorkspaceDto">
-		UPDATE gc_ws 
+
+	<update id="updateWsName"
+		parameterType="com.gotcha.www.home.vo.WorkspaceDto">
+		UPDATE gc_ws
 		SET ws_name = #{ws_name}
 		WHERE ws_id = #{ws_id}
 	</update>
-	
+
 	<update id="updateFileName" parameterType="HashMap">
-		UPDATE gc_ws 
+		UPDATE gc_ws
 		SET ws_isImage = #{ws_isImage}
 		WHERE ws_id = #{ws_id}
 	</update>
-	
+
+	<update id="mandateAdmin" parameterType="HashMap">
+		UPDATE gc_user_role
+		SET role_id = 1
+		WHERE ws_id = #{ws_id}
+		AND user_id = #{user_id}
+	</update>
+
 	<delete id="deleteMember" parameterType="HashMap">
 		DELETE gc_user_role
-		WHERE ws_id = #{ws_id} and user_id = #{user_id}
+		WHERE ws_id = #{ws_id}
+		AND user_id = #{user_id}
+	</delete>
+
+	<delete id="deleteCardMember" parameterType="HashMap">
+		DELETE gc_card_mem
+		WHERE card_id IN (
+			SELECT card_id
+			FROM gc_card_mem
+			WHERE card_id IN 
+			(
+				SELECT card_id
+				FROM gc_card
+				WHERE ws_id = #{ws_id}
+			)
+			AND user_id = #{user_id}
+		)
 	</delete>
 	
+	<delete id="deleteFav" parameterType="HashMap">
+		DELETE gc_fav
+		WHERE ws_id = #{ws_id}
+		AND user_id = #{user_id}
+	</delete>
+	
+	<delete id="deleteTodos" parameterType="HashMap">
+		DELETE gc_card_todo
+		WHERE card_id IN (
+			SELECT card_id
+			FROM gc_card
+			WHERE ws_id = #{ws_id}
+		)
+	</delete>
+	
+	<delete id="deleteFiles" parameterType="HashMap">
+		DELETE gc_card_file
+		WHERE card_id IN (
+			SELECT card_id
+			FROM gc_card
+			WHERE ws_id = #{ws_id}
+		)
+	</delete>
+	
+	<delete id="deleteCards" parameterType="HashMap">
+		DELETE gc_card WHERE ws_id = #{ws_id}
+	</delete>
+	
+	<delete id="deleteLists" parameterType="HashMap">
+		DELETE gc_list WHERE ws_id = #{ws_id}
+	</delete>
+	
+	<delete id="deleteBoard" parameterType="HashMap">
+		DELETE gc_board WHERE ws_id = #{ws_id}
+	</delete>
+	
+	<delete id="deleteWorkspace" parameterType="HashMap">
+		DELETE gc_ws WHERE ws_id = #{ws_id}
+	</delete>
 </mapper>
