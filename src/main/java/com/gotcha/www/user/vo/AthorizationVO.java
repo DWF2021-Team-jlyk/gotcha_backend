@@ -19,4 +19,10 @@ public class AthorizationVO {
 	private char is_fav;
 	private int role_id;
 	private String role_type;
+	private String card_name;
+	private String card_desc;
+	private String card_start_date;
+	private String card_end_date;
+	private char card_isdone;
+	private int position;
 }

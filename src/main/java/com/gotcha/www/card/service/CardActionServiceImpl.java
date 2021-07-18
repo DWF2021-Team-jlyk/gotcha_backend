@@ -19,10 +19,12 @@ import com.gotcha.www.workList.vo.CardVO;
 public class CardActionServiceImpl implements CardActionService {
 
 	private final CardActionDAO cardActionDAO;
+	private final WorkListDAO workListDAO;
 
 	@Autowired
-	public CardActionServiceImpl(CardActionDAO cardActionDAO) {
+	public CardActionServiceImpl(CardActionDAO cardActionDAO, WorkListDAO workListDAO) {
 		this.cardActionDAO = cardActionDAO;
+		this.workListDAO = workListDAO;
 	}
 	
 	@Override

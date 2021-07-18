@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,15 +23,20 @@ import com.gotcha.www.workList.vo.CardVO;
 public class CardActionController {
 	
 	private final CardActionService cardActionService;
-	
+
+	private final WorkListService workListService;
+
+	private final CardActService cardActService;
+
 	@Autowired
-	WorkListService workListService;
-	
-	@Autowired
-	CardActService cardActService;
-	
-	public CardActionController(CardActionService cardActionService) {
+	public CardActionController(
+			CardActionService cardActionService,
+			WorkListService workListService,
+			CardActService cardActService
+	) {
 		this.cardActionService = cardActionService;
+		this.workListService = workListService;
+		this.cardActService = cardActService;
 	} 
 	
 	@PostMapping("selectMaxPosition")
@@ -40,11 +46,13 @@ public class CardActionController {
 	}
 	
 	@PostMapping("updateCardMove")
+	@Transactional
 	public @ResponseBody CardVO updateCardMove(@RequestBody CardVO cardVO) {
 		System.out.println("cardVO" + cardVO);
-		cardActionService.updateCardMove(cardVO);
+
 		cardActionService.updateDestPosition(cardVO);
-		
+		cardActionService.updateCardMove(cardVO);
+
 
 		Date today = new Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

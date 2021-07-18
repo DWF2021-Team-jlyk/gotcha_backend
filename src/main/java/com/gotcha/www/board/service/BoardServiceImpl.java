@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gotcha.www.board.dao.BoardDAO;
 import com.gotcha.www.board.vo.BoardVO;
 
-import jdk.internal.org.jline.utils.Log;
-
 @Service
 @Transactional
 public class BoardServiceImpl implements BoardService {
