@@ -23,17 +23,22 @@ import com.gotcha.www.card.vo.CardMemberDTO;
 @RequestMapping("/cardDetail/member")
 @RestController
 public class CardMemberController {
+
 	private final CardMemberService cardMemberService;
 	private final NotiService notiService;
+	private final CardActService cardActService;
+
 	private final Log log = LogFactory.getLog(this.getClass());
 
 	@Autowired
-	CardActService cardActService;
-
-	@Autowired
-	public CardMemberController(CardMemberService cardMemberService, NotiService notiService) {
+	public CardMemberController(
+			CardMemberService cardMemberService,
+			NotiService notiService,
+			CardActService cardActService
+	) {
 		this.cardMemberService = cardMemberService;
 		this.notiService = notiService;
+		this.cardActService = cardActService;
 	}
 	
 	@PostMapping("/insertCardMember")
@@ -57,12 +62,14 @@ public class CardMemberController {
     	int card_id = (int)map.get("card_id");
 //    	log.info("card_id" + card_id);
     	List<CardMemberDTO> list = cardMemberService.getCardMem(card_id);
+
         return list;
     }
 	
 	@PostMapping("/deleteCardMember")
 	public @ResponseBody CardMemberDTO deleteCardMember(@RequestBody CardMemberDTO cardMemberDTO) {
 		cardMemberService.deleteCardMember(cardMemberDTO);
+		notiService.cancelCardNoti(cardMemberDTO.getCard_id(), cardMemberDTO.getUser_id());
 		return cardMemberDTO;
 	}
 }

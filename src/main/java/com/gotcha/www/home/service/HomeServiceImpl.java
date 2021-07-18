@@ -189,6 +189,12 @@ public class HomeServiceImpl implements HomeService{
 	@Override
 	public void deleteMember(HashMap<String, Object> map) {
 		homeDAO.deleteMember(map);
+		int ws_id = (int)map.get("ws_id");
+		String user_id = (String)map.get("user_id");
+		notiService.makeExpelNoti(
+				homeDAO.getWsNameById(ws_id),
+				ws_id, user_id
+		);
 	}
 	
 	// search user

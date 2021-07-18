@@ -90,6 +90,26 @@ public class NotiServiceImpl implements NotiService {
 
     @Override
     @Transactional
+    public void makeExpelNoti(String ws_name, int ws_id, String userId){
+
+        NotiVO notiVO = new NotiVO();
+
+        final String notiDesc = ws_name + "에서 추방 되셨습니다." + "\n";
+
+        notiVO.setNoti_id(notiDAO.getNotiId());
+        notiVO.setNoti_desc(notiDesc);
+        notiVO.setWs_id(ws_id);
+        notiVO.setNoti_type('i');
+        notiVO.setNoti_checked('0');
+        notiVO.setNoti_time(getNotiTime());
+        notiVO.setNoti_type_id(ws_id);
+
+        notiDAO.insertNoti(notiVO);
+        notiDAO.insertNotiUser(new NotiUserVO(notiVO.getNoti_id(), userId));
+    }
+
+    @Override
+    @Transactional
     public void makeTodoNoti(CardTodoDTO cardTodoDTO, String userId) {
         NotiVO notiVO = new NotiVO();
         CardVO cardVO = workListDAO.selectOneCard(cardTodoDTO.getCard_id());
@@ -131,6 +151,29 @@ public class NotiServiceImpl implements NotiService {
                         "종료 날짜 : " +
                         (cardVO.getCard_end_date() == null ?
                                 "미정" : cardVO.getCard_end_date()) + "\n";
+
+        notiVO.setNoti_id(notiDAO.getNotiId());
+        notiVO.setNoti_type('c');
+        notiVO.setNoti_time(getNotiTime());
+        notiVO.setNoti_checked('0');
+        notiVO.setNoti_type_id(cardVO.getCard_id());
+        notiVO.setWs_id(cardVO.getWs_id());
+        notiVO.setNoti_desc(notiDesc);
+
+        notiDAO.insertNoti(notiVO);
+        notiDAO.insertNotiUser(new NotiUserVO(notiVO.getNoti_id(), userId));
+    }
+
+    @Override
+    @Transactional
+    public void cancelCardNoti(int cardId, String userId) {
+
+        NotiVO notiVO = new NotiVO();
+        CardVO cardVO = workListDAO.selectOneCard(cardId);
+
+        final String notiDesc =
+                "업무가 취소 되었습니다.\n" +
+                        "취소된 업무 : " + cardVO.getCard_name() + "\n";
 
         notiVO.setNoti_id(notiDAO.getNotiId());
         notiVO.setNoti_type('c');

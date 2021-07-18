@@ -97,7 +97,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 
 		}
 		
-		if(requestURL.equals("/home/workspaceUpdate")) {
+		if(requestURL.startsWith("/main/wsList")) {
 			ObjectMapper om = new ObjectMapper();
 			AthorizationVO authorizationVO = om.readValue(requestWrapper.getInputStream(), AthorizationVO.class);
 
