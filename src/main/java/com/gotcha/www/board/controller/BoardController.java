@@ -62,14 +62,15 @@ public class BoardController {
 	public @ResponseBody BoardVO insertBoard(@RequestBody BoardVO boardVO) {
 		log.info("controller, service before:" + boardVO);
 		boardVO.setId(boardService.getBoardId());
+		log.info("boardService.getBoardId()"+boardVO.getId());
 		boardService.insertBoard(boardVO);
-		;
 		log.info("controller, service after:" + boardVO);
 		return boardVO;
 	}
 
 	@RequestMapping("/update")
 	public @ResponseBody BoardVO updateBoard(@RequestBody BoardVO boardVO) {
+		log.info("updateboard"+boardVO);
 		boardService.updateBoard(boardVO);
 		return boardVO;
 	}
@@ -81,6 +82,16 @@ public class BoardController {
 		log.info("delete controller, service after getTodo_id()" + baordVO.getId());
 		log.info("delete controller, service after" + baordVO);
 		return baordVO;
+	}
+	
+	@RequestMapping("/showPost")
+	public @ResponseBody BoardVO selectBoardById(@RequestBody BoardVO boardVO) {
+		log.info("BoardController id:" + boardVO);
+		
+		boardVO = boardService.selectBoardById(boardVO.getId());
+		log.info("BoardController after service:" + boardVO);
+		return boardVO;
+
 	}
 
 }
