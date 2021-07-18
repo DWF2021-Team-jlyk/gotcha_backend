@@ -102,6 +102,7 @@ public class WorkListController {
 	public @ResponseBody CardVO updateCard(@RequestBody CardVO cardVO) {
     	log.info("\n updateCard : " + cardVO);
 		workListService.updateCard(cardVO);
+		log.info("[/main/wsList/list/card/update]"+cardVO);
 		return cardVO;
 	}
 	
