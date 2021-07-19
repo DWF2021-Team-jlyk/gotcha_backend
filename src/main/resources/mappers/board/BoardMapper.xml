@@ -9,9 +9,10 @@
 
 	<select id="selectBoard" parameterType="int"
 		resultType="com.gotcha.www.board.vo.BoardVO">
-		select id, board_title, board_content, user_id, board_reg_time, board_mod_time
+		select id, board_title, board_content, user_id, board_reg_time, board_mod_time, ws_id
 		from gc_board
 		where ws_id = #{ws_id}
+		order by id desc
 	</select>
 	
 	<select id="selectBoardById" parameterType="int" resultType="com.gotcha.www.board.vo.BoardVO">
