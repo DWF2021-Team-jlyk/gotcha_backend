@@ -118,7 +118,7 @@ public class HomeController {
 	}
 	
 	@PostMapping("/deleteMember")
-	public void deleteMember(@RequestBody HashMap<String, Object> map) {
+	public @ResponseBody int deleteMember(@RequestBody HashMap<String, Object> map) {
 		log.info("[DELETE MEMBER] ");
 		homeService.deleteMember(map);
 		int ws_id = (int)map.get("ws_id");
@@ -127,6 +127,7 @@ public class HomeController {
 		log.info("deleteMember : " + map);
 		log.info("deleteMember : "+reason);
 		notiService.mandateNoti(ws_id, user_id, reason);
+		return ws_id;
 	}
 	
     @PostMapping("/myPage")

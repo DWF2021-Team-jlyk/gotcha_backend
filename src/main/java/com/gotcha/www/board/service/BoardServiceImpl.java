@@ -56,7 +56,7 @@ public class BoardServiceImpl implements BoardService {
 		log.info("updateBoard" + boardVO.toString());
 		boardDAO.updateBoard(boardVO);
 		List<String> wsUserList = homeDAO.selectWsUserList(ws_id);
-		notiService.makeBoardNoti(boardVO, wsUserList);
+		notiService.makeUpdatedBoardNoti(boardVO, wsUserList);
 	}
 
 	@Override

@@ -110,6 +110,7 @@ public class WorkListController {
     	String desc = cardLogVO.getUser_id() + "(이)가 " + cardLogVO.getCard_name() + "(을)를 추가했습니다.";
     	cardLogVO.setCard_id(card_id);
     	log.info("cardLogVO222" + cardLogVO);
+    	cardLogVO.setCard_isdone('0');
 		workListService.insertCard(cardLogVO);
 
 		
