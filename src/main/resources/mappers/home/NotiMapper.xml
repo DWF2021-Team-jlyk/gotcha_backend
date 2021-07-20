@@ -55,4 +55,8 @@
     <delete id="deleteNoti" parameterType="int">
         delete from GC_NOTI where NOTI_ID=#{noti_id}
     </delete>
+
+    <select id="getWsMember" resultType="String" parameterType="int">
+        select user_id from TAEHEON.GC_USER_ROLE where WS_ID=#{ws_id}
+    </select>
 </mapper>

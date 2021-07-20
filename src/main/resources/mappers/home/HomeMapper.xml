@@ -47,10 +47,7 @@
 	</select>
 
 	<select id="getWsLastIndex" resultType="int">
-		SELECT LAST_NUMBER
-		FROM
-		USER_SEQUENCES
-		WHERE SEQUENCE_NAME = 'WS_SEQ'
+		SELECT max(ws_id) FROM gc_ws
 	</select>
 
 	<select id="getWsNextIndex" resultType="int">

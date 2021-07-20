@@ -1,7 +1,7 @@
 package com.gotcha.www.home.controller;
 
 import com.gotcha.www.card.vo.CardTodoDTO;
-import com.gotcha.www.extra.vo.BoardVO;
+import com.gotcha.www.board.vo.BoardVO;
 import com.gotcha.www.home.service.NotiService;
 import com.gotcha.www.home.vo.WorkspaceDto;
 import com.gotcha.www.workList.vo.CardVO;

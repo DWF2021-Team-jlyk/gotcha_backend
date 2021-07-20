@@ -143,6 +143,7 @@ public class WorkListController {
 	
 	@RequestMapping("/card/delete")
 	public @ResponseBody CardVO deleteCard(@RequestBody CardVO cardVO) {
+    	log.info(cardVO);
 		workListService.deleteCard(cardVO.getCard_id());
 		try{
 		fileService.deleteAllFile(cardVO.getCard_id(), "cards");

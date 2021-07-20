@@ -84,9 +84,16 @@ public class HomeServiceImpl implements HomeService{
 	public boolean fileUpload(String ws_name, String newFileName, byte[] fileByte) {
 
 		try {
-			int lastIndex = homeDAO.getWsLastIndex();
-			log.info("[lastIndex] " + lastIndex);
-			String uploadFolder = fileUploadPath + lastIndex + "/bg";
+			int lastIndex;
+			if(homeDAO.getWsCount() != 0){
+				lastIndex = homeDAO.getWsLastIndex();
+			}
+			else{
+				lastIndex = 0;
+			}
+
+			log.info("[lastIndex] " + (lastIndex+1));
+			String uploadFolder = fileUploadPath + (lastIndex+1) + "/bg";
 
 //			String uploadFolder = "resources/static/upload" + lastIndex + "/bg";
 //			System.out.println("[foldername]"+uploadFolder);
@@ -191,9 +198,10 @@ public class HomeServiceImpl implements HomeService{
 		homeDAO.deleteMember(map);
 		int ws_id = (int)map.get("ws_id");
 		String user_id = (String)map.get("user_id");
+		String reason = (String)map.get("reason");
 		notiService.makeExpelNoti(
 				homeDAO.getWsNameById(ws_id),
-				ws_id, user_id
+				ws_id, user_id,reason
 		);
 	}
 	
@@ -221,7 +229,7 @@ public class HomeServiceImpl implements HomeService{
 		homeDAO.deleteMember(deleteMap);
 		log.info("[SUCCESS deleteUserRole]");
 		
-		homeDAO.deleteFav(deleteMap);
+//		homeDAO.deleteFav(deleteMap);
 	}
 
 	@Override
@@ -261,7 +269,7 @@ public class HomeServiceImpl implements HomeService{
 		
 		// user role 삭제
 		homeDAO.deleteMember(deleteMap);
-		homeDAO.deleteFav(deleteMap);
+//		homeDAO.deleteFav(deleteMap);
 		log.info("[USER TABLES DELETE SUCCESS]");
 		
 		// 이미지 파일 삭제

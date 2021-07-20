@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.gotcha.www.home.service.NotiService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +37,16 @@ public class HomeController {
 
     private final HomeService homeService;
     private final UserService userService;
+    private final NotiService notiService;
     private final Log log = LogFactory.getLog(this.getClass());
     private static String userId;
 
 
     @Autowired
-    private HomeController(HomeService homeService, UserService userService) {
+    private HomeController(HomeService homeService, UserService userService, NotiService notiService) {
         this.homeService = homeService;
         this.userService = userService;
+        this.notiService = notiService;
     }
 
     @PostMapping("/wsList")
@@ -118,6 +121,12 @@ public class HomeController {
 	public void deleteMember(@RequestBody HashMap<String, Object> map) {
 		log.info("[DELETE MEMBER] ");
 		homeService.deleteMember(map);
+		int ws_id = (int)map.get("ws_id");
+		String user_id = (String)map.get("user_id");
+		String reason = (String)map.get("reason");
+		log.info("deleteMember : " + map);
+		log.info("deleteMember : "+reason);
+		notiService.mandateNoti(ws_id, user_id, reason);
 	}
 	
     @PostMapping("/myPage")
@@ -243,8 +252,10 @@ public class HomeController {
     	userId = getLoginUser(principalDetails);
     	int ws_id = (int) map.get("ws_id");
     	String user_id = (String) map.get("user_id");
+    	String reason = (String)map.get("reason");
     	log.info("[LEAVE WORKSPACE]" + ws_id + user_id + userId);
     	homeService.leaveWorkspace(ws_id, user_id, userId);
+    	notiService.outNoti(ws_id, user_id, reason);
     }
     
     @PostMapping("/deleteWorkspace")

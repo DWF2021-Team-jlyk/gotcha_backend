@@ -21,4 +21,6 @@ public interface NotiDAO {
     void changeNotiCheck(int noti_id);
 
     void deleteNoti(int noti_id);
+
+    List<String> getWsMember(int ws_id);
 }

@@ -90,4 +90,7 @@ public interface HomeDAO{
 
 	@Select("select ws_name from GC_WS where ws_id = #{ws_id}")
 	String getWsNameById(int ws_id);
+
+	@Select("select count(*) from GC_WS")
+	int getWsCount();
 }
