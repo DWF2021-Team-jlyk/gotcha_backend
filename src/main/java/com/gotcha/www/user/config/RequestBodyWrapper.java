@@ -46,13 +46,6 @@ public class RequestBodyWrapper extends HttpServletRequestWrapper {
 		} catch(IOException e) {
 			log.error("Stream열다가 IOException 발생", e);
 		}
-//		try {
-//			ObjectMapper objectMapper = new ObjectMapper();
-//			WorkListVO workListVO = objectMapper.readValue(request.getInputStream(), WorkListVO.class);
-//			System.out.println("work : " + workListVO);
-//		} catch(Exception e) {
-//			
-//		}
 	}
 
 	// InputStream 받아서 byte[] 반환하는 유틸성 메소드

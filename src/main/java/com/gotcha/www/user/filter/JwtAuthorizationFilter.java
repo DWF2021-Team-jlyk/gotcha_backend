@@ -73,17 +73,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 		log.info("[jwtHeader] "+jwtHeader);
 		jwtToken = jwtHeader.replace("Bearer ", "");
 		log.info("[jwtToken] "+jwtToken);
-//		jwtToken = token.replace("Bearer ", "");
-		
+
 		// header가 있는지 확인
 		if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
-//			PrintWriter out = response.getWriter();
-//			out.print("<javascript>");
-//			out.print("alert('null');");
-//			out.print("</javascript>");
 			log.info("[TOKEN IS NULL]");
-//			AccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
-//			accessDeniedHandler.handle(request, response, null);
 			chain.doFilter(request, response);
 			return;
 		}

@@ -83,7 +83,6 @@ public class UserServiceImpl implements UserService {
 			MimeMessage mimeMsg = mailSender.createMimeMessage();
 			MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMsg, true, "UTF-8");
 
-			//messageHelper.setFrom(new InternetAddress("jsu917@gmail.com"));
 			
 			messageHelper.setTo(new InternetAddress(toMail));//수취인
 			
@@ -166,8 +165,6 @@ public class UserServiceImpl implements UserService {
 		UserVO userVO = userDAO.getUserPwd(user_id);
 		log.info("[CURRENTPWD] "+userVO.getUser_pwd());
 		
-//		boolean status = bCryptPasswordEncoder.matches(user_pwd, userVO.getUser_pwd()) ? true : false; 
-		
 		return bCryptPasswordEncoder.matches(user_pwd, userVO.getUser_pwd());
 	}
 
@@ -182,12 +179,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public boolean withdrawal(String userId) {
-//		boolean checkStatus;
-		// 각  workspace 마다 member가 몇 명인지 체크 후 0명이면 user_role 및 workspace 삭제(수정 해야함)
-//		int checkMember = userDAO.checkWorkspaceMember();
-//		if(checkMember > 0) {
-//			return false;
-//		}
 		int checkAdmin = userDAO.checkWorkspaceAdmin(userId);
 		if(checkAdmin > 0) {
 			return false;

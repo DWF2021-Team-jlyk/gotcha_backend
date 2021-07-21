@@ -120,30 +120,6 @@ public class UserController {
 		return false;
 	}
 	
-//	@PostMapping("/addWorkspace")
-//	public void addWorkspace(
-//							@RequestParam("ws_name") String ws_name,
-//							@RequestParam("ws_isImage") MultipartFile file,
-//							MultipartHttpServletRequest req) throws IOException {
-//    	if(req.getFile("ws_isImage") != null) {
-//			log.info("[REQUEST ADD WORKSPACE]");
-//			log.info("[FILE] "+file);
-//			String fileName = file.getOriginalFilename();
-//			log.info("[fileName] " + file.getOriginalFilename());
-//			byte[] fileByte = file.getBytes();
-//			homeService.createWorkspace("user01@naver.com",ws_name, file.getOriginalFilename());
-////			boolean fileUpload = homeService.fileUpload(ws_name,fileName,fileByte);
-//			log.info("[FILE UPLOAD STATE] "+fileUpload);
-//
-////			if(fileUpload == true) {
-////				homeService.addWorkspace(ws_name, file.getOriginalFilename());
-////			}
-//			log.info("[FILE UPLOAD] " + fileUpload);
-//		}else if(req.getFile("ws_isImage") == null) {
-//			log.info("null");
-//		}
-//	}
-	
 	@GetMapping("/accessDenied")
 	public String accessDenied() {
 		log.info("[accessDenied....]");

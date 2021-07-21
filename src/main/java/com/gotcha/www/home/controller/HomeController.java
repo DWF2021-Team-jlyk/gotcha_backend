@@ -54,7 +54,7 @@ public class HomeController {
 			, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 		userId = getLoginUser(principalDetails);
 		List<WorkspaceDto> mainList = homeService.selectWorkspace(userId);
-//		log.info("[/wsList RESULT] " + mainList);
+
 		return mainList;
 	}
 	
@@ -64,7 +64,7 @@ public class HomeController {
 			@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		userId = getLoginUser(principalDetails);
 		List<NotiJoinVO> mainList = homeService.selectNotice(userId);
-//		log.info("노티" + mainList);
+
 		return mainList;
 	}
 	
@@ -87,11 +87,11 @@ public class HomeController {
 		log.info("selectWsUserList " + map);
 		log.info("selectWsUserList get "+map.get("ws_id").getClass());
 		int ws_id = Integer.parseInt(map.get("ws_id"));
-//		log.info("[USERLIST] " + ws_id);
+
 		List<String> wsUserList = homeService.selectWsUserList(ws_id);
-//		log.info("[USERLISTS] " + wsUserList);
+
 		return wsUserList;
-//		return null;
+
 	}
     
 	@PostMapping("/getFileName")
@@ -159,14 +159,8 @@ public class HomeController {
 		
     	boolean fileUpload = false;
     	if(req.getFile("ws_isImage") != null) {
-    		
-    		log.info("[WS_ID] " + ws_id);
-        	log.info("[FILE] " + file);
+
         	String fileName = file.getOriginalFilename();
-        	log.info("[FILE NAME] " + fileName);
-    		log.info("[WS_ID] " + ws_id);
-    		
-    		log.info("[FILE NAME] " + fileName);
     		
     		byte[] fileByte = file.getBytes();
     		fileUpload = homeService.fileUpdate(ws_id, fileName,fileByte);
@@ -237,13 +231,11 @@ public class HomeController {
 			
 			log.info("[FILE UPLOAD] " + fileUpload);
 		}else {
-			
-			log.info("[NULL]");
 			homeService.createWorkspace(userId,ws_name, null, member_id);
 		}
     	
     	log.info("[UPLOAD FILE] " + file);
-//    	homeService.store(file);
+
     	return fileUpload;
 	}
 

@@ -36,21 +36,6 @@ public class HomeServiceImpl implements HomeService {
     @Value("${service.card.uploadurl}")
     private String fileDeletePath;
 
-//	@Autowired
-//    public HomeServiceImpl(FileUploadProperties fileUploadProperties) {
-//        this.dirLocation = Paths.get(fileUploadProperties.getLocation())
-//                .toAbsolutePath().normalize();
-//    }
-
-//    @PostConstruct
-//    public void init() {
-//        try {
-//            Files.createDirectories(this.dirLocation);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     private Log log = LogFactory.getLog(this.getClass());
 
     private Path dirLocation = null;
@@ -93,13 +78,6 @@ public class HomeServiceImpl implements HomeService {
 
             log.info("[lastIndex] " + (lastIndex + 1));
             String uploadFolder = fileUploadPath + (lastIndex + 1) + "/bg";
-
-//			String uploadFolder = "resources/static/upload" + lastIndex + "/bg";
-//			System.out.println("[foldername]"+uploadFolder);
-//			String uploadFolder = "C:\\gotcha\\workspaces\\" + lastIndex + "\\bg";
-//			Path location = this.dirLocation.resolve(fileName);
-//			log.info("[uploadFolder] " + location);
-//			Files.copy(multipartFile.getInputStream(), location, StandardCopyOption.REPLACE_EXISTING);
 
             // 폴더 생성
             UploadFileUtil.mkdirDir(uploadFolder);
@@ -230,7 +208,6 @@ public class HomeServiceImpl implements HomeService {
         homeDAO.deleteMember(deleteMap);
         log.info("[SUCCESS deleteUserRole]");
 
-//		homeDAO.deleteFav(deleteMap);
     }
 
     @Override
@@ -283,46 +260,5 @@ public class HomeServiceImpl implements HomeService {
         homeDAO.deleteWorkspace(deleteMap);
         log.info("[WORKSPACE TABLES DELETE SUCCESS]");
     }
-
-    /**
-     * 파일 업로드
-     * @param file
-     */
-//	@Override
-//	public void store(MultipartFile file) {
-//		String filename = StringUtils.cleanPath(file.getOriginalFilename());
-//		log.info("[SERVICE STORE] " + file.getOriginalFilename());
-//		try {
-//			
-//
-//			InputStream inputStream = file.getInputStream();
-//			Files.copy(inputStream, getPath().resolve(filename),
-//				StandardCopyOption.REPLACE_EXISTING);
-//			
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
-
-    /**
-     * 업로드 폴더 없을 경우 생성
-     */
-//	public void init() {
-//		try {
-//			Files.createDirectories(getPath());
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-    /**
-     * 패스 객체 반환
-     * @return
-     */
-//	private Path getPath() {
-//		return Paths.get(fileUploadPath);
-//	}
 
 }

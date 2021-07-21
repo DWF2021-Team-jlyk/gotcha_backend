@@ -12,8 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.filter.CorsFilter;
 
 import com.gotcha.www.user.dao.UserDAO;
-import com.gotcha.www.user.exception.CustomAccessDeniedHandler;
-import com.gotcha.www.user.exception.CustomAuthenticationEntryPoint;
 import com.gotcha.www.user.filter.JwtAuthenticationFilter;
 import com.gotcha.www.user.filter.JwtAuthorizationFilter;
 
@@ -39,60 +37,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-//	@Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-//    }
-
-    @Autowired
-    CustomAuthenticationEntryPoint authenticationEntryPoint;
-
-    @Autowired
-    CustomAccessDeniedHandler accessDeniedHandler;
-
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
                 .antMatchers("/resources/**")
                 .antMatchers("/user/**")
                 .antMatchers("/image/**");
-//            .antMatchers("/home/wsList")
-//            .antMatchers("/home/notiList")
-//            .antMatchers("/home/favUpdate")
-//            .antMatchers("/home/wsUserList");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                //.addFilterBefore(new MyFilter3(), SecurityContextPersistenceFilter.class)
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session을 사용하지 않겠다.
                 .and()
                 .addFilter(corsFilter) // @CrossOrigin(인증 X), 시큐리티 필터에 등록 인증(O)
                 .formLogin().disable()
-//			.anonymous().disable()
-//			.formLogin().loginPage("/login").and()
-                .httpBasic().disable() //
-//			.exceptionHandling()
-//			.authenticationEntryPoint(authenticationEntryPoint) // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
-//			.accessDeniedHandler(new CustomAccessDeniedHandler()) // 권한에서 예외가 발생;
-//			.accessDeniedHandler(accessDeniedHandler)
-//			.and()
+                .httpBasic().disable()
                 .authorizeRequests()
                 .antMatchers("/main/wsList/list/**").access("hasAnyRole('ADMIN') or hasAnyRole('MEMBER')" )
                 .antMatchers("/home/**").access("hasAnyRole('USER')")
-//			.antMatchers("/main/wsList/list/**").access("hasAnyRole('ROLE_ADMIN') or hasAnyRole('ROLE_MEMBER')")
-//			.antMatchers("member").hasAnyRole("ADMIN, MEMBER")
-//			.antMatchers("/user/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), userDAO))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDAO));
-//			.exceptionHandling()
-//			.authenticationEntryPoint(authenticationEntryPoint) // 시큐리티 필터에서 발생하는 예외를 try-catch로 잡는다.
-//			.accessDeniedHandler(accessDeniedHandler) // 권한에서 예외가 발생;
-
     }
 
 }
